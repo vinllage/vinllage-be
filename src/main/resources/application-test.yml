@@ -1,5 +1,5 @@
 spring:
-  # 데이터베이스 설정
+  # 데이터베이스 설정: 테스트 실행 시 메모리에만 DB 생성, 테스트 끝나면 데이터 사라짐
   datasource:
     driverClassName: org.h2.Driver
     url: jdbc:h2:mem:test
@@ -8,4 +8,4 @@ spring:
 
   jpa:
     hibernate:
-      ddlAuto: ${ddl.auto}
+      ddlAuto: create
