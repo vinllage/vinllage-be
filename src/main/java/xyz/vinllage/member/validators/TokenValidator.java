@@ -10,6 +10,7 @@ import xyz.vinllage.member.repositories.MemberRepository;
 @Component
 @RequiredArgsConstructor
 public class TokenValidator implements Validator {
+
     private final MemberRepository repository;
 
     @Override

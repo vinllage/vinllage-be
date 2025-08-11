@@ -50,7 +50,7 @@ public class JoinValidator implements Validator, PasswordValidator, MobileValida
         }
 
         // 3. 비밀번호 확인 일치 여부
-        if (password.equals(confirmPassword)) {
+        if (!password.equals(confirmPassword)) {
             errors.rejectValue("confirmPassword", "Mismatch");
         }
 
@@ -61,3 +61,4 @@ public class JoinValidator implements Validator, PasswordValidator, MobileValida
         }
     }
 }
+
