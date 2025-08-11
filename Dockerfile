@@ -1,6 +1,6 @@
 FROM openjdk:21-jdk
 ARG JAR_PATH=build/libs/vinllage-0.0.1-SNAPSHOT.jar
-ARG PORT=5000
+ARG PORT=4000
 COPY ${JAR_PATH} app.jar
 RUN mkdir uploads
 
@@ -20,6 +20,9 @@ ENV MAIL_PASSWORD=**
 ENV REDIS_HOST=**
 ENV REDIS_PORT=**
 
-ENTRYPOINT [  "java",  "-Ddb.password=${DB_PASSWORD}", "-Ddb.url=${DB_URL}",  "-Ddb.username=${DB_USERNAME}",  "-Dspring.jpa.hibernate.ddl-auto=${DDL_AUTO}",  "-Dfile.path=${FILE_PATH}",  "-Dfile.url=${FILE_URL}", "-Dredis.host=${REDIS_HOST}",  "-Dredis.port=${REDIS_PORT}",  "-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}",  "-jar", "app.jar"]
+ENV JWT_SECRET=**
+ENV JWT_VALIDTIME=**
+
+ENTRYPOINT [  "java",  "-Ddb.password=${DB_PASSWORD}", "-Ddb.url=${DB_URL}",  "-Ddb.username=${DB_USERNAME}",  "-Dspring.jpa.hibernate.ddl-auto=${DDL_AUTO}",  "-Dfile.path=${FILE_PATH}",  "-Dfile.url=${FILE_URL}", "-Dredis.host=${REDIS_HOST}",  "-Dredis.port=${REDIS_PORT}",  "-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}", "-Djwt.secret=${JWT_SECRET}", "-Djwt.validTime=${JWT_VALIDTIME}", "-jar", "app.jar"]
 
 EXPOSE ${PORT}
