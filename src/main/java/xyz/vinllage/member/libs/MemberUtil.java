@@ -1,9 +1,5 @@
 package xyz.vinllage.member.libs;
 
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
