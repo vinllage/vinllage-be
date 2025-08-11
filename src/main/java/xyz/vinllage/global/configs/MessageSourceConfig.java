@@ -1,6 +1,8 @@
 package xyz.vinllage.global.configs;
 
 import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
 /*
@@ -8,7 +10,10 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 * 메세지 프로퍼티 파일을 읽어서 메시지 키에 따라 텍스트 제공
 *
 */
+@Configuration
 public class MessageSourceConfig {
+
+    @Bean
     public MessageSource messageSource() {
         ResourceBundleMessageSource ms = new ResourceBundleMessageSource();
         ms.addBasenames("messages.commons", "messages.validations", "messages.errors");

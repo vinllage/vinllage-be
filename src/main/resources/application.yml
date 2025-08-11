@@ -19,18 +19,18 @@ spring:
   jpa:
     properties:
       hibernate:
-        show_sql: true
-        format_sql: true
-        use_sql_comments: true
+        show_sql: true          # 실행되는 SQL 출력
+        format_sql: true        # SQL을 예쁘게 포맷
+        use_sql_comments: true  # 주석 출력
     hibernate:
-      ddlAuto: ${ddl.auto}
+      ddlAuto: ${ddl.auto}      # 스키마 자동 생성 전략 (create-실행 시마다 새로 생성, update-변경사항만 반영, none-자동 변경 없음)
 
   # 파일 업로드 용량 설정
   servlet:
     multipart:
-      maxFileSize: 20MB
-      maxRequestSize: 60MB
-      fileSizeThreshold: 30MB
+      maxFileSize: 20MB         # 단일 파일 최대 크기
+      maxRequestSize: 60MB      # 요청 전체 크기
+      fileSizeThreshold: 30MB   # 임시 파일로 전환되는 기준 크기
 
 # 로그 설정
 logging:
@@ -55,14 +55,14 @@ springdoc:
   swagger-ui:
     operations-sorter: alpha
     tags-sorter: alpha
-    path: /api-docs.html
+    path: /api-docs.html        # Swagger UI 접속 경로
     disable-swagger-default-url: true
     doc-expansion: none
   paths-to-match:
-    - /api/v1/**
+    - /api/v1/**                # 해당 경로의 API만 문서화
 
-  # JWT 설정
+# JWT 설정
 member:
   jwt:
-    secret: ${jwt.secret}
-    validTime: ${jwt.validTime}
+    secret: ${jwt.secret}       # 로그인 시 발급되는 JWT 토큰의 비밀키
+    validTime: ${jwt.validTime} # 토큰 유효 시간 (ms)
