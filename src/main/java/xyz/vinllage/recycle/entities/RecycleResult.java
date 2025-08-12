@@ -18,14 +18,9 @@ public class RecycleResult extends BaseEntity {
 	@JoinColumn(name = "member_id")
 	private Member member;
 
-	@Column(precision = 5, scale = 4, nullable = false) // 길이 5자리, 소수점 4자리 까지
+	@Column(precision = 5, nullable = false) // 길이 5자리, 소수점 4자리 까지
 	private Double topConfidence; // 최고 예측 신뢰도 (0~1)
 
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
-	private Trash trash; // 쓰레기 정보
-
 	@Transient
-	@Column(nullable = false)
 	private String topJson; // 상위 예측 결과 JSON 문자열
 }
