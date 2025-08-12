@@ -1,11 +1,32 @@
 spring:
-  # 데이터베이스 설정: 테스트 실행 시 메모리에만 DB 생성, 테스트 끝나면 데이터 사라짐
+  # H2 데이터베이스 설정
   datasource:
-    driverClassName: org.h2.Driver
-    url: jdbc:h2:mem:test
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
     username: sa
     password:
 
+  # JPA 설정
   jpa:
     hibernate:
-      ddlAuto: create
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  # Redis 설정 (테스트용)
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+# Redis 관련 설정값들 (기본값으로 설정)
+redis:
+  host: localhost
+  port: 6379
+
+  # H2 콘솔 활성화
+  h2:
+    console:
+      enabled: true
