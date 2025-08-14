@@ -3,13 +3,13 @@ package xyz.vinllage.board.board.controllers;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.apache.tomcat.jni.FileInfo;
+import xyz.vinllage.board.controllers.BaseRequest;
 import xyz.vinllage.member.constants.Authority;
 
 import java.util.List;
 
 @Data
-public class RequestBoard {
-    private String mode;
+public class RequestBoard extends BaseRequest {
 
     @NotBlank
     private String bid; // 게시판 아이디

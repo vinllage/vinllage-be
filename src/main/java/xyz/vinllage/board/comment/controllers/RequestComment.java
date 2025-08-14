@@ -3,10 +3,10 @@ package xyz.vinllage.board.comment.controllers;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import xyz.vinllage.board.controllers.BaseRequest;
 
 @Data
-public class RequestComment {
-    private String mode;
+public class RequestComment extends BaseRequest {
 
     @NotNull
     private Long boardDataSeq; // 게시글 번호

@@ -3,12 +3,12 @@ package xyz.vinllage.board.post.controllers;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.apache.tomcat.jni.FileInfo;
+import xyz.vinllage.board.controllers.BaseRequest;
 
 import java.util.List;
 
 @Data
-public class RequestBoardData {
-    private String mode;
+public class RequestBoardData extends BaseRequest {
     private Long seq;
 
     @NotBlank

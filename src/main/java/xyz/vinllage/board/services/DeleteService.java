@@ -1,4 +1,4 @@
 package xyz.vinllage.board.services;
 
-public class DeleteService {
+public abstract class DeleteService {
 }

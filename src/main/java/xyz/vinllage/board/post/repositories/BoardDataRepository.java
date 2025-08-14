@@ -6,6 +6,6 @@ import xyz.vinllage.board.board.entities.Board;
 import xyz.vinllage.board.post.entities.BoardData;
 import xyz.vinllage.board.repositories.BaseRepository;
 
-public interface BoardDataRepository extends BaseRepository<Board, String> {
+public interface BoardDataRepository extends BaseRepository<BoardData, Long> {
 
 }
