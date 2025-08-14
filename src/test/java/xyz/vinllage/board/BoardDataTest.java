@@ -7,16 +7,23 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
+import xyz.vinllage.board.board.controllers.RequestBoard;
 import xyz.vinllage.board.board.entities.Board;
 import xyz.vinllage.board.board.repositories.BoardRepository;
+import xyz.vinllage.board.board.services.BoardInfoService;
 import xyz.vinllage.board.controllers.BoardSearch;
+import xyz.vinllage.board.post.controllers.RequestBoardData;
 import xyz.vinllage.board.post.entities.BoardData;
 import xyz.vinllage.board.post.repositories.BoardDataRepository;
 import xyz.vinllage.board.post.services.BoardDataInfoService;
+import xyz.vinllage.board.post.services.BoardDataUpdateService;
 import xyz.vinllage.global.search.ListData;
 import xyz.vinllage.member.constants.Authority;
 import xyz.vinllage.member.entities.Member;
+import xyz.vinllage.member.libs.MemberUtil;
 import xyz.vinllage.member.repositories.MemberRepository;
 
 import java.time.LocalDate;
@@ -26,6 +33,8 @@ import java.util.List;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @DataJpaTest
 @ActiveProfiles("test")
@@ -380,6 +389,11 @@ class BoardDataInfoServiceTest {
         System.out.println("  작성자: " + result.getPoster());
         System.out.println("  게시판: " + result.getBoard().getName());
         System.out.println("  회원: " + result.getMember().getName());
+
+        RequestBoard result2= boardDataInfoService.getForm(seq);
+        System.out.println("피카츄");
+        System.out.println(result2);
+
     }
 
     @Test
@@ -409,5 +423,156 @@ class BoardDataInfoServiceTest {
                     " (게시판: " + item.getBoard().getName() +
                     ", 작성자: " + item.getMember().getName() + ")");
         }
+    }
+}
+
+@DataJpaTest
+@ActiveProfiles("test")
+@DisplayName("BoardDataUpdateService 테스트")
+class BoardDataUpdateServiceTest {
+
+    @Autowired
+    private BoardDataRepository boardDataRepository;
+
+    @Autowired
+    private BoardRepository boardRepository;
+
+    @Autowired
+    private MemberRepository memberRepository;
+
+    private ModelMapper mapper;
+    private BoardDataUpdateService updateService;
+    private PasswordEncoder encoder;
+    private MemberUtil memberUtil;
+    private MockHttpServletRequest request;
+
+    private BoardInfoService boardInfoService;
+
+    @BeforeEach
+    void setUp() {
+        // 1. 먼저 기본 객체들 생성
+        request = new MockHttpServletRequest();
+        request.setRemoteAddr("127.0.0.1");
+        request.addHeader("User-Agent", "Test Browser");
+
+        encoder = new BCryptPasswordEncoder();
+
+        // 2. 테스트 데이터 생성 (Mock 설정 전에)
+        createTestData();
+
+        // 3. Mock 객체 생성 및 설정 (데이터 생성 후에)
+        memberUtil = mock(MemberUtil.class);
+        boardInfoService = new BoardInfoService(request, boardRepository,mapper);
+
+        // 4. Mock 설정
+        Member savedMember = memberRepository.findAll().get(0);  // 저장된 회원 가져오기
+        when(memberUtil.getMember()).thenReturn(savedMember);
+        when(memberUtil.isAdmin()).thenReturn(false);
+
+        // 5. UpdateService 생성 (Mock 설정 후에)
+        updateService = new BoardDataUpdateService(
+                boardDataRepository,
+                boardRepository,
+                boardInfoService,
+                memberUtil,
+                request,
+                encoder
+        );
+    }
+
+    void createTestData() {
+        // 회원 생성 (Mock 없이)
+        Member member = new Member();
+        member.setEmail("test@test.com");
+        member.setName("테스터");
+        member.setPassword("password");
+        member.setMobile("010-1234-5678");
+        member.setCreatedAt(LocalDateTime.now());
+        memberRepository.save(member);
+
+        // 게시판 생성
+        Board board = new Board();
+        board.setBid("test");
+        board.setName("테스트 게시판");
+        board.setSkin("default");
+        board.setActive(true);
+        board.setEditor(true);
+        board.setCategory("general");
+        board.setListAuthority(Authority.ALL);
+        board.setViewAuthority(Authority.ALL);
+        board.setWriteAuthority(Authority.MEMBER);
+        board.setCommentAuthority(Authority.MEMBER);
+        board.setRowsForPage(20);
+        board.setPageCount(10);
+        board.setCreatedAt(LocalDateTime.now());
+        boardRepository.save(board);
+
+        System.out.println("테스트 데이터 생성 완료");
+    }
+
+    @Test
+    @DisplayName("새 게시글 등록 테스트")
+    void createNewBoardData() {
+        // Given
+        RequestBoardData request = new RequestBoardData();
+        request.setBid("test");
+        request.setGid("test_gid_123");
+        request.setSubject("테스트 제목");
+        request.setContent("테스트 내용");
+        request.setPoster("테스터");
+        request.setCategory("일반");
+        request.setSecret(false);
+        request.setNotice(false);
+
+        // When
+        updateService.process(request);
+
+        // Then
+        BoardData saved = boardDataRepository.findAll().get(0);
+        assertNotNull(saved);
+        assertEquals("테스트 제목", saved.getSubject());
+        assertEquals("테스트 내용", saved.getContent());
+        assertEquals("테스터", saved.getPoster());
+        assertEquals("test", saved.getBoard().getBid());
+        assertEquals("127.0.0.1", saved.getIp());
+
+        System.out.println("저장된 게시글: " + saved.getSubject());
+    }
+
+    @Test
+    @DisplayName("기존 게시글 수정 테스트")
+    void updateExistingBoardData() {
+        // Given - 기존 게시글 생성
+        Board board = boardRepository.findById("test").orElseThrow();
+        Member member = memberRepository.findAll().get(0);
+
+        BoardData existing = new BoardData();
+        existing.setSubject("기존 제목");
+        existing.setContent("기존 내용");
+        existing.setPoster("기존 작성자");
+        existing.setBoard(board);
+        existing.setMember(member);
+        existing.setGid("existing_gid");
+        existing.setIp("192.168.1.1");
+        existing.setCreatedAt(LocalDateTime.now());
+        BoardData saved = boardDataRepository.save(existing);
+
+        // When - 수정 요청
+        RequestBoardData request = new RequestBoardData();
+        request.setSeq(saved.getSeq());
+        request.setBid("test");
+        request.setSubject("수정된 제목");
+        request.setContent("수정된 내용");
+        request.setPoster("수정된 작성자");
+
+        updateService.process(request);
+
+        // Then
+        BoardData updated = boardDataRepository.findById(saved.getSeq()).orElseThrow();
+        assertEquals("수정된 제목", updated.getSubject());
+        assertEquals("수정된 내용", updated.getContent());
+        assertEquals("수정된 작성자", updated.getPoster());
+
+        System.out.println("수정된 게시글: " + updated.getSubject());
     }
 }

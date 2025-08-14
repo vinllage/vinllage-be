@@ -6,6 +6,6 @@ import xyz.vinllage.board.board.entities.Board;
 import xyz.vinllage.board.comment.entities.Comment;
 import xyz.vinllage.board.repositories.BaseRepository;
 
-public interface CommentRepository extends BaseRepository<Board, String> {
+public interface CommentRepository extends BaseRepository<Comment, Long> {
 
 }

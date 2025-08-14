@@ -56,10 +56,17 @@ public abstract class InfoService<T, ID> {
         int total = (int)data.getTotalElements();
         Pagination pagination = new Pagination(page, total, 10, limit, request);
 
+        items= after(items);
+
         return new ListData<>(items, pagination);
     }
 
     // 검색기능 분리
     protected abstract BooleanBuilder search(BoardSearch search);
+
+    //후처리
+    public List<T> after(List<T> items){
+        return items;
+    }
 
 }

@@ -13,9 +13,10 @@ import xyz.vinllage.board.services.UpdateService;
 @Lazy
 @Service
 @RequiredArgsConstructor
-public class BoardUpdateService extends UpdateService<Board, String> {
+public class BoardUpdateService extends UpdateService<Board, String, RequestBoard> {
 
     private final BoardRepository repository;
+    private final ModelMapper mapper;
 
 
     @Override
@@ -24,7 +25,9 @@ public class BoardUpdateService extends UpdateService<Board, String> {
     }
 
     @Override
-    public Board beforeProcess(Board item) {
+    public Board beforeProcess(RequestBoard form) {
+
+        Board item = mapper.map(form, Board.class);
         // Board 저장 전 처리 로직
         // 예: 유효성 검사, 데이터 변환 등
         return item;
