@@ -66,3 +66,7 @@ member:
   jwt:
     secret: ${jwt.secret}       # 로그인 시 발급되는 JWT 토큰의 비밀키
     validTime: ${jwt.validTime} # 토큰 유효 시간 (ms)
+
+# 외우 API 서버 주소
+api:
+  server.url: ${api.url}
