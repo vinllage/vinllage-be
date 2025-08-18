@@ -39,7 +39,7 @@ class RecycleInfoServiceTest {
 	RecycleInfoService service;
 
 	@Test
-	void getList_basic_pagingAndSort() {
+	void test1() {
 		when(repository.findAll(any(Predicate.class), any(Pageable.class)))
 				.thenAnswer(invocation -> {
 					Pageable pageable = invocation.getArgument(1);
