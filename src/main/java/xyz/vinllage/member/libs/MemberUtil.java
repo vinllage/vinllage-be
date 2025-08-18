@@ -1,11 +1,17 @@
 package xyz.vinllage.member.libs;
 
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import xyz.vinllage.member.MemberInfo;
 import xyz.vinllage.member.constants.Authority;
 import xyz.vinllage.member.entities.Member;
+
+import java.util.Objects;
+import java.util.UUID;
 
 /*
 *
@@ -13,7 +19,10 @@ import xyz.vinllage.member.entities.Member;
 *
 */
 @Component
+@RequiredArgsConstructor
 public class MemberUtil {
+    private final HttpServletRequest request;
+
     // 로그인 상태인지 확인, 로그인이면 true 아니면 false
     public boolean isLogin() {
         return getMember() != null;
@@ -34,5 +43,18 @@ public class MemberUtil {
         }
 
         return null;
+    }
+
+    /**
+     * 회원 구분 해시
+     *  비회원 : 요청헤더 - User-Hash가 있으면 그걸로 대체
+     *  회원 : 회원 번호
+     * @return
+     */
+    public int getUserHash() {
+        String userHash = request.getHeader("User-Hash");
+        userHash = StringUtils.hasText(userHash) ? userHash : UUID.randomUUID().toString();
+
+        return isLogin() ? Objects.hash(getMember().getSeq()) : Objects.hash(userHash);
     }
 }
