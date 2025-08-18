@@ -29,12 +29,16 @@ public class TokenValidator implements Validator {
 
         RequestToken form = (RequestToken) target;
         Member member = repository.findByEmail(form.getEmail()).orElse(null);
-        if(member==null){
-            errors.rejectValue("NotFound.member.or.passsword");
+
+        if (member == null) {
+            errors.reject("NotFound.member.or.password");
         }
-        // 비밀 번호 검증
-        if(member != ){
-            errors.rejectValue("NotFound.member.or.passsword");
+
+        // 비밀번호 검증
+
+        if (member != null && !encoder.matches(form.getPassword(), member.getPassword())) {
+            errors.reject("NotFound.member.or.password");
+
         }
     }
 }

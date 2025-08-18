@@ -7,6 +7,23 @@ spring:
     redis:
       host: ${redis.host}
       port: ${redis.port}
+  mail:
+    host: smtp.gmail.com # 서버 호스트
+    port: 587
+    username: ${mail.username} # 이메일 아이디 , 주소가 text@gmail.com 이면  text
+    password: ${mail.password} #  앱 비밀 번호
+    properties:
+      mail:
+        smtp:
+          auth: true # 사용자 인증 시도 여부 - 기본값은 false
+          timeout: 5000
+          starttls:
+            enable: true # startTls 활성화 여부 - 기본값은 false
+
+
+
+
+
 
   # 데이터베이스 설정
   datasource:
