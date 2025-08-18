@@ -7,7 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import xyz.vinllage.board_seul.comment.entities.Comment_seul;
-import xyz.vinllage.board_seul.comment.entities.QComment;
+import xyz.vinllage.board_seul.comment.entities.QComment_seul;
 import xyz.vinllage.board_seul.comment.repositories.CommentRepository_seul;
 import xyz.vinllage.board_seul.controllers.BoardSearch_seul;
 import xyz.vinllage.board_seul.repositories.BaseRepository_seul;
@@ -44,7 +44,7 @@ public class CommentInfoService_seul extends InfoService<Comment_seul, Long>{
     @Override
     protected BooleanBuilder search(BoardSearch_seul search) {
         BooleanBuilder andBuilder = new BooleanBuilder();
-        QComment comment = QComment.comment;
+        QComment_seul comment = QComment_seul.comment_seul;
 
         //특정 seq의 게시글에 달린 댓글만
         andBuilder.and(comment.boardDataSeq.eq(search.getSeq()));

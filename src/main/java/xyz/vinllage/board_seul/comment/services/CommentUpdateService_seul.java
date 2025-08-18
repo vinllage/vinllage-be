@@ -3,7 +3,8 @@ package xyz.vinllage.board_seul.comment.services;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import xyz.vinllage.board_seul.comment.controllers.RequestComment;
+import xyz.vinllage.board.controllers.RequestComment;
+import xyz.vinllage.board_seul.comment.controllers.RequestComment_seul;
 import xyz.vinllage.board_seul.comment.entities.Comment_seul;
 import xyz.vinllage.board_seul.comment.repositories.CommentRepository_seul;
 import xyz.vinllage.board_seul.repositories.BaseRepository_seul;
@@ -14,7 +15,7 @@ import java.util.Objects;
 
 @Service
 @Transactional
-public class CommentUpdateService_seul extends UpdateService<Comment_seul, Long, RequestComment> {
+public class CommentUpdateService_seul extends UpdateService<Comment_seul, Long, RequestComment_seul> {
     private final CommentRepository_seul repository;
     private final HttpServletRequest request;
     private final MemberUtil memberUtil;
@@ -31,7 +32,7 @@ public class CommentUpdateService_seul extends UpdateService<Comment_seul, Long,
     }
 
     @Override
-    public Comment_seul beforeProcess(RequestComment item) {
+    public Comment_seul beforeProcess(RequestComment_seul item) {
         String mode = Objects.requireNonNullElse(item.getMode(), "register");
 
         Comment_seul commentSeul = new Comment_seul();

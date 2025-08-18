@@ -1,24 +1,15 @@
-<<<<<<<< HEAD:src/main/java/xyz/vinllage/board_seul/post/controllers/RequestBoardData.java
 package xyz.vinllage.board_seul.post.controllers;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import org.apache.tomcat.jni.FileInfo;
 import xyz.vinllage.board_seul.controllers.BaseRequest_seul;
-========
-package xyz.vinllage.board.controllers;
-
->>>>>>>> 732bea3697cf9f1a318ad83857aff9f743725cf9:src/main/java/xyz/vinllage/board/controllers/RequestBoard.java
+import xyz.vinllage.file.entities.FileInfo;
 
 import java.util.List;
 
 @Data
-<<<<<<<< HEAD:src/main/java/xyz/vinllage/board_seul/post/controllers/RequestSeulBoardData_seul.java
-public class RequestSeulBoardData_seul extends BaseRequest_seul {
-========
-public class RequestBoard {
+public class RequestBoardData_seul extends BaseRequest_seul {
     private String mode;
->>>>>>>> 732bea3697cf9f1a318ad83857aff9f743725cf9:src/main/java/xyz/vinllage/board/controllers/RequestBoard.java
     private Long seq;
 
     @NotBlank

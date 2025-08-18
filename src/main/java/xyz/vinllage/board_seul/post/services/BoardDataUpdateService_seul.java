@@ -6,11 +6,11 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import xyz.vinllage.board_seul.board.entities.Board_seul;
-import xyz.vinllage.board_seul.board.repositories.BoardRepository_seul_seul;
+import xyz.vinllage.board_seul.board.repositories.BoardRepository_seul;
 import xyz.vinllage.board_seul.board.services.BoardInfoService_seul;
-import xyz.vinllage.board_seul.post.controllers.RequestBoardData;
+import xyz.vinllage.board_seul.post.controllers.RequestBoardData_seul;
 import xyz.vinllage.board_seul.post.entities.BoardData_Seul;
-import xyz.vinllage.board_seul.post.repositories.BoardDataRepository_seul_seul;
+import xyz.vinllage.board_seul.post.repositories.BoardDataRepository_seul;
 import xyz.vinllage.board_seul.repositories.BaseRepository_seul;
 import xyz.vinllage.board_seul.services.UpdateService;
 import xyz.vinllage.member.libs.MemberUtil;
@@ -18,17 +18,17 @@ import xyz.vinllage.member.libs.MemberUtil;
 @Lazy
 @Service
 @Transactional
-public class BoardDataUpdateService_seul extends UpdateService<BoardData_Seul, Long, RequestBoardData> {
+public class BoardDataUpdateService_seul extends UpdateService<BoardData_Seul, Long, RequestBoardData_seul> {
 
-    private final BoardDataRepository_seul_seul repository;
+    private final BoardDataRepository_seul repository;
     private final BoardInfoService_seul boardInfoServiceSeul;
     private final MemberUtil memberUtil;
     private final HttpServletRequest request;
     private final PasswordEncoder encoder;
 
     // 생성자
-    public BoardDataUpdateService_seul(BoardDataRepository_seul_seul repository,
-                                       BoardRepository_seul_seul boardRepositorySeul,
+    public BoardDataUpdateService_seul(BoardDataRepository_seul repository,
+                                       BoardRepository_seul boardRepositorySeul,
                                        BoardInfoService_seul boardInfoServiceSeul,
                                        MemberUtil memberUtil,
                                        HttpServletRequest request,
@@ -47,7 +47,7 @@ public class BoardDataUpdateService_seul extends UpdateService<BoardData_Seul, L
 
     // 전처리 - RequestBoardData를 받아서 BoardData를 반환
     @Override
-    public BoardData_Seul beforeProcess(RequestBoardData form) {
+    public BoardData_Seul beforeProcess(RequestBoardData_seul form) {
         String bid = form.getBid();
         Long seq = form.getSeq();
         String gid = form.getGid();

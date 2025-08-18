@@ -1,15 +1,3 @@
-
-<<<<<<<< HEAD:src/main/java/xyz/vinllage/board_seul/board/controllers/RequestBoard.java
-package xyz.vinllage.board_seul.board.controllers;
-
-import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
-import xyz.vinllage.board_seul.controllers.BaseRequest;
-import xyz.vinllage.member.constants.Authority;
-
-@Data
-public class RequestBoard extends BaseRequest {
-========
 package xyz.vinllage.board.controllers;
 
 import jakarta.validation.constraints.NotBlank;
@@ -19,7 +7,6 @@ import xyz.vinllage.member.constants.Authority;
 @Data
 public class RequestBoardConfig {
     private String mode;
->>>>>>>> 732bea3697cf9f1a318ad83857aff9f743725cf9:src/main/java/xyz/vinllage/board/controllers/RequestBoardConfig.java
 
     @NotBlank
     private String bid; // 게시판 아이디

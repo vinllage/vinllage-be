@@ -10,14 +10,14 @@ import com.querydsl.core.types.Path;
 
 
 /**
- * QAuthorityEntity is a Querydsl query type for AuthorityEntity
+ * QAuthorityEntity_seul is a Querydsl query type for AuthorityEntity_seul
  */
 @Generated("com.querydsl.codegen.DefaultSupertypeSerializer")
-public class QAuthorityEntity extends EntityPathBase<AuthorityEntity_seul> {
+public class QAuthorityEntity_seul extends EntityPathBase<AuthorityEntity_seul> {
 
-    private static final long serialVersionUID = -772227952L;
+    private static final long serialVersionUID = 1934042808L;
 
-    public static final QAuthorityEntity authorityEntity = new QAuthorityEntity("authorityEntity");
+    public static final QAuthorityEntity_seul authorityEntity_seul = new QAuthorityEntity_seul("authorityEntity_seul");
 
     public final xyz.vinllage.global.entities.QBaseEntity _super = new xyz.vinllage.global.entities.QBaseEntity(this);
 
@@ -38,15 +38,15 @@ public class QAuthorityEntity extends EntityPathBase<AuthorityEntity_seul> {
 
     public final EnumPath<xyz.vinllage.member.constants.Authority> writeAuthority = createEnum("writeAuthority", xyz.vinllage.member.constants.Authority.class);
 
-    public QAuthorityEntity(String variable) {
+    public QAuthorityEntity_seul(String variable) {
         super(AuthorityEntity_seul.class, forVariable(variable));
     }
 
-    public QAuthorityEntity(Path<? extends AuthorityEntity_seul> path) {
+    public QAuthorityEntity_seul(Path<? extends AuthorityEntity_seul> path) {
         super(path.getType(), path.getMetadata());
     }
 
-    public QAuthorityEntity(PathMetadata metadata) {
+    public QAuthorityEntity_seul(PathMetadata metadata) {
         super(AuthorityEntity_seul.class, metadata);
     }
 

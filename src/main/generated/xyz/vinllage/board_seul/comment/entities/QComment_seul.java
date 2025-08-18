@@ -11,18 +11,18 @@ import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
- * QComment is a Querydsl query type for Comment
+ * QComment_seul is a Querydsl query type for Comment_seul
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QComment extends EntityPathBase<Comment_seul> {
+public class QComment_seul extends EntityPathBase<Comment_seul> {
 
-    private static final long serialVersionUID = -79129448L;
+    private static final long serialVersionUID = 1740968880L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
-    public static final QComment comment = new QComment("comment");
+    public static final QComment_seul comment_seul = new QComment_seul("comment_seul");
 
-    public final xyz.vinllage.board_seul.entities.QBoardEntity _super;
+    public final xyz.vinllage.board_seul.entities.QBoardEntity_seul _super;
 
     public final NumberPath<Long> boardDataSeq = createNumber("boardDataSeq", Long.class);
 
@@ -55,25 +55,25 @@ public class QComment extends EntityPathBase<Comment_seul> {
     //inherited
     public final StringPath ua;
 
-    public QComment(String variable) {
+    public QComment_seul(String variable) {
         this(Comment_seul.class, forVariable(variable), INITS);
     }
 
-    public QComment(Path<? extends Comment_seul> path) {
+    public QComment_seul(Path<? extends Comment_seul> path) {
         this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
-    public QComment(PathMetadata metadata) {
+    public QComment_seul(PathMetadata metadata) {
         this(metadata, PathInits.getFor(metadata, INITS));
     }
 
-    public QComment(PathMetadata metadata, PathInits inits) {
+    public QComment_seul(PathMetadata metadata, PathInits inits) {
         this(Comment_seul.class, metadata, inits);
     }
 
-    public QComment(Class<? extends Comment_seul> type, PathMetadata metadata, PathInits inits) {
+    public QComment_seul(Class<? extends Comment_seul> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this._super = new xyz.vinllage.board_seul.entities.QBoardEntity(type, metadata, inits);
+        this._super = new xyz.vinllage.board_seul.entities.QBoardEntity_seul(type, metadata, inits);
         this.content = _super.content;
         this.createdAt = _super.createdAt;
         this.deletedAt = _super.deletedAt;

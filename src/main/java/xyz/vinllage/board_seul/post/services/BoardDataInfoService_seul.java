@@ -8,11 +8,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import xyz.vinllage.board_seul.board.controllers.RequestBoard;
+import xyz.vinllage.board_seul.board.controllers.RequestBoard_seul;
 import xyz.vinllage.board_seul.controllers.BoardSearch_seul;
 import xyz.vinllage.board_seul.post.entities.BoardData_Seul;
-import xyz.vinllage.board_seul.post.entities.QBoardData;
-import xyz.vinllage.board_seul.post.repositories.BoardDataRepository_seul_seul;
+import xyz.vinllage.board_seul.post.entities.QBoardData_Seul;
+import xyz.vinllage.board_seul.post.repositories.BoardDataRepository_seul;
 import xyz.vinllage.board_seul.repositories.BaseRepository_seul;
 import xyz.vinllage.board_seul.services.InfoService;
 
@@ -24,11 +24,11 @@ import java.util.List;
 @Transactional
 public class BoardDataInfoService_seul extends InfoService<BoardData_Seul, Long>{
 
-    private final BoardDataRepository_seul_seul repository;
+    private final BoardDataRepository_seul repository;
     private final ModelMapper mapper;
 
     public BoardDataInfoService_seul(HttpServletRequest request,
-                                     BoardDataRepository_seul_seul repository, ModelMapper mapper) {
+                                     BoardDataRepository_seul repository, ModelMapper mapper) {
         super(request);
         this.repository = repository;
         this.mapper=mapper;
@@ -43,9 +43,9 @@ public class BoardDataInfoService_seul extends InfoService<BoardData_Seul, Long>
      * @param seq
      * @return
      */
-    public RequestBoard getForm(Long seq) {
+    public RequestBoard_seul getForm(Long seq) {
         BoardData_Seul item = get(seq);
-        RequestBoard form = mapper.map(item, RequestBoard.class);
+        RequestBoard_seul form = mapper.map(item, RequestBoard_seul.class);
         form.setBid(item.getBoardSeul().getBid());
         return form;
     }
@@ -61,10 +61,10 @@ public class BoardDataInfoService_seul extends InfoService<BoardData_Seul, Long>
         List<String> bids = search.getBid();
 
         BooleanBuilder andBuilder = new BooleanBuilder();
-        QBoardData boardData = QBoardData.boardData;
+        QBoardData_Seul boardData = QBoardData_Seul.boardData_Seul;
 
         if (bids != null && !bids.isEmpty())  { // 게시판 아이디 조회
-            andBuilder.and(boardData.board.bid.in(bids));
+            andBuilder.and(boardData.boardSeul.bid.in(bids));
         }
 
         // 게시글 등록일 조회

@@ -11,16 +11,16 @@ import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
- * QBoardEntity is a Querydsl query type for BoardEntity
+ * QBoardEntity_seul is a Querydsl query type for BoardEntity_seul
  */
 @Generated("com.querydsl.codegen.DefaultSupertypeSerializer")
-public class QBoardEntity extends EntityPathBase<BoardEntity_seul> {
+public class QBoardEntity_seul extends EntityPathBase<BoardEntity_seul> {
 
-    private static final long serialVersionUID = 1984918259L;
+    private static final long serialVersionUID = 1336014389L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
-    public static final QBoardEntity boardEntity = new QBoardEntity("boardEntity");
+    public static final QBoardEntity_seul boardEntity_seul = new QBoardEntity_seul("boardEntity_seul");
 
     public final xyz.vinllage.global.entities.QBaseEntity _super = new xyz.vinllage.global.entities.QBaseEntity(this);
 
@@ -45,23 +45,23 @@ public class QBoardEntity extends EntityPathBase<BoardEntity_seul> {
 
     public final StringPath ua = createString("ua");
 
-    public QBoardEntity(String variable) {
+    public QBoardEntity_seul(String variable) {
         this(BoardEntity_seul.class, forVariable(variable), INITS);
     }
 
-    public QBoardEntity(Path<? extends BoardEntity_seul> path) {
+    public QBoardEntity_seul(Path<? extends BoardEntity_seul> path) {
         this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
-    public QBoardEntity(PathMetadata metadata) {
+    public QBoardEntity_seul(PathMetadata metadata) {
         this(metadata, PathInits.getFor(metadata, INITS));
     }
 
-    public QBoardEntity(PathMetadata metadata, PathInits inits) {
+    public QBoardEntity_seul(PathMetadata metadata, PathInits inits) {
         this(BoardEntity_seul.class, metadata, inits);
     }
 
-    public QBoardEntity(Class<? extends BoardEntity_seul> type, PathMetadata metadata, PathInits inits) {
+    public QBoardEntity_seul(Class<? extends BoardEntity_seul> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.member = inits.isInitialized("member") ? new xyz.vinllage.member.entities.QMember(forProperty("member")) : null;
     }

@@ -7,10 +7,10 @@ import xyz.vinllage.member.constants.Authority;
 import xyz.vinllage.member.libs.MemberUtil;
 
 @Service
-public class BoardPermissionService extends PermissionService<BoardData_Seul> {
+public class BoardPermissionService_seul extends PermissionService<BoardData_Seul> {
 
 
-    public BoardPermissionService(MemberUtil memberUtil) {
+    public BoardPermissionService_seul(MemberUtil memberUtil) {
         super(memberUtil);
     }
 

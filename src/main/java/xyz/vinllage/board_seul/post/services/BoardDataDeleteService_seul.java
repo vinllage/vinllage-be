@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import xyz.vinllage.board_seul.post.entities.BoardData_Seul;
-import xyz.vinllage.board_seul.post.repositories.BoardDataRepository_seul_seul;
+import xyz.vinllage.board_seul.post.repositories.BoardDataRepository_seul;
 import xyz.vinllage.board_seul.repositories.BaseRepository_seul;
 import xyz.vinllage.board_seul.services.DeleteService;
 import xyz.vinllage.board_seul.services.InfoService;
@@ -14,10 +14,10 @@ import xyz.vinllage.board_seul.services.InfoService;
 @Transactional
 public class BoardDataDeleteService_seul extends DeleteService<BoardData_Seul,Long> {
     private final BoardDataInfoService_seul infoService;
-    private final BoardDataRepository_seul_seul repository;
+    private final BoardDataRepository_seul repository;
 
 
-    public BoardDataDeleteService_seul(BoardDataInfoService_seul infoService, BoardDataRepository_seul_seul repository) {
+    public BoardDataDeleteService_seul(BoardDataInfoService_seul infoService, BoardDataRepository_seul repository) {
         this.infoService = infoService;
         this.repository = repository;
     }

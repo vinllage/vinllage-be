@@ -6,7 +6,7 @@ import xyz.vinllage.board_seul.controllers.BaseRequest_seul;
 import xyz.vinllage.member.constants.Authority;
 
 @Data
-public class RequestSeulBoard_seul extends BaseRequest_seul {
+public class RequestBoard_seul extends BaseRequest_seul {
     private String mode;
 
     @NotBlank

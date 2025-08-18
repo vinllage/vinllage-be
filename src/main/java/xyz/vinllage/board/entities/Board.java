@@ -40,3 +40,32 @@ public class Board extends BaseEntity implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private Authority listAuthority; // 목록 권한, ALL - 전체, MEMBER - 회원, ADMIN - 관리자
+
+    @Enumerated(EnumType.STRING)
+    private Authority viewAuthority; // 글보기 권한
+
+    @Enumerated(EnumType.STRING)
+    private Authority writeAuthority; // 글작성 권한
+
+    @Enumerated(EnumType.STRING)
+    private Authority commentAuthority; // 댓글 작성 권한
+
+    @Transient
+    private boolean writable; // 글쓰기 가능 여부
+
+    @Transient
+    private boolean listable; // 글목록 가능 여부
+
+    @Transient
+    private boolean commentable; //댓글 작성 가능 여부
+
+    public List<String> getCategories() {
+        if (!StringUtils.hasText(category)) {
+            return List.of();
+        }
+
+        String[] categories = category.replaceAll("\r", "").split("\n");
+
+        return Arrays.stream(categories).filter(StringUtils::hasText).toList();
+    }
+}

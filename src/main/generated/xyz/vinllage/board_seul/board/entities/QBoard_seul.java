@@ -10,15 +10,16 @@ import com.querydsl.core.types.Path;
 
 
 /**
- * QBoard is a Querydsl query type for Board
+ * QBoard_seul is a Querydsl query type for Board_seul
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QBoard extends EntityPathBase<Board> {
+public class QBoard_seul extends EntityPathBase<Board_seul> {
 
-    private static final long serialVersionUID = 794315192L;
+    private static final long serialVersionUID = 2027524752L;
 
-    public static final QBoard board = new QBoard("board");
+    public static final QBoard_seul board_seul = new QBoard_seul("board_seul");
 
+    public final xyz.vinllage.board_seul.entities.QAuthorityEntity_seul _super = new xyz.vinllage.board_seul.entities.QAuthorityEntity_seul(this);
 
     public final BooleanPath active = createBoolean("active");
 
@@ -30,6 +31,8 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final BooleanPath comment = createBoolean("comment");
 
+    //inherited
+    public final EnumPath<xyz.vinllage.member.constants.Authority> commentAuthority = _super.commentAuthority;
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
@@ -41,6 +44,8 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final BooleanPath imageUpload = createBoolean("imageUpload");
 
+    //inherited
+    public final EnumPath<xyz.vinllage.member.constants.Authority> listAuthority = _super.listAuthority;
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
@@ -51,24 +56,24 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final NumberPath<Integer> rowsForPage = createNumber("rowsForPage", Integer.class);
 
-    public final BooleanPath showViewList = createBoolean("showViewList");
-
     public final StringPath skin = createString("skin");
 
-    public final EnumPath<xyz.vinllage.member.constants.Authority> viewAuthority = createEnum("viewAuthority", xyz.vinllage.member.constants.Authority.class);
+    //inherited
+    public final EnumPath<xyz.vinllage.member.constants.Authority> viewAuthority = _super.viewAuthority;
 
-    public final EnumPath<xyz.vinllage.member.constants.Authority> writeAuthority = createEnum("writeAuthority", xyz.vinllage.member.constants.Authority.class);
+    //inherited
+    public final EnumPath<xyz.vinllage.member.constants.Authority> writeAuthority = _super.writeAuthority;
 
-    public QBoard(String variable) {
-        super(Board.class, forVariable(variable));
+    public QBoard_seul(String variable) {
+        super(Board_seul.class, forVariable(variable));
     }
 
-    public QBoard(Path<? extends Board> path) {
+    public QBoard_seul(Path<? extends Board_seul> path) {
         super(path.getType(), path.getMetadata());
     }
 
-    public QBoard(PathMetadata metadata) {
-        super(Board.class, metadata);
+    public QBoard_seul(PathMetadata metadata) {
+        super(Board_seul.class, metadata);
     }
 
 }
