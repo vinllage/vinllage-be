@@ -4,9 +4,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import xyz.vinllage.board_seul.comment.controllers.RequestComment;
-import xyz.vinllage.board_seul.comment.entities.Comment;
-import xyz.vinllage.board_seul.comment.repositories.CommentRepository;
-import xyz.vinllage.board_seul.repositories.BaseRepository;
+import xyz.vinllage.board_seul.comment.entities.Comment_seul;
+import xyz.vinllage.board_seul.comment.repositories.CommentRepository_seul;
+import xyz.vinllage.board_seul.repositories.BaseRepository_seul;
 import xyz.vinllage.board_seul.services.UpdateService;
 import xyz.vinllage.member.libs.MemberUtil;
 
@@ -14,46 +14,46 @@ import java.util.Objects;
 
 @Service
 @Transactional
-public class CommentUpdateService_seul extends UpdateService<Comment, Long, RequestComment> {
-    private final CommentRepository repository;
+public class CommentUpdateService_seul extends UpdateService<Comment_seul, Long, RequestComment> {
+    private final CommentRepository_seul repository;
     private final HttpServletRequest request;
     private final MemberUtil memberUtil;
 
-    public CommentUpdateService_seul(CommentRepository repository, HttpServletRequest request, MemberUtil memberUtil) {
+    public CommentUpdateService_seul(CommentRepository_seul repository, HttpServletRequest request, MemberUtil memberUtil) {
         this.repository = repository;
         this.request = request;
         this.memberUtil = memberUtil;
     }
 
     @Override
-    protected BaseRepository<Comment, Long> getRepository() {
+    protected BaseRepository_seul<Comment_seul, Long> getRepository() {
         return repository;
     }
 
     @Override
-    public Comment beforeProcess(RequestComment item) {
+    public Comment_seul beforeProcess(RequestComment item) {
         String mode = Objects.requireNonNullElse(item.getMode(), "register");
 
-        Comment comment = new Comment();
-        comment.setBoardDataSeq(item.getBoardDataSeq());
-        comment.setPoster(item.getCommenter());
-        comment.setContent(item.getContent());
-        comment.setIp(request.getRemoteAddr());
-        comment.setUa(request.getHeader("User-Agent"));
+        Comment_seul commentSeul = new Comment_seul();
+        commentSeul.setBoardDataSeq(item.getBoardDataSeq());
+        commentSeul.setPoster(item.getCommenter());
+        commentSeul.setContent(item.getContent());
+        commentSeul.setIp(request.getRemoteAddr());
+        commentSeul.setUa(request.getHeader("User-Agent"));
 
         if (memberUtil.isLogin()) {
-            comment.setMember(memberUtil.getMember());
-            comment.setPoster(memberUtil.getMember().getName());
+            commentSeul.setMember(memberUtil.getMember());
+            commentSeul.setPoster(memberUtil.getMember().getName());
         } else {
-            comment.setGuestPw(item.getGuestPw());
-            comment.setPoster(item.getCommenter());
+            commentSeul.setGuestPw(item.getGuestPw());
+            commentSeul.setPoster(item.getCommenter());
         }
 
-        return comment;
+        return commentSeul;
     }
 
     @Override
-    public void afterProcess(Comment item) {
+    public void afterProcess(Comment_seul item) {
 
     }
 }

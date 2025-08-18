@@ -1,4 +1,4 @@
-package xyz.vinllage.board_seul.post.entities;
+package xyz.vinllage.board.post.entities;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 

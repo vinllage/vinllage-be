@@ -19,7 +19,6 @@ public class QBoard extends EntityPathBase<Board> {
 
     public static final QBoard board = new QBoard("board");
 
-    public final xyz.vinllage.board_seul.entities.QAuthorityEntity _super = new xyz.vinllage.board_seul.entities.QAuthorityEntity(this);
 
     public final BooleanPath active = createBoolean("active");
 
@@ -31,8 +30,6 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final BooleanPath comment = createBoolean("comment");
 
-    //inherited
-    public final EnumPath<xyz.vinllage.member.constants.Authority> commentAuthority = _super.commentAuthority;
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
@@ -44,8 +41,6 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final BooleanPath imageUpload = createBoolean("imageUpload");
 
-    //inherited
-    public final EnumPath<xyz.vinllage.member.constants.Authority> listAuthority = _super.listAuthority;
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
@@ -56,13 +51,13 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final NumberPath<Integer> rowsForPage = createNumber("rowsForPage", Integer.class);
 
+    public final BooleanPath showViewList = createBoolean("showViewList");
+
     public final StringPath skin = createString("skin");
 
-    //inherited
-    public final EnumPath<xyz.vinllage.member.constants.Authority> viewAuthority = _super.viewAuthority;
+    public final EnumPath<xyz.vinllage.member.constants.Authority> viewAuthority = createEnum("viewAuthority", xyz.vinllage.member.constants.Authority.class);
 
-    //inherited
-    public final EnumPath<xyz.vinllage.member.constants.Authority> writeAuthority = _super.writeAuthority;
+    public final EnumPath<xyz.vinllage.member.constants.Authority> writeAuthority = createEnum("writeAuthority", xyz.vinllage.member.constants.Authority.class);
 
     public QBoard(String variable) {
         super(Board.class, forVariable(variable));

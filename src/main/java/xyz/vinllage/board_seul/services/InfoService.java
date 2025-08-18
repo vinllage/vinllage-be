@@ -3,22 +3,17 @@ package xyz.vinllage.board_seul.services;
 import com.querydsl.core.BooleanBuilder;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import xyz.vinllage.board_seul.controllers.BoardSearch;
-import xyz.vinllage.board_seul.post.entities.BoardData;
-import xyz.vinllage.file.services.FileInfoService;
+import xyz.vinllage.board_seul.controllers.BoardSearch_seul;
 import xyz.vinllage.global.exceptions.NotFoundException;
-import xyz.vinllage.board_seul.repositories.BaseRepository;
+import xyz.vinllage.board_seul.repositories.BaseRepository_seul;
 import xyz.vinllage.global.search.ListData;
 import xyz.vinllage.global.search.Pagination;
-import xyz.vinllage.member.entities.Member;
-import xyz.vinllage.member.libs.MemberUtil;
 
 import java.util.List;
 
@@ -31,7 +26,7 @@ import static org.springframework.data.domain.Sort.Order.desc;
 public abstract class InfoService<T, ID> {
 
     protected final HttpServletRequest request;
-    protected abstract BaseRepository<T, ID> getRepository();
+    protected abstract BaseRepository_seul<T, ID> getRepository();
 
     /**
      * 단일 조회
@@ -46,7 +41,7 @@ public abstract class InfoService<T, ID> {
 
     // 리스트로 가져오기: 페이지네이션 통합
     public ListData<T> getList(
-            BoardSearch search) {
+            BoardSearch_seul search) {
         int page = Math.max(search.getPage(), 1);
         int limit = search.getLimit();
         limit = limit < 1 ? 20 : limit;
@@ -69,7 +64,7 @@ public abstract class InfoService<T, ID> {
     }
 
     // 검색기능 분리
-    protected abstract BooleanBuilder search(BoardSearch search);
+    protected abstract BooleanBuilder search(BoardSearch_seul search);
 
 
     // 후처리

@@ -68,6 +68,7 @@ public class Pagination {
 
         // 쿼리스트링 처리 S
         // ?page=10&post_id=freetalk&t=100&page=11....
+        // 새로운 페이지가 있으면 거르고 그 자리에 page=을 붙인다.
         String qs = request == null ? "" : request.getQueryString();
         String baseUrl = "?";
         if (StringUtils.hasText(qs)) {

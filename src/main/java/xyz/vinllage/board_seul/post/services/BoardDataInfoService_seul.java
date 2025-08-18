@@ -9,11 +9,11 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import xyz.vinllage.board_seul.board.controllers.RequestBoard;
-import xyz.vinllage.board_seul.controllers.BoardSearch;
-import xyz.vinllage.board_seul.post.entities.BoardData;
+import xyz.vinllage.board_seul.controllers.BoardSearch_seul;
+import xyz.vinllage.board_seul.post.entities.BoardData_Seul;
 import xyz.vinllage.board_seul.post.entities.QBoardData;
-import xyz.vinllage.board_seul.post.repositories.BoardDataRepository;
-import xyz.vinllage.board_seul.repositories.BaseRepository;
+import xyz.vinllage.board_seul.post.repositories.BoardDataRepository_seul_seul;
+import xyz.vinllage.board_seul.repositories.BaseRepository_seul;
 import xyz.vinllage.board_seul.services.InfoService;
 
 import java.time.LocalDate;
@@ -22,20 +22,20 @@ import java.util.List;
 @Lazy
 @Service
 @Transactional
-public class BoardDataInfoService_seul extends InfoService<BoardData, Long>{
+public class BoardDataInfoService_seul extends InfoService<BoardData_Seul, Long>{
 
-    private final BoardDataRepository repository;
+    private final BoardDataRepository_seul_seul repository;
     private final ModelMapper mapper;
 
     public BoardDataInfoService_seul(HttpServletRequest request,
-                                     BoardDataRepository repository, ModelMapper mapper) {
+                                     BoardDataRepository_seul_seul repository, ModelMapper mapper) {
         super(request);
         this.repository = repository;
         this.mapper=mapper;
     }
 
     @Override
-    protected BaseRepository<BoardData, Long> getRepository() { return repository; }
+    protected BaseRepository_seul<BoardData_Seul, Long> getRepository() { return repository; }
 
 
     /**
@@ -44,14 +44,14 @@ public class BoardDataInfoService_seul extends InfoService<BoardData, Long>{
      * @return
      */
     public RequestBoard getForm(Long seq) {
-        BoardData item = get(seq);
+        BoardData_Seul item = get(seq);
         RequestBoard form = mapper.map(item, RequestBoard.class);
-        form.setBid(item.getBoard().getBid());
+        form.setBid(item.getBoardSeul().getBid());
         return form;
     }
 
     @Override
-    protected BooleanBuilder search(BoardSearch search) {
+    protected BooleanBuilder search(BoardSearch_seul search) {
         /* 검색 조건 처리 S */
         String sopt = search.getSopt();
         String skey = search.getSkey();

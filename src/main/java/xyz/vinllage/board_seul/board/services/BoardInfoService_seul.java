@@ -8,24 +8,23 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import xyz.vinllage.board_seul.board.controllers.RequestBoard;
-import xyz.vinllage.board_seul.board.entities.Board;
-import xyz.vinllage.board_seul.board.entities.QBoard;
-import xyz.vinllage.board_seul.board.repositories.BoardRepository;
-import xyz.vinllage.board_seul.controllers.BoardSearch;
-import xyz.vinllage.board_seul.repositories.BaseRepository;
+import xyz.vinllage.board_seul.board.controllers.RequestSeulBoard_seul;
+import xyz.vinllage.board_seul.board.entities.Board_seul;
+import xyz.vinllage.board_seul.board.repositories.BoardRepository_seul_seul;
+import xyz.vinllage.board_seul.controllers.BoardSearch_seul;
+import xyz.vinllage.board_seul.repositories.BaseRepository_seul;
 import xyz.vinllage.board_seul.services.InfoService;
 
 @Lazy
 @Service
 @Transactional
-public class BoardInfoService_seul extends InfoService<Board, String> {
+public class BoardInfoService_seul extends InfoService<Board_seul, String> {
 
-    private final BoardRepository repository;
+    private final BoardRepository_seul_seul repository;
     private final ModelMapper mapper;
 
     public BoardInfoService_seul(HttpServletRequest request,
-                                 BoardRepository repository,
+                                 BoardRepository_seul_seul repository,
                                  ModelMapper mapper) {  // mapper 추가!
         super(request);
         this.repository = repository;
@@ -33,12 +32,12 @@ public class BoardInfoService_seul extends InfoService<Board, String> {
     }
 
     @Override
-    protected BaseRepository<Board, String> getRepository() {
+    protected BaseRepository_seul<Board_seul, String> getRepository() {
         return repository;
     }
 
     @Override
-    protected BooleanBuilder search(BoardSearch search) {
+    protected BooleanBuilder search(BoardSearch_seul search) {
         BooleanBuilder andBuilder = new BooleanBuilder();
         QBoard board = QBoard.board;
 
@@ -65,10 +64,10 @@ public class BoardInfoService_seul extends InfoService<Board, String> {
         return andBuilder;
     }
 
-    public RequestBoard getForm(String bid) {
-        Board board = get(bid);
+    public RequestSeulBoard_seul getForm(String bid) {
+        Board_seul boardSeul = get(bid);
 
-        return mapper.map(board, RequestBoard.class);
+        return mapper.map(boardSeul, RequestSeulBoard_seul.class);
     }
 
 }

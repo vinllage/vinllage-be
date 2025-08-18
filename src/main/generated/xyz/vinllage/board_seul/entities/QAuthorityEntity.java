@@ -13,7 +13,7 @@ import com.querydsl.core.types.Path;
  * QAuthorityEntity is a Querydsl query type for AuthorityEntity
  */
 @Generated("com.querydsl.codegen.DefaultSupertypeSerializer")
-public class QAuthorityEntity extends EntityPathBase<AuthorityEntity> {
+public class QAuthorityEntity extends EntityPathBase<AuthorityEntity_seul> {
 
     private static final long serialVersionUID = -772227952L;
 
@@ -39,15 +39,15 @@ public class QAuthorityEntity extends EntityPathBase<AuthorityEntity> {
     public final EnumPath<xyz.vinllage.member.constants.Authority> writeAuthority = createEnum("writeAuthority", xyz.vinllage.member.constants.Authority.class);
 
     public QAuthorityEntity(String variable) {
-        super(AuthorityEntity.class, forVariable(variable));
+        super(AuthorityEntity_seul.class, forVariable(variable));
     }
 
-    public QAuthorityEntity(Path<? extends AuthorityEntity> path) {
+    public QAuthorityEntity(Path<? extends AuthorityEntity_seul> path) {
         super(path.getType(), path.getMetadata());
     }
 
     public QAuthorityEntity(PathMetadata metadata) {
-        super(AuthorityEntity.class, metadata);
+        super(AuthorityEntity_seul.class, metadata);
     }
 
 }

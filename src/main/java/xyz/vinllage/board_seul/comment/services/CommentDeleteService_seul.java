@@ -3,32 +3,32 @@ package xyz.vinllage.board_seul.comment.services;
 import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import xyz.vinllage.board_seul.comment.entities.Comment;
-import xyz.vinllage.board_seul.comment.repositories.CommentRepository;
-import xyz.vinllage.board_seul.repositories.BaseRepository;
+import xyz.vinllage.board_seul.comment.entities.Comment_seul;
+import xyz.vinllage.board_seul.comment.repositories.CommentRepository_seul;
+import xyz.vinllage.board_seul.repositories.BaseRepository_seul;
 import xyz.vinllage.board_seul.services.DeleteService;
 import xyz.vinllage.board_seul.services.InfoService;
 
 @Lazy
 @Service
 @Transactional
-public class CommentDeleteService_seul extends DeleteService<Comment, Long> {
+public class CommentDeleteService_seul extends DeleteService<Comment_seul, Long> {
     private final CommentInfoService_seul commentInfoService;
-    private final CommentRepository repository;
+    private final CommentRepository_seul repository;
 
 
-    public CommentDeleteService_seul(CommentInfoService_seul commentInfoService, CommentRepository repository) {
+    public CommentDeleteService_seul(CommentInfoService_seul commentInfoService, CommentRepository_seul repository) {
         this.commentInfoService = commentInfoService;
         this.repository = repository;
     }
 
     @Override
-    protected InfoService<Comment, Long> getInfoService() {
+    protected InfoService<Comment_seul, Long> getInfoService() {
         return commentInfoService;
     }
 
     @Override
-    protected BaseRepository<Comment, Long> getRepository() {
+    protected BaseRepository_seul<Comment_seul, Long> getRepository() {
         return repository;
     }
 

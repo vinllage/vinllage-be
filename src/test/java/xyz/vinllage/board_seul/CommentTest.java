@@ -5,9 +5,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
-import xyz.vinllage.board_seul.comment.entities.Comment;
-import xyz.vinllage.board_seul.comment.repositories.CommentRepository;
+import xyz.vinllage.board_seul.comment.entities.Comment_seul;
+import xyz.vinllage.board_seul.comment.repositories.CommentRepository_seul;
 import xyz.vinllage.board_seul.comment.services.CommentDeleteService_seul;
 import xyz.vinllage.board_seul.comment.services.CommentInfoService_seul;
 import xyz.vinllage.global.exceptions.NotFoundException;
@@ -18,13 +17,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class CommentDeleteServiceTest {
+class CommentSeulDeleteServiceTest {
 
     @Mock
     private CommentInfoService_seul commentInfoService;
 
     @Mock
-    private CommentRepository repository;
+    private CommentRepository_seul repository;
 
     @InjectMocks
     private CommentDeleteService_seul deleteService;
@@ -33,19 +32,19 @@ class CommentDeleteServiceTest {
     void deletetete() {
         // given
         Long commentId = 1L;
-        Comment comment = new Comment();
-        comment.setSeq(commentId);
-        comment.setContent("테스트 댓글");
+        Comment_seul commentSeul = new Comment_seul();
+        commentSeul.setSeq(commentId);
+        commentSeul.setContent("테스트 댓글");
 
-        when(commentInfoService.get(commentId)).thenReturn(comment);
+        when(commentInfoService.get(commentId)).thenReturn(commentSeul);
 
         // when
         deleteService.delete(commentId);
 
         // then
-        assertNotNull(comment.getDeletedAt());
-        assertTrue(comment.getDeletedAt().isBefore(LocalDateTime.now().plusSeconds(1)));
-        verify(repository).save(comment);
+        assertNotNull(commentSeul.getDeletedAt());
+        assertTrue(commentSeul.getDeletedAt().isBefore(LocalDateTime.now().plusSeconds(1)));
+        verify(repository).save(commentSeul);
     }
 
     @Test

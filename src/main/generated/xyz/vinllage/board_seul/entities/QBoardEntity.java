@@ -14,7 +14,7 @@ import com.querydsl.core.types.dsl.PathInits;
  * QBoardEntity is a Querydsl query type for BoardEntity
  */
 @Generated("com.querydsl.codegen.DefaultSupertypeSerializer")
-public class QBoardEntity extends EntityPathBase<BoardEntity> {
+public class QBoardEntity extends EntityPathBase<BoardEntity_seul> {
 
     private static final long serialVersionUID = 1984918259L;
 
@@ -46,10 +46,10 @@ public class QBoardEntity extends EntityPathBase<BoardEntity> {
     public final StringPath ua = createString("ua");
 
     public QBoardEntity(String variable) {
-        this(BoardEntity.class, forVariable(variable), INITS);
+        this(BoardEntity_seul.class, forVariable(variable), INITS);
     }
 
-    public QBoardEntity(Path<? extends BoardEntity> path) {
+    public QBoardEntity(Path<? extends BoardEntity_seul> path) {
         this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
@@ -58,10 +58,10 @@ public class QBoardEntity extends EntityPathBase<BoardEntity> {
     }
 
     public QBoardEntity(PathMetadata metadata, PathInits inits) {
-        this(BoardEntity.class, metadata, inits);
+        this(BoardEntity_seul.class, metadata, inits);
     }
 
-    public QBoardEntity(Class<? extends BoardEntity> type, PathMetadata metadata, PathInits inits) {
+    public QBoardEntity(Class<? extends BoardEntity_seul> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.member = inits.isInitialized("member") ? new xyz.vinllage.member.entities.QMember(forProperty("member")) : null;
     }

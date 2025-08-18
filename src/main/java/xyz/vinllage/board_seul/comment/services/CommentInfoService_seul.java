@@ -6,28 +6,25 @@ import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import xyz.vinllage.board_seul.comment.entities.Comment;
+import xyz.vinllage.board_seul.comment.entities.Comment_seul;
 import xyz.vinllage.board_seul.comment.entities.QComment;
-import xyz.vinllage.board_seul.comment.repositories.CommentRepository;
-import xyz.vinllage.board_seul.controllers.BoardSearch;
-import xyz.vinllage.board_seul.repositories.BaseRepository;
+import xyz.vinllage.board_seul.comment.repositories.CommentRepository_seul;
+import xyz.vinllage.board_seul.controllers.BoardSearch_seul;
+import xyz.vinllage.board_seul.repositories.BaseRepository_seul;
 import xyz.vinllage.board_seul.services.InfoService;
-import xyz.vinllage.member.entities.Member;
 import xyz.vinllage.member.libs.MemberUtil;
-
-import java.util.List;
 
 @Lazy
 @Service
 @Transactional
-public class CommentInfoService_seul extends InfoService<Comment, Long>{
+public class CommentInfoService_seul extends InfoService<Comment_seul, Long>{
 
-    private final CommentRepository repository;
+    private final CommentRepository_seul repository;
     private final MemberUtil memberUtil;
     private final ModelMapper mapper;
     private final CommentPermissionService_seul permission;
 
-    public CommentInfoService_seul(HttpServletRequest request, CommentRepository repository, MemberUtil memberUtil, ModelMapper mapper, CommentPermissionService_seul permission) {
+    public CommentInfoService_seul(HttpServletRequest request, CommentRepository_seul repository, MemberUtil memberUtil, ModelMapper mapper, CommentPermissionService_seul permission) {
         super(request);
         this.repository = repository;
         this.memberUtil = memberUtil;
@@ -36,7 +33,7 @@ public class CommentInfoService_seul extends InfoService<Comment, Long>{
     }
 
     @Override
-    protected BaseRepository<Comment, Long> getRepository() {
+    protected BaseRepository_seul<Comment_seul, Long> getRepository() {
         return repository;
     }
 
@@ -45,7 +42,7 @@ public class CommentInfoService_seul extends InfoService<Comment, Long>{
 
     // 필터링해서 특정 게시글에 달린 댓글만
     @Override
-    protected BooleanBuilder search(BoardSearch search) {
+    protected BooleanBuilder search(BoardSearch_seul search) {
         BooleanBuilder andBuilder = new BooleanBuilder();
         QComment comment = QComment.comment;
 
@@ -59,7 +56,7 @@ public class CommentInfoService_seul extends InfoService<Comment, Long>{
 
     // 후처리
     @Override
-    public void addInfo(Comment item)
+    public void addInfo(Comment_seul item)
     {
         item.setCanDelete(permission.canEdit(item));
         item.setNeedAuth(permission.needAuth(item));

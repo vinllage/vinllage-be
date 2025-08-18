@@ -5,30 +5,30 @@ import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import xyz.vinllage.board_seul.board.entities.Board;
-import xyz.vinllage.board_seul.board.repositories.BoardRepository;
+import xyz.vinllage.board_seul.board.entities.Board_seul;
+import xyz.vinllage.board_seul.board.repositories.BoardRepository_seul_seul;
 import xyz.vinllage.board_seul.board.services.BoardInfoService_seul;
 import xyz.vinllage.board_seul.post.controllers.RequestBoardData;
-import xyz.vinllage.board_seul.post.entities.BoardData;
-import xyz.vinllage.board_seul.post.repositories.BoardDataRepository;
-import xyz.vinllage.board_seul.repositories.BaseRepository;
+import xyz.vinllage.board_seul.post.entities.BoardData_Seul;
+import xyz.vinllage.board_seul.post.repositories.BoardDataRepository_seul_seul;
+import xyz.vinllage.board_seul.repositories.BaseRepository_seul;
 import xyz.vinllage.board_seul.services.UpdateService;
 import xyz.vinllage.member.libs.MemberUtil;
 
 @Lazy
 @Service
 @Transactional
-public class BoardDataUpdateService_seul extends UpdateService<BoardData, Long, RequestBoardData> {
+public class BoardDataUpdateService_seul extends UpdateService<BoardData_Seul, Long, RequestBoardData> {
 
-    private final BoardDataRepository repository;
+    private final BoardDataRepository_seul_seul repository;
     private final BoardInfoService_seul boardInfoServiceSeul;
     private final MemberUtil memberUtil;
     private final HttpServletRequest request;
     private final PasswordEncoder encoder;
 
     // 생성자
-    public BoardDataUpdateService_seul(BoardDataRepository repository,
-                                       BoardRepository boardRepository,
+    public BoardDataUpdateService_seul(BoardDataRepository_seul_seul repository,
+                                       BoardRepository_seul_seul boardRepositorySeul,
                                        BoardInfoService_seul boardInfoServiceSeul,
                                        MemberUtil memberUtil,
                                        HttpServletRequest request,
@@ -41,21 +41,21 @@ public class BoardDataUpdateService_seul extends UpdateService<BoardData, Long, 
     }
 
     @Override
-    protected BaseRepository<BoardData, Long> getRepository() {
+    protected BaseRepository_seul<BoardData_Seul, Long> getRepository() {
         return repository;
     }
 
     // 전처리 - RequestBoardData를 받아서 BoardData를 반환
     @Override
-    public BoardData beforeProcess(RequestBoardData form) {
+    public BoardData_Seul beforeProcess(RequestBoardData form) {
         String bid = form.getBid();
         Long seq = form.getSeq();
         String gid = form.getGid();
 
         // 게시판 설정 보기
-        Board board = boardInfoServiceSeul.get(bid);
+        Board_seul boardSeul = boardInfoServiceSeul.get(bid);
 
-        BoardData item = null;
+        BoardData_Seul item = null;
         if (seq != null && seq > 0L && (item = repository.findById(seq).orElse(null)) != null) {
             // 글 수정
             System.out.println("기존 게시글 수정: " + seq);
@@ -67,8 +67,8 @@ public class BoardDataUpdateService_seul extends UpdateService<BoardData, Long, 
              * 3. gid
              * 4. 아이피 정보(ipAddr) & 브라우저 정보(요청 헤더 - User-Agent)
              */
-            item = new BoardData();
-            item.setBoard(board);
+            item = new BoardData_Seul();
+            item.setBoardSeul(boardSeul);
             item.setGid(gid);
             item.setMember(memberUtil.getMember());
             item.setIp(request.getRemoteAddr());
@@ -93,13 +93,13 @@ public class BoardDataUpdateService_seul extends UpdateService<BoardData, Long, 
             item.setNotice(false); // 공지글은 관리자만 설정 가능
         }
 
-        item.setPlainText(!board.isEditor());
+        item.setPlainText(!boardSeul.isEditor());
 
         return item;
     }
 
     @Override
-    public void afterProcess(BoardData item) {
+    public void afterProcess(BoardData_Seul item) {
         // 후처리 로직 (예: 파일 정리, 알림 발송 등)
         System.out.println("게시글 처리 완료: " + item.getSubject());
     }

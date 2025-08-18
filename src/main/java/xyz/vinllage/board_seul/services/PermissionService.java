@@ -2,7 +2,7 @@ package xyz.vinllage.board_seul.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import xyz.vinllage.board_seul.entities.BoardEntity;
+import xyz.vinllage.board_seul.entities.BoardEntity_seul;
 import xyz.vinllage.member.constants.Authority;
 import xyz.vinllage.member.entities.Member;
 import xyz.vinllage.member.libs.MemberUtil;
@@ -11,7 +11,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public abstract class PermissionService<T extends BoardEntity> {
+public abstract class PermissionService<T extends BoardEntity_seul> {
     private final MemberUtil memberUtil;
 
     // 게시판 설정에 따른 처리
@@ -57,7 +57,7 @@ public abstract class PermissionService<T extends BoardEntity> {
     // 상속시켜서 처리
     protected abstract boolean canAccess(T item);
 
-    //수정 권한 확인
+    // 수정*삭제 권한 확인
     public boolean canEdit(T item) {
         boolean auth= canAccess(item);
 
@@ -68,7 +68,7 @@ public abstract class PermissionService<T extends BoardEntity> {
         }
     }
 
-
+    // 비회원 게시글/댓글인 경우 비회원 비밀번호 확인
     public boolean needAuth(T item) {
         // 관리자는 멤버와 상관없음
         if (memberUtil.isAdmin()) {

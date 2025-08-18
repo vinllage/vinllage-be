@@ -1,14 +1,14 @@
 package xyz.vinllage.board_seul.comment.services;
 
 import org.springframework.stereotype.Service;
-import xyz.vinllage.board_seul.comment.entities.Comment;
-import xyz.vinllage.board_seul.post.entities.BoardData;
+import xyz.vinllage.board_seul.comment.entities.Comment_seul;
+import xyz.vinllage.board_seul.post.entities.BoardData_Seul;
 import xyz.vinllage.board_seul.post.services.BoardDataInfoService_seul;
 import xyz.vinllage.board_seul.services.PermissionService;
 import xyz.vinllage.member.libs.MemberUtil;
 
 @Service
-public class CommentPermissionService_seul extends PermissionService<Comment> {
+public class CommentPermissionService_seul extends PermissionService<Comment_seul> {
 
     private final BoardDataInfoService_seul boardDataInfoService;
 
@@ -18,8 +18,8 @@ public class CommentPermissionService_seul extends PermissionService<Comment> {
     }
 
     @Override
-    public boolean canAccess(Comment comment){
-        BoardData boardData = boardDataInfoService.get(comment.getBoardDataSeq());
+    public boolean canAccess(Comment_seul commentSeul){
+        BoardData_Seul boardData = boardDataInfoService.get(commentSeul.getBoardDataSeq());
         return authCheck(boardData.getCommentAuthority());
     }
 }

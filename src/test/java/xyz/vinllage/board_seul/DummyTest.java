@@ -9,10 +9,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.ActiveProfiles;
 import xyz.vinllage.board_seul.board.controllers.RequestBoard;
-import xyz.vinllage.board_seul.board.entities.Board;
-import xyz.vinllage.board_seul.board.repositories.BoardRepository;
+import xyz.vinllage.board_seul.board.entities.Board_seul;
+import xyz.vinllage.board_seul.board.repositories.BoardRepository_seul_seul;
 import xyz.vinllage.board_seul.board.services.BoardInfoService_seul;
-import xyz.vinllage.board_seul.controllers.BoardSearch;
+import xyz.vinllage.board_seul.controllers.BoardSearch_seul;
 import xyz.vinllage.global.search.ListData;
 
 import java.time.LocalDateTime;
@@ -22,10 +22,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 @ActiveProfiles("test")
 @DisplayName("BoardInfoService getList 테스트")
-class BoardInfoServiceTest {
+class BoardSeulInfoServiceTest {
 
     @Autowired
-    private BoardRepository boardRepository;
+    private BoardRepository_seul_seul boardRepositorySeul;
 
     private BoardInfoService_seul boardInfoServiceSeul;
     private MockHttpServletRequest mockRequest;
@@ -36,7 +36,7 @@ class BoardInfoServiceTest {
         mockRequest = new MockHttpServletRequest();
 
         // BoardInfoService 수동 생성
-        boardInfoServiceSeul = new BoardInfoService_seul(mockRequest, boardRepository, new ModelMapper());
+        boardInfoServiceSeul = new BoardInfoService_seul(mockRequest, boardRepositorySeul, new ModelMapper());
 
         // 더미 데이터 생성
         createDummyBoards();
@@ -48,13 +48,13 @@ class BoardInfoServiceTest {
         String[] boardNames = {"공지사항", "자유게시판", "질문답변", "갤러리", "이벤트"};
 
         for (int i = 0; i < boardIds.length; i++) {
-            Board board = new Board();
-            board.setBid(boardIds[i]);
-            board.setName(boardNames[i]);
-            board.setSkin("default");
-            board.setCreatedAt(LocalDateTime.now().minusDays(i)); // 생성일 다르게
+            Board_seul boardSeul = new Board_seul();
+            boardSeul.setBid(boardIds[i]);
+            boardSeul.setName(boardNames[i]);
+            boardSeul.setSkin("default");
+            boardSeul.setCreatedAt(LocalDateTime.now().minusDays(i)); // 생성일 다르게
 
-            boardRepository.save(board);
+            boardRepositorySeul.save(boardSeul);
         }
 
         System.out.println("총 " + boardIds.length + "개 게시판 생성 완료");
@@ -64,12 +64,12 @@ class BoardInfoServiceTest {
     @DisplayName("전체 게시판 목록 조회 테스트")
     void getAllBoards() {
         // Given
-        BoardSearch search = new BoardSearch();
+        BoardSearch_seul search = new BoardSearch_seul();
         search.setPage(1);
         search.setLimit(10);
 
         // When
-        ListData<Board> result = boardInfoServiceSeul.getList(search);
+        ListData<Board_seul> result = boardInfoServiceSeul.getList(search);
 
         // Then
         assertNotNull(result);
@@ -92,14 +92,14 @@ class BoardInfoServiceTest {
     @DisplayName("게시판 BID로 검색 테스트")
     void searchByBid() {
         // Given
-        BoardSearch search = new BoardSearch();
+        BoardSearch_seul search = new BoardSearch_seul();
         search.setSopt("BID");
         search.setSkey("notice");
         search.setPage(1);
         search.setLimit(10);
 
         // When
-        ListData<Board> result = boardInfoServiceSeul.getList(search);
+        ListData<Board_seul> result = boardInfoServiceSeul.getList(search);
 
         // Then
         assertNotNull(result);
@@ -115,14 +115,14 @@ class BoardInfoServiceTest {
     @DisplayName("게시판 NAME으로 검색 테스트")
     void searchByName() {
         // Given
-        BoardSearch search = new BoardSearch();
+        BoardSearch_seul search = new BoardSearch_seul();
         search.setSopt("NAME");
         search.setSkey("자유");
         search.setPage(1);
         search.setLimit(10);
 
         // When
-        ListData<Board> result = boardInfoServiceSeul.getList(search);
+        ListData<Board_seul> result = boardInfoServiceSeul.getList(search);
 
         // Then
         assertNotNull(result);
@@ -137,14 +137,14 @@ class BoardInfoServiceTest {
     @DisplayName("통합 검색(ALL) 테스트")
     void searchAll() {
         // Given
-        BoardSearch search = new BoardSearch();
+        BoardSearch_seul search = new BoardSearch_seul();
         search.setSopt("ALL");
         search.setSkey("게시판");
         search.setPage(1);
         search.setLimit(10);
 
         // When
-        ListData<Board> result = boardInfoServiceSeul.getList(search);
+        ListData<Board_seul> result = boardInfoServiceSeul.getList(search);
 
         // Then
         assertNotNull(result);
@@ -163,14 +163,14 @@ class BoardInfoServiceTest {
     @DisplayName("빈 검색 결과 테스트")
     void testEmptyResult() {
         // Given
-        BoardSearch search = new BoardSearch();
+        BoardSearch_seul search = new BoardSearch_seul();
         search.setSopt("BID");
         search.setSkey("nonexistent");
         search.setPage(1);
         search.setLimit(10);
 
         // When
-        ListData<Board> result = boardInfoServiceSeul.getList(search);
+        ListData<Board_seul> result = boardInfoServiceSeul.getList(search);
 
         // Then
         assertNotNull(result);
@@ -184,19 +184,19 @@ class BoardInfoServiceTest {
     @DisplayName("정렬 확인 테스트 (최신순)")
     void testSorting() {
         // Given
-        BoardSearch search = new BoardSearch();
+        BoardSearch_seul search = new BoardSearch_seul();
         search.setPage(1);
         search.setLimit(10);
 
         // When
-        ListData<Board> result = boardInfoServiceSeul.getList(search);
+        ListData<Board_seul> result = boardInfoServiceSeul.getList(search);
 
         // Then
         assertTrue(result.getItems().size() > 1);
 
         // 첫 번째가 두 번째보다 최신인지 확인
-        Board first = result.getItems().get(0);
-        Board second = result.getItems().get(1);
+        Board_seul first = result.getItems().get(0);
+        Board_seul second = result.getItems().get(1);
 
         assertTrue(first.getCreatedAt().isAfter(second.getCreatedAt()) ||
                 first.getCreatedAt().isEqual(second.getCreatedAt()));

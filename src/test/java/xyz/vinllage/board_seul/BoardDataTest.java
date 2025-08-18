@@ -11,14 +11,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import xyz.vinllage.board_seul.board.controllers.RequestBoard;
-import xyz.vinllage.board_seul.board.entities.Board;
-import xyz.vinllage.board_seul.board.repositories.BoardRepository;
-import xyz.vinllage.board_seul.board.services.BoardDeleteService_seul;
+import xyz.vinllage.board_seul.board.entities.Board_seul;
+import xyz.vinllage.board_seul.board.repositories.BoardRepository_seul_seul;
 import xyz.vinllage.board_seul.board.services.BoardInfoService_seul;
-import xyz.vinllage.board_seul.controllers.BoardSearch;
+import xyz.vinllage.board_seul.controllers.BoardSearch_seul;
 import xyz.vinllage.board_seul.post.controllers.RequestBoardData;
-import xyz.vinllage.board_seul.post.entities.BoardData;
-import xyz.vinllage.board_seul.post.repositories.BoardDataRepository;
+import xyz.vinllage.board_seul.post.entities.BoardData_Seul;
+import xyz.vinllage.board_seul.post.repositories.BoardDataRepository_seul_seul;
 import xyz.vinllage.board_seul.post.services.BoardDataDeleteService_seul;
 import xyz.vinllage.board_seul.post.services.BoardDataInfoService_seul;
 import xyz.vinllage.board_seul.post.services.BoardDataUpdateService_seul;
@@ -40,13 +39,13 @@ import static org.mockito.Mockito.when;
 @DataJpaTest
 @ActiveProfiles("test")
 @DisplayName("BoardDataInfoService 테스트")
-class BoardDataInfoServiceTest {
+class BoardSeulDataInfoServiceTest {
 
     @Autowired
-    private BoardDataRepository boardDataRepository;
+    private BoardDataRepository_seul_seul boardDataRepositorySeul;
 
     @Autowired
-    private BoardRepository boardRepository;
+    private BoardRepository_seul_seul boardRepositorySeul;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -61,7 +60,7 @@ class BoardDataInfoServiceTest {
         mapper = new ModelMapper();
 
         // BoardDataInfoService 수동 생성
-        boardDataInfoServiceSeul = new BoardDataInfoService_seul(mockRequest, boardDataRepository, mapper);
+        boardDataInfoServiceSeul = new BoardDataInfoService_seul(mockRequest, boardDataRepositorySeul, mapper);
 
         // 테스트 데이터 생성
         createTestData();
@@ -86,35 +85,35 @@ class BoardDataInfoServiceTest {
         memberRepository.save(member2);
 
         // 2. 테스트 게시판 생성 (다른 필수 필드들도 추가)
-        Board board1 = new Board();
-        board1.setBid("notice");
-        board1.setName("공지사항");
-        board1.setSkin("default");
-        board1.setActive(true);
-        board1.setCategory("general");           // 필수 필드
-        board1.setListAuthority(Authority.ALL);  // 필수 필드
-        board1.setViewAuthority(Authority.ALL);  // 필수 필드
-        board1.setWriteAuthority(Authority.MEMBER); // 필수 필드
-        board1.setCommentAuthority(Authority.MEMBER); // 필수 필드
-        board1.setRowsForPage(20);
-        board1.setPageCount(10);
-        board1.setCreatedAt(LocalDateTime.now());
-        boardRepository.save(board1);
+        Board_seul boardSeul1 = new Board_seul();
+        boardSeul1.setBid("notice");
+        boardSeul1.setName("공지사항");
+        boardSeul1.setSkin("default");
+        boardSeul1.setActive(true);
+        boardSeul1.setCategory("general");           // 필수 필드
+        boardSeul1.setListAuthority(Authority.ALL);  // 필수 필드
+        boardSeul1.setViewAuthority(Authority.ALL);  // 필수 필드
+        boardSeul1.setWriteAuthority(Authority.MEMBER); // 필수 필드
+        boardSeul1.setCommentAuthority(Authority.MEMBER); // 필수 필드
+        boardSeul1.setRowsForPage(20);
+        boardSeul1.setPageCount(10);
+        boardSeul1.setCreatedAt(LocalDateTime.now());
+        boardRepositorySeul.save(boardSeul1);
 
-        Board board2 = new Board();
-        board2.setBid("free");
-        board2.setName("자유게시판");
-        board2.setSkin("default");
-        board2.setActive(true);
-        board2.setCategory("general");
-        board2.setListAuthority(Authority.ALL);
-        board2.setViewAuthority(Authority.ALL);
-        board2.setWriteAuthority(Authority.MEMBER);
-        board2.setCommentAuthority(Authority.MEMBER);
-        board2.setRowsForPage(20);
-        board2.setPageCount(10);
-        board2.setCreatedAt(LocalDateTime.now());
-        boardRepository.save(board2);
+        Board_seul boardSeul2 = new Board_seul();
+        boardSeul2.setBid("free");
+        boardSeul2.setName("자유게시판");
+        boardSeul2.setSkin("default");
+        boardSeul2.setActive(true);
+        boardSeul2.setCategory("general");
+        boardSeul2.setListAuthority(Authority.ALL);
+        boardSeul2.setViewAuthority(Authority.ALL);
+        boardSeul2.setWriteAuthority(Authority.MEMBER);
+        boardSeul2.setCommentAuthority(Authority.MEMBER);
+        boardSeul2.setRowsForPage(20);
+        boardSeul2.setPageCount(10);
+        boardSeul2.setCreatedAt(LocalDateTime.now());
+        boardRepositorySeul.save(boardSeul2);
 
         // 3. 게시글 생성 (seq 제거)
         String[] subjects = {
@@ -132,17 +131,17 @@ class BoardDataInfoServiceTest {
         };
 
         Random random = new Random();
-        Board[] boards = {board1, board2};
+        Board_seul[] boardSeuls = {boardSeul1, boardSeul2};
         Member[] members = {member1, member2};
 
         // 50개 게시글 생성
         for (int i = 1; i <= 50; i++) {
-            BoardData boardData = new BoardData();
+            BoardData_Seul boardData = new BoardData_Seul();
             // boardData.setSeq((long) i);  // 제거! 자동 생성
             boardData.setSubject(subjects[random.nextInt(subjects.length)] + " #" + i);
             boardData.setContent(contents[random.nextInt(contents.length)] + " (게시글 번호: " + i + ")");
             boardData.setPoster("작성자" + (i % 5 + 1));
-            boardData.setBoard(boards[random.nextInt(boards.length)]);
+            boardData.setBoardSeul(boardSeuls[random.nextInt(boardSeuls.length)]);
             boardData.setMember(members[random.nextInt(members.length)]);
 
             // BoardData의 다른 필수 필드들도 설정
@@ -155,7 +154,7 @@ class BoardDataInfoServiceTest {
                     .minusHours(random.nextInt(24));
             boardData.setCreatedAt(randomTime);
 
-            boardDataRepository.save(boardData);
+            boardDataRepositorySeul.save(boardData);
         }
 
         System.out.println("테스트 데이터 생성 완료: 회원 2명, 게시판 2개, 게시글 50개");
@@ -165,12 +164,12 @@ class BoardDataInfoServiceTest {
     @DisplayName("전체 게시글 목록 조회 테스트")
     void getAllBoardData() {
         // Given
-        BoardSearch search = new BoardSearch();
+        BoardSearch_seul search = new BoardSearch_seul();
         search.setPage(1);
         search.setLimit(20);
 
         // When
-        ListData<BoardData> result = boardDataInfoServiceSeul.getList(search);
+        ListData<BoardData_Seul> result = boardDataInfoServiceSeul.getList(search);
 
         // Then
         assertNotNull(result);
@@ -184,10 +183,10 @@ class BoardDataInfoServiceTest {
 
         // 첫 번째 게시글 정보 출력
         if (!result.getItems().isEmpty()) {
-            BoardData first = result.getItems().get(0);
+            BoardData_Seul first = result.getItems().get(0);
             System.out.println("첫 번째 게시글: " + first.getSubject());
             System.out.println("작성자: " + first.getPoster());
-            System.out.println("게시판: " + first.getBoard().getName());
+            System.out.println("게시판: " + first.getBoardSeul().getName());
         }
     }
 
@@ -195,14 +194,14 @@ class BoardDataInfoServiceTest {
     @DisplayName("제목으로 검색 테스트")
     void searchBySubject() {
         // Given
-        BoardSearch search = new BoardSearch();
+        BoardSearch_seul search = new BoardSearch_seul();
         search.setSopt("SUBJECT");
         search.setSkey("공지");
         search.setPage(1);
         search.setLimit(20);
 
         // When
-        ListData<BoardData> result = boardDataInfoServiceSeul.getList(search);
+        ListData<BoardData_Seul> result = boardDataInfoServiceSeul.getList(search);
 
         // Then
         assertNotNull(result);
@@ -211,7 +210,7 @@ class BoardDataInfoServiceTest {
         System.out.println("'공지' 제목 검색 결과: " + result.getItems().size() + "개");
 
         // 검색된 게시글들이 모두 '공지'를 포함하는지 확인
-        for (BoardData item : result.getItems()) {
+        for (BoardData_Seul item : result.getItems()) {
             assertTrue(item.getSubject().contains("공지"));
             System.out.println("검색된 게시글: " + item.getSubject());
         }
@@ -221,20 +220,20 @@ class BoardDataInfoServiceTest {
     @DisplayName("내용으로 검색 테스트")
     void searchByContent() {
         // Given
-        BoardSearch search = new BoardSearch();
+        BoardSearch_seul search = new BoardSearch_seul();
         search.setSopt("CONTENT");
         search.setSkey("도움");
         search.setPage(1);
         search.setLimit(20);
 
         // When
-        ListData<BoardData> result = boardDataInfoServiceSeul.getList(search);
+        ListData<BoardData_Seul> result = boardDataInfoServiceSeul.getList(search);
 
         // Then
         assertNotNull(result);
         System.out.println("'도움' 내용 검색 결과: " + result.getItems().size() + "개");
 
-        for (BoardData item : result.getItems()) {
+        for (BoardData_Seul item : result.getItems()) {
             assertTrue(item.getContent().contains("도움"));
             System.out.println("검색된 게시글: " + item.getSubject() + " - " + item.getContent());
         }
@@ -244,21 +243,21 @@ class BoardDataInfoServiceTest {
     @DisplayName("게시판 ID로 필터링 테스트")
     void searchByBoardId() {
         // Given
-        BoardSearch search = new BoardSearch();
+        BoardSearch_seul search = new BoardSearch_seul();
         search.setBid(Arrays.asList("notice"));
         search.setPage(1);
         search.setLimit(20);
 
         // When
-        ListData<BoardData> result = boardDataInfoServiceSeul.getList(search);
+        ListData<BoardData_Seul> result = boardDataInfoServiceSeul.getList(search);
 
         // Then
         assertNotNull(result);
         System.out.println("'notice' 게시판 필터링 결과: " + result.getItems().size() + "개");
 
-        for (BoardData item : result.getItems()) {
-            assertEquals("notice", item.getBoard().getBid());
-            System.out.println("게시글: " + item.getSubject() + " (게시판: " + item.getBoard().getName() + ")");
+        for (BoardData_Seul item : result.getItems()) {
+            assertEquals("notice", item.getBoardSeul().getBid());
+            System.out.println("게시글: " + item.getSubject() + " (게시판: " + item.getBoardSeul().getName() + ")");
         }
     }
 
@@ -266,19 +265,19 @@ class BoardDataInfoServiceTest {
     @DisplayName("회원 이메일로 검색 테스트")
     void searchByMemberEmail() {
         // Given
-        BoardSearch search = new BoardSearch();
+        BoardSearch_seul search = new BoardSearch_seul();
         search.setEmail(Arrays.asList("test1@test.com"));
         search.setPage(1);
         search.setLimit(20);
 
         // When
-        ListData<BoardData> result = boardDataInfoServiceSeul.getList(search);
+        ListData<BoardData_Seul> result = boardDataInfoServiceSeul.getList(search);
 
         // Then
         assertNotNull(result);
         System.out.println("'test1@test.com' 회원 검색 결과: " + result.getItems().size() + "개");
 
-        for (BoardData item : result.getItems()) {
+        for (BoardData_Seul item : result.getItems()) {
             assertEquals("test1@test.com", item.getMember().getEmail());
             System.out.println("게시글: " + item.getSubject() + " (작성자: " + item.getMember().getName() + ")");
         }
@@ -288,14 +287,14 @@ class BoardDataInfoServiceTest {
     @DisplayName("날짜 범위 검색 테스트")
     void searchByDateRange() {
         // Given
-        BoardSearch search = new BoardSearch();
+        BoardSearch_seul search = new BoardSearch_seul();
         search.setSDate(LocalDate.now().minusDays(7));  // 7일 전부터
         search.setEDate(LocalDate.now());               // 오늘까지
         search.setPage(1);
         search.setLimit(20);
 
         // When
-        ListData<BoardData> result = boardDataInfoServiceSeul.getList(search);
+        ListData<BoardData_Seul> result = boardDataInfoServiceSeul.getList(search);
 
         // Then
         assertNotNull(result);
@@ -304,7 +303,7 @@ class BoardDataInfoServiceTest {
         LocalDateTime weekAgo = LocalDate.now().minusDays(7).atStartOfDay();
         LocalDateTime today = LocalDate.now().atTime(23, 59, 59);
 
-        for (BoardData item : result.getItems()) {
+        for (BoardData_Seul item : result.getItems()) {
             assertTrue(item.getCreatedAt().isAfter(weekAgo) || item.getCreatedAt().isEqual(weekAgo));
             assertTrue(item.getCreatedAt().isBefore(today) || item.getCreatedAt().isEqual(today));
             System.out.println("게시글: " + item.getSubject() + " (작성일: " + item.getCreatedAt() + ")");
@@ -315,20 +314,20 @@ class BoardDataInfoServiceTest {
     @DisplayName("통합 검색 테스트")
     void searchAll() {
         // Given
-        BoardSearch search = new BoardSearch();
+        BoardSearch_seul search = new BoardSearch_seul();
         search.setSopt("ALL");
         search.setSkey("정보");
         search.setPage(1);
         search.setLimit(20);
 
         // When
-        ListData<BoardData> result = boardDataInfoServiceSeul.getList(search);
+        ListData<BoardData_Seul> result = boardDataInfoServiceSeul.getList(search);
 
         // Then
         assertNotNull(result);
         System.out.println("'정보' 통합 검색 결과: " + result.getItems().size() + "개");
 
-        for (BoardData item : result.getItems()) {
+        for (BoardData_Seul item : result.getItems()) {
             boolean hasKeyword = item.getSubject().contains("정보") ||
                     item.getContent().contains("정보") ||
                     item.getPoster().contains("정보") ||
@@ -343,17 +342,17 @@ class BoardDataInfoServiceTest {
     @DisplayName("페이징 테스트")
     void testPaging() {
         // Given
-        BoardSearch search1 = new BoardSearch();
+        BoardSearch_seul search1 = new BoardSearch_seul();
         search1.setPage(1);
         search1.setLimit(10);
 
-        BoardSearch search2 = new BoardSearch();
+        BoardSearch_seul search2 = new BoardSearch_seul();
         search2.setPage(2);
         search2.setLimit(10);
 
         // When
-        ListData<BoardData> page1 = boardDataInfoServiceSeul.getList(search1);
-        ListData<BoardData> page2 = boardDataInfoServiceSeul.getList(search2);
+        ListData<BoardData_Seul> page1 = boardDataInfoServiceSeul.getList(search1);
+        ListData<BoardData_Seul> page2 = boardDataInfoServiceSeul.getList(search2);
 
         // Then
         assertEquals(10, page1.getItems().size());
@@ -372,23 +371,23 @@ class BoardDataInfoServiceTest {
     @DisplayName("단일 게시글 조회 테스트")
     void getSingleBoardData() {
 
-        BoardSearch search = new BoardSearch();
+        BoardSearch_seul search = new BoardSearch_seul();
         search.setPage(1);
         search.setLimit(20);
 
         // When
-        ListData<BoardData> result1 = boardDataInfoServiceSeul.getList(search);
+        ListData<BoardData_Seul> result1 = boardDataInfoServiceSeul.getList(search);
 
-        BoardData first=result1.getItems().getFirst();
+        BoardData_Seul first=result1.getItems().getFirst();
         Long seq=first.getSeq();
 
-        BoardData result= boardDataInfoServiceSeul.get(seq);
+        BoardData_Seul result= boardDataInfoServiceSeul.get(seq);
 
         System.out.println("조회된 게시글:");
         System.out.println("  제목: " + result.getSubject());
         System.out.println("  내용: " + result.getContent());
         System.out.println("  작성자: " + result.getPoster());
-        System.out.println("  게시판: " + result.getBoard().getName());
+        System.out.println("  게시판: " + result.getBoardSeul().getName());
         System.out.println("  회원: " + result.getMember().getName());
 
         RequestBoard result2= boardDataInfoServiceSeul.getForm(seq);
@@ -401,7 +400,7 @@ class BoardDataInfoServiceTest {
     @DisplayName("복합 조건 검색 테스트")
     void complexSearch() {
         // Given
-        BoardSearch search = new BoardSearch();
+        BoardSearch_seul search = new BoardSearch_seul();
         search.setBid(Arrays.asList("free"));           // 자유게시판만
         search.setEmail(Arrays.asList("test1@test.com")); // 특정 회원만
         search.setSopt("SUBJECT");                       // 제목 검색
@@ -410,18 +409,18 @@ class BoardDataInfoServiceTest {
         search.setLimit(20);
 
         // When
-        ListData<BoardData> result = boardDataInfoServiceSeul.getList(search);
+        ListData<BoardData_Seul> result = boardDataInfoServiceSeul.getList(search);
 
         // Then
         assertNotNull(result);
         System.out.println("복합 조건 검색 결과: " + result.getItems().size() + "개");
 
-        for (BoardData item : result.getItems()) {
-            assertEquals("free", item.getBoard().getBid());
+        for (BoardData_Seul item : result.getItems()) {
+            assertEquals("free", item.getBoardSeul().getBid());
             assertEquals("test1@test.com", item.getMember().getEmail());
             assertTrue(item.getSubject().contains("자유"));
             System.out.println("검색된 게시글: " + item.getSubject() +
-                    " (게시판: " + item.getBoard().getName() +
+                    " (게시판: " + item.getBoardSeul().getName() +
                     ", 작성자: " + item.getMember().getName() + ")");
         }
     }
@@ -430,13 +429,13 @@ class BoardDataInfoServiceTest {
 @DataJpaTest
 @ActiveProfiles("test")
 @DisplayName("BoardDataUpdateService 테스트")
-class BoardDataUpdateServiceTest {
+class BoardSeulDataUpdateServiceTest {
 
     @Autowired
-    private BoardDataRepository boardDataRepository;
+    private BoardDataRepository_seul_seul boardDataRepositorySeul;
 
     @Autowired
-    private BoardRepository boardRepository;
+    private BoardRepository_seul_seul boardRepositorySeul;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -464,7 +463,7 @@ class BoardDataUpdateServiceTest {
 
         // 3. Mock 객체 생성 및 설정 (데이터 생성 후에)
         memberUtil = mock(MemberUtil.class);
-        boardInfoServiceSeul = new BoardInfoService_seul(request, boardRepository,mapper);
+        boardInfoServiceSeul = new BoardInfoService_seul(request, boardRepositorySeul,mapper);
 
         // 4. Mock 설정
         Member savedMember = memberRepository.findAll().get(0);  // 저장된 회원 가져오기
@@ -473,8 +472,8 @@ class BoardDataUpdateServiceTest {
 
         // 5. UpdateService 생성 (Mock 설정 후에)
         updateService = new BoardDataUpdateService_seul(
-                boardDataRepository,
-                boardRepository,
+                boardDataRepositorySeul,
+                boardRepositorySeul,
                 boardInfoServiceSeul,
                 memberUtil,
                 request,
@@ -493,21 +492,21 @@ class BoardDataUpdateServiceTest {
         memberRepository.save(member);
 
         // 게시판 생성
-        Board board = new Board();
-        board.setBid("test");
-        board.setName("테스트 게시판");
-        board.setSkin("default");
-        board.setActive(true);
-        board.setEditor(true);
-        board.setCategory("general");
-        board.setListAuthority(Authority.ALL);
-        board.setViewAuthority(Authority.ALL);
-        board.setWriteAuthority(Authority.MEMBER);
-        board.setCommentAuthority(Authority.MEMBER);
-        board.setRowsForPage(20);
-        board.setPageCount(10);
-        board.setCreatedAt(LocalDateTime.now());
-        boardRepository.save(board);
+        Board_seul boardSeul = new Board_seul();
+        boardSeul.setBid("test");
+        boardSeul.setName("테스트 게시판");
+        boardSeul.setSkin("default");
+        boardSeul.setActive(true);
+        boardSeul.setEditor(true);
+        boardSeul.setCategory("general");
+        boardSeul.setListAuthority(Authority.ALL);
+        boardSeul.setViewAuthority(Authority.ALL);
+        boardSeul.setWriteAuthority(Authority.MEMBER);
+        boardSeul.setCommentAuthority(Authority.MEMBER);
+        boardSeul.setRowsForPage(20);
+        boardSeul.setPageCount(10);
+        boardSeul.setCreatedAt(LocalDateTime.now());
+        boardRepositorySeul.save(boardSeul);
 
         System.out.println("테스트 데이터 생성 완료");
     }
@@ -530,12 +529,12 @@ class BoardDataUpdateServiceTest {
         updateService.process(request);
 
         // Then
-        BoardData saved = boardDataRepository.findAll().get(0);
+        BoardData_Seul saved = boardDataRepositorySeul.findAll().get(0);
         assertNotNull(saved);
         assertEquals("테스트 제목", saved.getSubject());
         assertEquals("테스트 내용", saved.getContent());
         assertEquals("테스터", saved.getPoster());
-        assertEquals("test", saved.getBoard().getBid());
+        assertEquals("test", saved.getBoardSeul().getBid());
         assertEquals("127.0.0.1", saved.getIp());
 
         System.out.println("저장된 게시글: " + saved.getSubject());
@@ -545,19 +544,19 @@ class BoardDataUpdateServiceTest {
     @DisplayName("기존 게시글 수정 테스트")
     void updateExistingBoardData() {
         // Given - 기존 게시글 생성
-        Board board = boardRepository.findById("test").orElseThrow();
+        Board_seul boardSeul = boardRepositorySeul.findById("test").orElseThrow();
         Member member = memberRepository.findAll().get(0);
 
-        BoardData existing = new BoardData();
+        BoardData_Seul existing = new BoardData_Seul();
         existing.setSubject("기존 제목");
         existing.setContent("기존 내용");
         existing.setPoster("기존 작성자");
-        existing.setBoard(board);
+        existing.setBoardSeul(boardSeul);
         existing.setMember(member);
         existing.setGid("existing_gid");
         existing.setIp("192.168.1.1");
         existing.setCreatedAt(LocalDateTime.now());
-        BoardData saved = boardDataRepository.save(existing);
+        BoardData_Seul saved = boardDataRepositorySeul.save(existing);
 
         // When - 수정 요청
         RequestBoardData request = new RequestBoardData();
@@ -570,7 +569,7 @@ class BoardDataUpdateServiceTest {
         updateService.process(request);
 
         // Then
-        BoardData updated = boardDataRepository.findById(saved.getSeq()).orElseThrow();
+        BoardData_Seul updated = boardDataRepositorySeul.findById(saved.getSeq()).orElseThrow();
         assertEquals("수정된 제목", updated.getSubject());
         assertEquals("수정된 내용", updated.getContent());
         assertEquals("수정된 작성자", updated.getPoster());
