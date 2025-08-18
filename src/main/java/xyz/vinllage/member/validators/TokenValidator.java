@@ -1,10 +1,12 @@
 package xyz.vinllage.member.validators;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import xyz.vinllage.member.controllers.RequestToken;
+import xyz.vinllage.member.entities.Member;
 import xyz.vinllage.member.repositories.MemberRepository;
 
 @Component
@@ -12,6 +14,7 @@ import xyz.vinllage.member.repositories.MemberRepository;
 public class TokenValidator implements Validator {
 
     private final MemberRepository repository;
+    private final PasswordEncoder encoder;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -25,8 +28,13 @@ public class TokenValidator implements Validator {
         }
 
         RequestToken form = (RequestToken) target;
-        if (!repository.existsByEmail(form.getEmail())) {
-            errors.rejectValue("email", "NotFound.member");
+        Member member = repository.findByEmail(form.getEmail()).orElse(null);
+        if(member==null){
+            errors.rejectValue("NotFound.member.or.passsword");
+        }
+        // 비밀 번호 검증
+        if(member != ){
+            errors.rejectValue("NotFound.member.or.passsword");
         }
     }
 }
