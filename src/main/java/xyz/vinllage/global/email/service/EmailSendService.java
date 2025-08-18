@@ -15,8 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static java.awt.SystemColor.text;
-
 @Service
 @RequiredArgsConstructor
 public class EmailSendService {
@@ -32,6 +30,7 @@ public class EmailSendService {
      * @return
      */
     public boolean sendMail(EmailMessage message, String tpl, Map<String, Object >tplData){
+        String text = null;
         /**
          * 이메일 템플릿 사용 하는 경우 EmailMessage의 제목 내용 수신인 밎 tplData 추가 치환 속성을 전달 하고 타임 리프로 변역된 텍스트를 반환 값으로처리
          *
@@ -46,14 +45,9 @@ public class EmailSendService {
 
             context.setVariables(tplData);
             text = templateEngine.process("email" + tpl, context);
-
-
+        }else { // 템플릿 전송이 아닌 경우 메세지로 대체
+            text = message.message();
         }
-
-
-
-
-
         try{
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
@@ -66,5 +60,8 @@ public class EmailSendService {
             e.printStackTrace();
         }
         return false;
+    }
+    public boolean sendMail(EmailMessage message){
+        return sendMail(message, null, null);
     }
     }

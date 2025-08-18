@@ -23,9 +23,13 @@ public class QTrash extends EntityPathBase<Trash> {
 
     public final EnumPath<xyz.vinllage.recycle.constants.TrashState> trashState = createEnum("trashState", xyz.vinllage.recycle.constants.TrashState.class);
 
-    public final NumberPath<Long> x = createNumber("x", Long.class);
+    public final NumberPath<Long> xEnd = createNumber("xEnd", Long.class);
 
-    public final NumberPath<Long> y = createNumber("y", Long.class);
+    public final NumberPath<Long> xStart = createNumber("xStart", Long.class);
+
+    public final NumberPath<Long> yEnd = createNumber("yEnd", Long.class);
+
+    public final NumberPath<Long> yStart = createNumber("yStart", Long.class);
 
     public QTrash(String variable) {
         super(Trash.class, forVariable(variable));

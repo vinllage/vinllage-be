@@ -12,10 +12,16 @@ public class Trash {
 	private Long rid; // 기본키 rid
 
 	@Column(nullable = false)
-	private Long x; // 웹캠 속 x 좌표
+	private Long xStart ; // 웹캠 속 x 좌표
 
 	@Column(nullable = false)
-	private Long y; // 웹캠 속 y 좌표
+	private Long xEnd; // 웹캠 속 x 좌표
+
+	@Column(nullable = false)
+	private Long yStart; // 웹캠 속 y 좌표
+
+	@Column(nullable = false)
+	private Long yEnd; // 웹캠 속 y 좌표
 
 	@Enumerated(EnumType.STRING) // 쓰레기 종류 enum값 받기
 	private TrashState trashState;
