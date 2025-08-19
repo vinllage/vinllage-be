@@ -11,11 +11,10 @@ public class DetectedRecycle extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seq;
 
-    @Column(name = "file_seq", nullable = false)
-    private Long fileSeq;
+    @Column(nullable = false)
+    private String gid;  // 파일 gid
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
     private Member member;
 
     // 길이 고려: TEXT 또는 DB가 지원하면 JSON 타입
