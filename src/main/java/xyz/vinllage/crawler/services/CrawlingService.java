@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import xyz.vinllage.crawler.controllers.RequestCrawling;
 import xyz.vinllage.crawler.entities.CrawledData;
+import xyz.vinllage.crawler.entities.CrawlerConfig;
 import xyz.vinllage.crawler.repositories.CrawledDataRepository;
+import xyz.vinllage.crawler.repositories.CrawlerConfigRepository;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -30,9 +32,16 @@ public class CrawlingService {
     private final CrawledDataRepository repository;
     private final RestTemplate restTemplate;
     private final ObjectMapper om;
+    private final CrawlerConfigRepository configRepository;
+    private final CrawlerSettingService settingService;
 
     @Value("${api.server.url}")
     private String apiUrl;
+
+    /**
+     * 크롤링 요청을 외부 API(Flask) 서버에 전달하고,
+     * 결과 데이터를 CrawledData 엔티티로 변환 후 DB에 저장하는 메서드
+     */
     public List<CrawledData> process(RequestCrawling form){
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -79,8 +88,20 @@ public class CrawlingService {
         return null;
     }
 
-    @Scheduled(timeUnit = TimeUnit.HOURS, fixedRate = 6L)
+    /**
+     * 24시간마다 실행되는 스케줄러
+     * - 스케줄러가 ON 상태일 때만 동작
+     * - DB에 저장된 CrawlerConfig 목록을 불러와 순차적으로 크롤링 실행
+     */
+    @Scheduled(timeUnit = TimeUnit.HOURS, fixedRate = 24L)
     public void scheduledJob() {
+        if (!settingService.isSchedulerEnabled()) {
+            return;
+        }
 
+        List<CrawlerConfig> configs = configRepository.findAll();
+        for (CrawlerConfig config : configs) {
+            process(config.toRequest());
+        }
     }
 }
