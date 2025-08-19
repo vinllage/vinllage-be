@@ -32,12 +32,14 @@ public class DetectSaveService {
 
         // 1) 파일 업로드: 동일 gid로 그룹화
         String gid = UUID.randomUUID().toString();
-        RequestUpload upload = new RequestUpload();
-        upload.setGid(gid);
-        upload.setFiles(files.toArray(MultipartFile[]::new));
-        upload.setSingle(false);     // 여러 파일
-        upload.setImageOnly(true);
-        upload.setLocation("detect");
+        RequestUpload form = new RequestUpload();
+        form.setGid(gid);
+        form.setFiles(files.toArray(MultipartFile[]::new));
+        form.setSingle(false);     // 여러 파일
+        form.setImageOnly(false);
+        form.setLocation("detect");
+
+        fileUploadService.process(form);
 
         // 2) RecycleFileData 생성
         DetectedRecycle entity = new DetectedRecycle();
