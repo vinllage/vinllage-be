@@ -21,6 +21,7 @@ public class CrawlingserviceTest {
         form.setLinkSelector(".brd_body .title a");
         form.setTitleSelector(".board_view .board_tit");
         form.setDateSelector(".board_view .createDate");
+        form.setContentSelector(".board_view .board_con");
         form.setUrlPrefix("https://www.me.go.kr");
         service.process(form);
     }

@@ -13,6 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import xyz.vinllage.crawler.entities.CrawledData;
 import xyz.vinllage.crawler.repositories.CrawledDataRepository;
+import xyz.vinllage.global.search.ListData;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -78,10 +79,10 @@ public class EventControllerTest {
                 .getResponse()
                 .getContentAsString();
 
-        JsonNode root = om.readTree(body);
-        List<CrawledData> items = om.convertValue(root.get("items"), new TypeReference<>() {});
-        assertEquals(2, items.size());
-        assertEquals(2, items.get(0).getHash());
+        ListData<CrawledData> data = om.readValue(body, new TypeReference<ListData<CrawledData>>() {});
+        assertEquals(2, data.getItems().size());
+        assertEquals("Event2", data.getItems().get(0).getTitle());
+        assertEquals("Event1", data.getItems().get(1).getTitle());
     }
 
     /**
