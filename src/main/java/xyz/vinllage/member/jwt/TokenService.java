@@ -43,7 +43,7 @@ public class TokenService {
     public TokenService(JwtProperties properties, MemberInfoService infoService) {
         this.properties = properties;
         this.infoService = infoService;
-        this.repository = repository
+        this.repository = repository;
 
         byte[] keyBytes = Decoders.BASE64URL.decode(properties.getSecret());
         this.key = Keys.hmacShaKeyFor(keyBytes);

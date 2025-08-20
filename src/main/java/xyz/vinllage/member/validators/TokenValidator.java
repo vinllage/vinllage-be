@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import xyz.vinllage.member.controllers.RequestLoginToken;
 import xyz.vinllage.member.controllers.RequestToken;
 import xyz.vinllage.member.entities.Member;
 import xyz.vinllage.member.repositories.MemberRepository;
@@ -18,6 +19,7 @@ public class TokenValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
+
         return clazz.isAssignableFrom(RequestToken.class);
     }
 
@@ -26,6 +28,7 @@ public class TokenValidator implements Validator {
         if (errors.hasErrors()) {
             return;
         }
+        if (!(target instanceof RequestLoginToken))return;
 
         RequestToken form = (RequestToken) target;
         Member member = repository.findByEmail(form.getEmail()).orElse(null);
