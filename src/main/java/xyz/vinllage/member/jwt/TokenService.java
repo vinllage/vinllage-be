@@ -18,8 +18,10 @@ import xyz.vinllage.global.exceptions.UnAuthorizedException;
 import xyz.vinllage.global.libs.Utils;
 import xyz.vinllage.member.MemberInfo;
 import xyz.vinllage.member.constants.Authority;
+import xyz.vinllage.member.controllers.RequestSocialToken;
 import xyz.vinllage.member.controllers.RequestToken;
 import xyz.vinllage.member.entities.Member;
+import xyz.vinllage.member.exceptions.MemberNotFoundException;
 import xyz.vinllage.member.repositories.MemberRepository;
 import xyz.vinllage.member.services.MemberInfoService;
 
@@ -40,7 +42,7 @@ public class TokenService {
 
     private Key key;
 
-    public TokenService(JwtProperties properties, MemberInfoService infoService) {
+    public TokenService(JwtProperties properties, MemberInfoService infoService, MemberRepository repository) {
         this.properties = properties;
         this.infoService = infoService;
         this.repository = repository;
@@ -70,9 +72,9 @@ public class TokenService {
                 .compact();
     }
 
-    public String create(RequestToken form) {
-        Member member = repository.findBySocialChannelAndSocialToken(form.getChannel(), form.getToken()).orElseThrow(MemberNotFoundException::new);
-        return create(member.getEmail());
+    public String create(RequestSocialToken form ) {
+       Member member = repository.findBySocialChannelAndSocialToken(form.getChnannel(), form.getToken()).orElseThrow(MemberNotFoundException::new);
+       return create(member.getEmail());
     }
 
     /**

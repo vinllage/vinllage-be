@@ -30,7 +30,7 @@ public class TokenValidator implements Validator {
         }
         if (!(target instanceof RequestLoginToken))return;
 
-        RequestToken form = (RequestToken) target;
+        RequestLoginToken form = (RequestLoginToken) target;
         Member member = repository.findByEmail(form.getEmail()).orElse(null);
 
         if (member == null) {
