@@ -18,7 +18,9 @@ import xyz.vinllage.global.exceptions.UnAuthorizedException;
 import xyz.vinllage.global.libs.Utils;
 import xyz.vinllage.member.MemberInfo;
 import xyz.vinllage.member.constants.Authority;
+import xyz.vinllage.member.controllers.RequestToken;
 import xyz.vinllage.member.entities.Member;
+import xyz.vinllage.member.repositories.MemberRepository;
 import xyz.vinllage.member.services.MemberInfoService;
 
 import java.security.Key;
@@ -31,6 +33,7 @@ import java.util.List;
 public class TokenService {
     private final JwtProperties properties;
     private final MemberInfoService infoService;
+    private final MemberRepository repository;
 
     @Autowired
     private Utils utils;
@@ -40,6 +43,7 @@ public class TokenService {
     public TokenService(JwtProperties properties, MemberInfoService infoService) {
         this.properties = properties;
         this.infoService = infoService;
+        this.repository = repository
 
         byte[] keyBytes = Decoders.BASE64URL.decode(properties.getSecret());
         this.key = Keys.hmacShaKeyFor(keyBytes);
@@ -64,6 +68,11 @@ public class TokenService {
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(date)
                 .compact();
+    }
+
+    public String create(RequestToken form) {
+        Member member = repository.findBySocialChannelAndSocialToken(form.getChannel(), form.getToken()).orElseThrow(MemberNotFoundException::new);
+        return create(member.getEmail());
     }
 
     /**
