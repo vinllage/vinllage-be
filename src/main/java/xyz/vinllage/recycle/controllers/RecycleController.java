@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import xyz.vinllage.global.exceptions.BadRequestException;
 import xyz.vinllage.global.libs.Utils;
+import xyz.vinllage.global.search.ListData;
 import xyz.vinllage.member.entities.Member;
 import xyz.vinllage.member.libs.MemberUtil;
+import xyz.vinllage.recycle.entities.RecycleResult;
 import xyz.vinllage.recycle.services.DetectInfoService;
 import xyz.vinllage.recycle.services.DetectSaveService;
-import xyz.vinllage.global.search.ListData;
-import xyz.vinllage.recycle.entities.RecycleResult;
 import xyz.vinllage.recycle.services.RecycleInfoService;
 
 import java.util.List;
@@ -31,6 +31,7 @@ public class RecycleController {
     private final RecycleInfoService infoService;
     private final MemberUtil memberUtil;
     private final Utils utils;
+
 
     @Operation(summary = "감지된 재활용 크롭 이미지 저장", method = "POST")
     @ApiResponse(responseCode = "201", description = "성공 시 201로 응답, 검증 실패시 400")
@@ -55,11 +56,6 @@ public class RecycleController {
         @RequestParam(defaultValue = "1") int page,
         @RequestParam(defaultValue = "20") int limit
     ) {
-        // 개발용 메서드
-        detectInfoService.downloadAllDetectedImages();
-
-        // 추가 작업...
-
         return infoService.getList(page, limit);
     }
 }
