@@ -18,7 +18,10 @@ import xyz.vinllage.global.exceptions.UnAuthorizedException;
 import xyz.vinllage.global.libs.Utils;
 import xyz.vinllage.member.MemberInfo;
 import xyz.vinllage.member.constants.Authority;
+import xyz.vinllage.member.constants.SocialChnannel;
 import xyz.vinllage.member.entities.Member;
+import xyz.vinllage.member.exceptions.MemberNotFoundException;
+import xyz.vinllage.member.repositories.MemberRepository;
 import xyz.vinllage.member.services.MemberInfoService;
 
 import java.security.Key;
@@ -31,15 +34,17 @@ import java.util.List;
 public class TokenService {
     private final JwtProperties properties;
     private final MemberInfoService infoService;
+    private final MemberRepository repository;
 
     @Autowired
     private Utils utils;
 
     private Key key;
 
-    public TokenService(JwtProperties properties, MemberInfoService infoService) {
+    public TokenService(JwtProperties properties, MemberInfoService infoService, MemberRepository repository) {
         this.properties = properties;
         this.infoService = infoService;
+        this.repository = repository;
 
         byte[] keyBytes = Decoders.BASE64URL.decode(properties.getSecret());
         this.key = Keys.hmacShaKeyFor(keyBytes);
@@ -66,6 +71,11 @@ public class TokenService {
                 .compact();
     }
 
+    public String create(SocialChnannel channel, String token) {
+        Member member = repository.findBySocialChannelAndSocialToken(channel, token).orElseThrow(MemberNotFoundException::new);
+
+        return create(member.getEmail());
+    }
     /**
      * JWT 토큰으로 인증 처리(로그인 처리)
      *
@@ -98,6 +108,7 @@ public class TokenService {
 
         return authentication;
     }
+
 
     /**
      * 요청헤더

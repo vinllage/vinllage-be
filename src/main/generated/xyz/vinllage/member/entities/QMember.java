@@ -50,6 +50,10 @@ public class QMember extends EntityPathBase<Member> {
 
     public final NumberPath<Long> seq = createNumber("seq", Long.class);
 
+    public final EnumPath<xyz.vinllage.member.constants.SocialChnannel> socialChnannel = createEnum("socialChnannel", xyz.vinllage.member.constants.SocialChnannel.class);
+
+    public final StringPath socialToken = createString("socialToken");
+
     public final BooleanPath termsAgree = createBoolean("termsAgree");
 
     public QMember(String variable) {
