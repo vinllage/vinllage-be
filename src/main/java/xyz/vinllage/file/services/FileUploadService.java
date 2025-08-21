@@ -89,6 +89,8 @@ public class FileUploadService {
             try {
                 file.transferTo(uploadPath);
                 infoService.addInfo(item);
+                System.out.println("Path: " + item.getFilePath());
+                System.out.println("Url: " + item.getFileUrl());
                 uploadedFiles.add(item);
             } catch (IOException e) {
                 // 업로드 실패시 저장된 DB 데이터 삭제
