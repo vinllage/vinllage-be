@@ -14,7 +14,7 @@ import xyz.vinllage.global.libs.Utils;
 import xyz.vinllage.global.search.ListData;
 import xyz.vinllage.member.entities.Member;
 import xyz.vinllage.member.libs.MemberUtil;
-import xyz.vinllage.recycle.entities.RecycleResult;
+import xyz.vinllage.recycle.entities.DetectedRecycle;
 import xyz.vinllage.recycle.services.DetectInfoService;
 import xyz.vinllage.recycle.services.DetectSaveService;
 import xyz.vinllage.recycle.services.RecycleInfoService;
@@ -28,7 +28,7 @@ import java.util.List;
 public class RecycleController {
     private final DetectSaveService detectSaveService;
     private final DetectInfoService detectInfoService;
-    private final RecycleInfoService infoService;
+    private final RecycleInfoService recycleInfoService;
     private final MemberUtil memberUtil;
     private final Utils utils;
 
@@ -52,10 +52,11 @@ public class RecycleController {
   
     @Operation(summary = "쓰레기 목록 조회", description = "page 기본값 1, limit 기본값 20")
     @GetMapping("/list")
-    public ListData<RecycleResult> list(
+    public ListData<DetectedRecycle> list(
         @RequestParam(defaultValue = "1") int page,
-        @RequestParam(defaultValue = "20") int limit
+        @RequestParam(defaultValue = "20") int limit,
+        @RequestParam(defaultValue = "2362a2bc-1d87-4f66-bfdb-b7b42d991c02") String gid
     ) {
-        return infoService.getList(page, limit);
+        return detectInfoService.getList(gid, page, limit);
     }
 }

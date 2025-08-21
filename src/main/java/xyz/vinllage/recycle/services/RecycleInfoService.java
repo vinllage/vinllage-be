@@ -15,7 +15,7 @@ import xyz.vinllage.recycle.entities.QRecycleResult;
 import xyz.vinllage.recycle.entities.RecycleResult;
 import xyz.vinllage.recycle.repositories.RecycleRepository;
 
-import static org.springframework.data.domain.Sort.Order.desc;
+import static org.springframework.data.domain.Sort.Order.asc;
 
 @Lazy
 @Service
@@ -30,7 +30,7 @@ public class RecycleInfoService {
 		page = Math.max(page, 1);
 		limit = limit < 1 ? 20 : limit;
 
-		Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(desc("rid")));
+		Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(asc("rid")));
 
 		QRecycleResult recycleResult = QRecycleResult.recycleResult;
 		BooleanBuilder where = new BooleanBuilder().and(recycleResult.deletedAt.isNull());
