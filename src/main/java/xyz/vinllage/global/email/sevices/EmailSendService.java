@@ -49,17 +49,17 @@ public class EmailSendService {
             mimeMessageHelper.setSubject(message.subject());  // 메일 제목
             mimeMessageHelper.setText(text, true); // 메일 내용
             javaMailSender.send(mimeMessage);
+
             return true;
-        } catch (MessagingException e) {
+        }catch (MessagingException e){
             e.printStackTrace();
         }
 
         return false;
-
     }
 
-    public boolean sendMail(EmailEntiry message) {
-        return sendMail(message, null, null);
+    public boolean sendEmail(EmailEntiry message) {
+        return sendMail(message, null , null);
     }
 
 

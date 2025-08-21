@@ -18,8 +18,7 @@ import xyz.vinllage.global.exceptions.UnAuthorizedException;
 import xyz.vinllage.global.libs.Utils;
 import xyz.vinllage.member.MemberInfo;
 import xyz.vinllage.member.constants.Authority;
-import xyz.vinllage.member.controllers.RequestSocialToken;
-import xyz.vinllage.member.controllers.RequestToken;
+import xyz.vinllage.member.constants.SocialChnannel;
 import xyz.vinllage.member.entities.Member;
 import xyz.vinllage.member.exceptions.MemberNotFoundException;
 import xyz.vinllage.member.repositories.MemberRepository;
@@ -72,11 +71,11 @@ public class TokenService {
                 .compact();
     }
 
-    public String create(RequestSocialToken form ) {
-       Member member = repository.findBySocialChannelAndSocialToken(form.getChnannel(), form.getToken()).orElseThrow(MemberNotFoundException::new);
-       return create(member.getEmail());
-    }
+    public String create(SocialChnannel channel, String token) {
+        Member member = repository.findBySocialChannelAndSocialToken(channel, token).orElseThrow(MemberNotFoundException::new);
 
+        return create(member.getEmail());
+    }
     /**
      * JWT 토큰으로 인증 처리(로그인 처리)
      *
@@ -109,6 +108,7 @@ public class TokenService {
 
         return authentication;
     }
+
 
     /**
      * 요청헤더

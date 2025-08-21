@@ -4,11 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
-import xyz.vinllage.member.controllers.RequestLoginToken;
 import xyz.vinllage.member.controllers.RequestToken;
 import xyz.vinllage.member.entities.Member;
 import xyz.vinllage.member.repositories.MemberRepository;
+
 
 @Component
 @RequiredArgsConstructor
@@ -25,23 +26,29 @@ public class TokenValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        if (errors.hasErrors()) {
-            return;
-        }
-        if (!(target instanceof RequestLoginToken))return;
+        if (!(target instanceof RequestToken))return;
 
-        RequestLoginToken form = (RequestLoginToken) target;
-        Member member = repository.findByEmail(form.getEmail()).orElse(null);
+        RequestToken form = (RequestToken) target;
+        if(form.isSocial()){ // 소셜 로그인 요청인 경우
+            if(form.getSocialChnannel() == null){
+                errors.rejectValue("socialChannel", "NotNull");
+            }
+            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "socialChannel", "NotBlank");
 
-        if (member == null) {
-            errors.reject("NotFound.member.or.password");
-        }
+        }else { // 일반 로그인 요청인 경우
+            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "NotBlank");
+            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotBlank");
+            if (errors.hasErrors()) return;
+            Member member = repository.findByEmail(form.getEmail()).orElse(null);
+            if (member == null) {
+                errors.reject("NotFound.member.or.password");
+            }
+            // 비밀번호 검증
 
-        // 비밀번호 검증
 
-        if (member != null && !encoder.matches(form.getPassword(), member.getPassword())) {
-            errors.reject("NotFound.member.or.password");
-
+            if (member != null && !encoder.matches(form.getPassword(), member.getPassword())) {
+                errors.reject("NotFound.member.or.password");
+            }
         }
     }
 }

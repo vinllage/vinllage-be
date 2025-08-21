@@ -3,7 +3,9 @@ package xyz.vinllage.member.validators;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import xyz.vinllage.global.validators.MobileValidator;
 import xyz.vinllage.global.validators.PasswordValidator;
@@ -34,15 +36,24 @@ public class JoinValidator implements Validator, PasswordValidator, MobileValida
          * 4. 휴대전화번호 형식 검증
          */
 
+
         RequestJoin form = (RequestJoin) target;
+        String password = form.getPassword();
+        String confirmPassword = form.getConfirmPassword();
+        if(form.getSocialChnannel() != null && StringUtils.hasText(form.getSocialToken())){
+            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotBlank");
+            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "confirmPassword", "NotBlank");
+            if (StringUtils.hasText(password) && password.length() < 8) {
+                errors.rejectValue("password", "Size");
+            }
+        }
 
         // 1. 이메일 중복 여부
         if (repository.existsByEmail(form.getEmail())) {
             errors.rejectValue("email", "Duplicated");
         }
 
-        String password = form.getPassword();
-        String confirmPassword = form.getConfirmPassword();
+
 
         // 2. 비밀번호 복잡성
         if (!checkAlpha(password, false) || !checkNumber(password) || !checkSpecialChars(password)) {

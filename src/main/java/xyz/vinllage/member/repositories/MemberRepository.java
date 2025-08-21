@@ -21,4 +21,5 @@ import java.util.Optional;
     boolean existsByEmail(String email);
 
     Optional<Member> findBySocialChannelAndSocialToken(SocialChnannel chnannel , String socialToken);
+
 }
