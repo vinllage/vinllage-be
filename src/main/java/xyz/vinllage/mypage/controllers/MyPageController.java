@@ -1,5 +1,6 @@
 package xyz.vinllage.mypage.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,41 +18,54 @@ import java.time.LocalDateTime;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/mypage")
-@Tag(name="마이페이지 API", description = "회원 정보 수정, 탈퇴, 분리수거 결과 리스트 및 누적 통계를 확인")
+@Tag(name = "마이페이지 API", description = "회원 정보 조회/수정/탈퇴")
 public class MyPageController {
 
     private final MemberRepository memberRepository;
     private final MemberUtil memberUtil;
     private final PasswordEncoder encoder;
 
+    /* =========================================
+       1) 내 정보 조회
+       ========================================= */
     @GetMapping
-    @PreAuthorize("isAuthenticated()") // 로그인 필수
+    @PreAuthorize("isAuthenticated()")
+    @Operation(summary = "내 정보 조회")
     public Member myInfo() {
-        return memberUtil.getMember(); // 현재 로그인한 사용자 엔티티 조회
+        return memberUtil.getMember();
     }
 
+    /* =========================================
+       2) 프로필 수정 (비밀번호는 선택)
+       - RequestProfile 는 기존 프로젝트 DTO 사용
+       ========================================= */
     @PutMapping("/profile")
     @PreAuthorize("isAuthenticated()")
+    @Operation(summary = "프로필 수정 (이름/휴대폰, 비밀번호 선택)")
     public Member updateProfile(@Valid @RequestBody RequestProfile form) {
         Member me = memberUtil.getMember();
 
-        // 비밀번호 변경 (선택)
+        // 비밀번호(선택)
         if (StringUtils.hasText(form.getPassword())) {
-            me.setPassword(encoder.encode(form.getPassword()));
+            me.setPassword(encoder.encode(form.getPassword().trim()));
             me.setCredentialChangedAt(LocalDateTime.now());
         }
-        // 이름/전화번호 변경
-        me.setName(form.getName());
+
+        // 이름/휴대폰
+        me.setName(form.getName().trim());
         me.setMobile(form.getMobile().replaceAll("\\D", ""));
 
         return memberRepository.saveAndFlush(me);
     }
 
+    /* =========================================
+       3) 회원 탈퇴
+       ========================================= */
     @DeleteMapping
     @PreAuthorize("isAuthenticated()")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "회원 탈퇴")
     public void deleteMe() {
-        // 계정 삭제
         Member me = memberUtil.getMember();
         memberRepository.delete(me);
     }
