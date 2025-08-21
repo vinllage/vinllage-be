@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import xyz.vinllage.global.exceptions.BadRequestException;
 import xyz.vinllage.global.libs.Utils;
+import xyz.vinllage.global.search.ListData;
 import xyz.vinllage.member.entities.Member;
 import xyz.vinllage.member.libs.MemberUtil;
 import xyz.vinllage.recycle.entities.DetectedRecycle;
@@ -51,11 +52,11 @@ public class RecycleController {
   
     @Operation(summary = "쓰레기 목록 조회", description = "page 기본값 1, limit 기본값 20")
     @GetMapping("/list")
-    public List<DetectedRecycle> list(
+    public ListData<DetectedRecycle> list(
         @RequestParam(defaultValue = "1") int page,
         @RequestParam(defaultValue = "20") int limit,
-        @RequestParam(defaultValue = "64e12e01-dbd5-45a4-9988-104b8cbee6ac") String gid
+        @RequestParam(defaultValue = "2362a2bc-1d87-4f66-bfdb-b7b42d991c02") String gid
     ) {
-        return detectInfoService.getList(gid);
+        return detectInfoService.getList(gid, page, limit);
     }
 }
