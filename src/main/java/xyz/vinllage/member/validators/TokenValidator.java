@@ -30,7 +30,7 @@ public class TokenValidator implements Validator {
 
         RequestToken form = (RequestToken) target;
         if(form.isSocial()){ // 소셜 로그인 요청인 경우
-            if(form.getSocialChnannel() == null){
+            if(form.getSocialChannel() == null){
                 errors.rejectValue("socialChannel", "NotNull");
             }
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "socialChannel", "NotBlank");

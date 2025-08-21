@@ -40,7 +40,7 @@ public class JoinValidator implements Validator, PasswordValidator, MobileValida
         RequestJoin form = (RequestJoin) target;
         String password = form.getPassword();
         String confirmPassword = form.getConfirmPassword();
-        if(form.getSocialChnannel() != null && StringUtils.hasText(form.getSocialToken())){
+        if(form.getSocialChannel() != null && StringUtils.hasText(form.getSocialToken())){
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotBlank");
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "confirmPassword", "NotBlank");
             if (StringUtils.hasText(password) && password.length() < 8) {
