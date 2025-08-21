@@ -21,6 +21,6 @@ public class DetectedRecycle extends BaseEntity {
     @Column(columnDefinition = "TEXT") // MySQL JSON 쓰면 "JSON"
     private String data; // JSON 문자열 원본
 
-    @Transient
+    @Column(columnDefinition = "TEXT")
     private String imageUrl;
 }

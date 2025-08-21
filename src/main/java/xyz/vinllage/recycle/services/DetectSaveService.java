@@ -44,7 +44,7 @@ public class DetectSaveService {
         form.setLocation("detect");
 
         List<FileInfo> fileInfos = fileUploadService.process(form);
-        System.out.println("파일인포" + fileInfos);
+//        System.out.println("파일인포" + fileInfos);
         List<Map<String, String>> images = fileInfos.stream()
                 .filter(FileInfo::isImage) // 이미지인 경우만
                 .map(f -> Map.of(
