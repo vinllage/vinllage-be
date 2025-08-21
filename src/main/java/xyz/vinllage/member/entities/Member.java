@@ -7,7 +7,7 @@ import lombok.Data;
 import xyz.vinllage.file.entities.FileInfo;
 import xyz.vinllage.global.entities.BaseEntity;
 import xyz.vinllage.member.constants.Authority;
-import xyz.vinllage.member.constants.SocialChnannel;
+import xyz.vinllage.member.constants.SocialChannel;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -55,7 +55,7 @@ public class Member extends BaseEntity implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime credentialChangedAt; // 비밀번호 변경 일시
     @Enumerated(EnumType.STRING)
-    private SocialChnannel socialChnannel;
+    private SocialChannel socialChannel;
 
     @Column(length = 45)
     private String socialToken;

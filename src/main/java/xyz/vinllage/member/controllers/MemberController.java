@@ -71,7 +71,7 @@ public class MemberController {
             throw new BadRequestException(utils.getErrorMessages(errors));
         }
 
-        return form.isSocial() ? tokenService.create(form.getSocialChnannel(), form.getSocialToken()) : tokenService.create(form.getEmail());
+        return form.isSocial() ? tokenService.create(form.getSocialChannel(), form.getSocialToken()) : tokenService.create(form.getEmail());
     }
 
 

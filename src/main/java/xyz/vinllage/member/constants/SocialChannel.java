@@ -1,6 +1,6 @@
 package xyz.vinllage.member.constants;
 
-public enum SocialChnannel {
+public enum SocialChannel {
     KAKAO,
     NAVER
 }
