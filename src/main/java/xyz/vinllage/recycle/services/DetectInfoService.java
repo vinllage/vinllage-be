@@ -14,10 +14,16 @@ public class DetectInfoService {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<DetectedRecycle> getList() {
+    public DetectedRecycle get() {
+
+        return null;
+    }
+
+    public List<DetectedRecycle> getList(String gid) {
         QDetectedRecycle detectedRecycle = QDetectedRecycle.detectedRecycle;
         return queryFactory
                 .selectFrom(detectedRecycle)
-                .fetch();
+                .where(detectedRecycle.gid.eq(gid))
+                .stream().toList();
     }
 }
