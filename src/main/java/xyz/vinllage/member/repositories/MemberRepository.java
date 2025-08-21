@@ -2,7 +2,7 @@ package xyz.vinllage.member.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import xyz.vinllage.member.constants.SocialChnannel;
+import xyz.vinllage.member.constants.SocialChannel;
 import xyz.vinllage.member.entities.Member;
 
 import java.util.Optional;
@@ -20,6 +20,6 @@ import java.util.Optional;
     Optional<Member> findByEmail(String email);
     boolean existsByEmail(String email);
 
-    Optional<Member> findBySocialChannelAndSocialToken(SocialChnannel chnannel , String socialToken);
+    Optional<Member> findBySocialChannelAndSocialToken(SocialChannel channel , String socialToken);
 
 }

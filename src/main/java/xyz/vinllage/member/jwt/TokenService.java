@@ -18,7 +18,7 @@ import xyz.vinllage.global.exceptions.UnAuthorizedException;
 import xyz.vinllage.global.libs.Utils;
 import xyz.vinllage.member.MemberInfo;
 import xyz.vinllage.member.constants.Authority;
-import xyz.vinllage.member.constants.SocialChnannel;
+import xyz.vinllage.member.constants.SocialChannel;
 import xyz.vinllage.member.entities.Member;
 import xyz.vinllage.member.exceptions.MemberNotFoundException;
 import xyz.vinllage.member.repositories.MemberRepository;
@@ -71,7 +71,7 @@ public class TokenService {
                 .compact();
     }
 
-    public String create(SocialChnannel channel, String token) {
+    public String create(SocialChannel channel, String token) {
         Member member = repository.findBySocialChannelAndSocialToken(channel, token).orElseThrow(MemberNotFoundException::new);
 
         return create(member.getEmail());
