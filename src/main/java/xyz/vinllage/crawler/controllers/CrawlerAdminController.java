@@ -15,7 +15,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/crawler")
-@PreAuthorize("hasAuthority('ADMIN)")
+@PreAuthorize("hasAuthority('ADMIN')")
 @Tag(name="크롤러 설정 API", description = "크롤러 설정 및 스케줄러 관리 기능 제공")
 public class CrawlerAdminController {
     private final CrawlerConfigService configService;
