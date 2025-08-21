@@ -6,17 +6,20 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import xyz.vinllage.file.services.FileUploadService;
 import xyz.vinllage.member.constants.Authority;
 import xyz.vinllage.member.controllers.RequestJoin;
 import xyz.vinllage.member.entities.Member;
 import xyz.vinllage.member.repositories.MemberRepository;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Lazy
 @Service
 @RequiredArgsConstructor
 public class JoinService {
+    private final FileUploadService uploadService;
     private final MemberRepository repository;
     private final PasswordEncoder encoder;
     private final ModelMapper mapper;
@@ -42,6 +45,15 @@ public class JoinService {
          * flush()
          * → 지금까지 쌓여 있던 변경 사항들을 즉시 DB에 반영
          */
+
+        String gid = form.getGid();
+        gid = StringUtils.hasText(gid) ? gid : UUID.randomUUID().toString();
+
+        member.setGid(gid);
+
         repository.saveAndFlush(member);
+
+        // 파일 업로드 완료 처리
+        uploadService.processDone(gid);
     }
 }

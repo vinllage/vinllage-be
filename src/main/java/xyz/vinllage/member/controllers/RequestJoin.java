@@ -11,6 +11,9 @@ import lombok.Data;
  */
 @Data
 public class RequestJoin {
+
+    private String gid;
+
     @NotBlank @Email
     private String email;
 

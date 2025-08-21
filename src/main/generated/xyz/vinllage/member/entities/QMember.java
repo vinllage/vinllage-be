@@ -35,6 +35,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final DateTimePath<java.time.LocalDateTime> expired = createDateTime("expired", java.time.LocalDateTime.class);
 
+    public final StringPath gid = createString("gid");
+
     public final BooleanPath locked = createBoolean("locked");
 
     public final StringPath mobile = createString("mobile");

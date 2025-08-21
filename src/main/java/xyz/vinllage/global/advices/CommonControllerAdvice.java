@@ -1,21 +1,20 @@
 package xyz.vinllage.global.advices;
 
 import lombok.RequiredArgsConstructor;
-import xyz.vinllage.global.exceptions.CommonException;
-import xyz.vinllage.global.libs.Utils;
-import xyz.vinllage.global.rests.JSONError;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import xyz.vinllage.global.exceptions.CommonException;
 import xyz.vinllage.global.libs.Utils;
+import xyz.vinllage.global.rests.JSONError;
 
 import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
-@RestControllerAdvice("org.koreait")
+@RestControllerAdvice("xyz.vinllage")
 public class CommonControllerAdvice {
     private final Utils utils;
 
