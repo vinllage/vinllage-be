@@ -62,7 +62,7 @@ public class MemberController {
             @Parameter(name="socialToken", required = true, description = "쇼설 로그인 발급 받은 회원을 구분 값  , 소셜 로그인 시 필수 "),
     })
     @ApiResponse(responseCode = "200", description = "인증 성공시 토큰(JWT)발급")
-    @PostMapping({"/token", "/social.token"})
+    @PostMapping({"/token", "/social/token"})
     public String token(@Valid @RequestBody RequestToken form, Errors errors) {
         form.setSocial(request.getRequestURI().contains("/social"));
         tokenValidator.validate(form, errors);

@@ -20,6 +20,6 @@ import java.util.Optional;
     Optional<Member> findByEmail(String email);
     boolean existsByEmail(String email);
 
-    Optional<Member> findBySocialChannelAndSocialToken(SocialChannel channel , String socialToken);
+    Optional<Member> findBySocialChannelAndSocialToken(SocialChannel socialChannel, String socialToken);
 
 }
