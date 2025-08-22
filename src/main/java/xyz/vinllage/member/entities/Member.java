@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import xyz.vinllage.file.entities.FileInfo;
 import xyz.vinllage.global.entities.BaseEntity;
 import xyz.vinllage.member.constants.Authority;
+import xyz.vinllage.member.constants.SocialChannel;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -17,10 +19,16 @@ import java.time.LocalDateTime;
 */
 @Data
 @Entity
+@Table(indexes = {
+        @Index(name = "index_member_social", columnList = "socialToken")
+})
 public class Member extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seq; // 회원 고유 번호
+
+    @Column(length=45)
+    private String gid; // gid로 프로필 이미지 조회
 
     @Column(length = 75, unique = true, nullable = false)
     private String email;
@@ -47,8 +55,17 @@ public class Member extends BaseEntity implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime credentialChangedAt; // 비밀번호 변경 일시
 
+    @Enumerated(EnumType.STRING)
+    private SocialChannel socialChannel;
+
+    @Column(length = 45)
+    private String socialToken;
+
     // 해당 회원이 관리자 권한인지 확인
     public boolean isAdmin() {
         return authority != null && authority == Authority.ADMIN;
     }
+
+    @Transient
+    private FileInfo profileImage;
 }

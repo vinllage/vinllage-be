@@ -35,6 +35,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final DateTimePath<java.time.LocalDateTime> expired = createDateTime("expired", java.time.LocalDateTime.class);
 
+    public final StringPath gid = createString("gid");
+
     public final BooleanPath locked = createBoolean("locked");
 
     public final StringPath mobile = createString("mobile");
@@ -47,6 +49,10 @@ public class QMember extends EntityPathBase<Member> {
     public final StringPath password = createString("password");
 
     public final NumberPath<Long> seq = createNumber("seq", Long.class);
+
+    public final EnumPath<xyz.vinllage.member.constants.SocialChannel> socialChannel = createEnum("socialChannel", xyz.vinllage.member.constants.SocialChannel.class);
+
+    public final StringPath socialToken = createString("socialToken");
 
     public final BooleanPath termsAgree = createBoolean("termsAgree");
 

@@ -5,10 +5,11 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import xyz.vinllage.global.exceptions.BadRequestException;
@@ -29,6 +30,7 @@ public class MemberController {
     private final JoinService joinService;
     private final TokenValidator tokenValidator;
     private final TokenService tokenService;
+    private final HttpServletRequest request;
     private final MemberUtil memberUtil;
     private final Utils utils;
 
@@ -54,20 +56,22 @@ public class MemberController {
      */
     @Operation(summary = "회원 인증 처리", description = "이메일과 비밀번호로 인증한 후 회원 전용 요청을 보낼수 있는 토큰(JWT)을 발급")
     @Parameters({
-            @Parameter(name="email", required = true, description = "이메일"),
-            @Parameter(name="password", required = true, description = "비밀번호")
+            @Parameter(name="email", required = true, description = "이메일 ,일반 로그인 시 필수"),
+            @Parameter(name="password", required = true, description = "비밀번호, 일반 로그인 시 필수"),
+            @Parameter(name="socialChannel", required = true, description = "쇼설 로그인 구분 , 소셜 로그인 시 필수 "),
+            @Parameter(name="socialToken", required = true, description = "쇼설 로그인 발급 받은 회원을 구분 값  , 소셜 로그인 시 필수 "),
     })
     @ApiResponse(responseCode = "200", description = "인증 성공시 토큰(JWT)발급")
-    @PostMapping("/token")
+    @PostMapping({"/token", "/social.token"})
     public String token(@Valid @RequestBody RequestToken form, Errors errors) {
-
+        form.setSocial(request.getRequestURI().contains("/social"));
         tokenValidator.validate(form, errors);
 
         if (errors.hasErrors()) {
             throw new BadRequestException(utils.getErrorMessages(errors));
         }
 
-        return tokenService.create(form.getEmail());
+        return form.isSocial() ? tokenService.create(form.getSocialChannel(), form.getSocialToken()) : tokenService.create(form.getEmail());
     }
 
 
@@ -79,8 +83,7 @@ public class MemberController {
     @Operation(summary = "로그인 상태인 회원 정보를 조회", method = "GET")
     @ApiResponse(responseCode = "200")
     @GetMapping // GET /api/v1/member
-    @PreAuthorize("isAuthenticated()")
-    public Member myInfo() {
-        return memberUtil.getMember();
+    public ResponseEntity<Member> myInfo() {
+        return memberUtil.isLogin() ? ResponseEntity.ok(memberUtil.getMember()) : ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }
