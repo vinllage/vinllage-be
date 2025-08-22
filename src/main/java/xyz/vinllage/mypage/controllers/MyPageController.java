@@ -25,9 +25,10 @@ public class MyPageController {
     private final MemberUtil memberUtil;
     private final PasswordEncoder encoder;
 
-    /* =========================================
-       1) 내 정보 조회
-       ========================================= */
+    /**
+     * 1) 내 정보 조회
+     * @return
+     */
     @GetMapping
     @PreAuthorize("isAuthenticated()")
     @Operation(summary = "내 정보 조회")
@@ -35,10 +36,11 @@ public class MyPageController {
         return memberUtil.getMember();
     }
 
-    /* =========================================
-       2) 프로필 수정 (비밀번호는 선택)
-       - RequestProfile 는 기존 프로젝트 DTO 사용
-       ========================================= */
+    /**
+     * 프로필 수정 (비밀번호는 선택)
+     * @param form
+     * @return
+     */
     @PutMapping("/profile")
     @PreAuthorize("isAuthenticated()")
     @Operation(summary = "프로필 수정 (이름/휴대폰, 비밀번호 선택)")
@@ -58,9 +60,9 @@ public class MyPageController {
         return memberRepository.saveAndFlush(me);
     }
 
-    /* =========================================
-       3) 회원 탈퇴
-       ========================================= */
+    /**
+     * 3) 회원 탈퇴
+     */
     @DeleteMapping
     @PreAuthorize("isAuthenticated()")
     @ResponseStatus(HttpStatus.NO_CONTENT)
