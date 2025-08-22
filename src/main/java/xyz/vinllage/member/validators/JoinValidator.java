@@ -16,6 +16,7 @@ import xyz.vinllage.member.repositories.MemberRepository;
 @Component
 @RequiredArgsConstructor
 public class JoinValidator implements Validator, PasswordValidator, MobileValidator {
+
     private final MemberRepository repository;
 
     @Override
@@ -25,27 +26,30 @@ public class JoinValidator implements Validator, PasswordValidator, MobileValida
 
     @Override
     public void validate(Object target, Errors errors) {
-        if (errors.hasErrors()) {
-            return;
-        }
 
-        /*
+
+        /**
          * 1. 이메일 중복 여부
          * 2. 비밀번호 복잡성
          * 3. 비밀번호 확인 일치 여부
          * 4. 휴대전화번호 형식 검증
          */
 
-
         RequestJoin form = (RequestJoin) target;
         String password = form.getPassword();
         String confirmPassword = form.getConfirmPassword();
-        if(form.getSocialChannel() != null && StringUtils.hasText(form.getSocialToken())){
+        boolean isSocial = form.getSocialChannel() != null && StringUtils.hasText(form.getSocialToken());
+        if (!isSocial) {
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotBlank");
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "confirmPassword", "NotBlank");
+
             if (StringUtils.hasText(password) && password.length() < 8) {
                 errors.rejectValue("password", "Size");
             }
+        }
+
+        if (errors.hasErrors()) {
+            return;
         }
 
         // 1. 이메일 중복 여부
@@ -55,14 +59,18 @@ public class JoinValidator implements Validator, PasswordValidator, MobileValida
 
 
 
-        // 2. 비밀번호 복잡성
-        if (!checkAlpha(password, false) || !checkNumber(password) || !checkSpecialChars(password)) {
-            errors.rejectValue("password", "Complexity");
-        }
 
-        // 3. 비밀번호 확인 일치 여부
-        if (!password.equals(confirmPassword)) {
-            errors.rejectValue("confirmPassword", "Mismatch");
+
+        if (!isSocial) {
+            // 2. 비밀번호 복잡성
+            if (!checkAlpha(password, false) || !checkNumber(password) || !checkSpecialChars(password)) {
+                errors.rejectValue("password", "Complexity");
+            }
+
+            // 3. 비밀번호 확인 일치 여부
+            if (!password.equals(confirmPassword)) {
+                errors.rejectValue("confirmPassword", "Mismatch");
+            }
         }
 
         // 4. 휴대전화번호 형식 검증
@@ -72,4 +80,3 @@ public class JoinValidator implements Validator, PasswordValidator, MobileValida
         }
     }
 }
-

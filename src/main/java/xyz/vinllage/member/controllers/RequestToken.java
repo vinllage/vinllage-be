@@ -13,6 +13,4 @@ public class RequestToken {
     private String password;
     private SocialChannel socialChannel;
     private String socialToken;
-
-
 }
