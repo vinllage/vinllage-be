@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import xyz.vinllage.global.exceptions.BadRequestException;
@@ -83,8 +83,7 @@ public class MemberController {
     @Operation(summary = "로그인 상태인 회원 정보를 조회", method = "GET")
     @ApiResponse(responseCode = "200")
     @GetMapping // GET /api/v1/member
-    @PreAuthorize("isAuthenticated()")
-    public Member myInfo() {
-        return memberUtil.getMember();
+    public ResponseEntity<Member> myInfo() {
+        return memberUtil.isLogin() ? ResponseEntity.ok(memberUtil.getMember()) : ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }
