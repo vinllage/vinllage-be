@@ -11,9 +11,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import xyz.vinllage.global.search.ListData;
 import xyz.vinllage.global.search.Pagination;
-import xyz.vinllage.recycle.entities.QRecycleResult;
-import xyz.vinllage.recycle.entities.RecycleResult;
-import xyz.vinllage.recycle.repositories.RecycleRepository;
+import xyz.vinllage.recycle.entities.DetectedRecycle;
+import xyz.vinllage.recycle.entities.QDetectedRecycle;
+import xyz.vinllage.recycle.repositories.DetectedRecycleRepository;
 
 import static org.springframework.data.domain.Sort.Order.asc;
 
@@ -22,20 +22,20 @@ import static org.springframework.data.domain.Sort.Order.asc;
 @RequiredArgsConstructor
 public class RecycleInfoService {
 
-	private final RecycleRepository repository;
+	private final DetectedRecycleRepository repository;
 	private final HttpServletRequest request;
 
 	// 분리수거 결과 조회
-	public ListData<RecycleResult> getList(int page, int limit) {
+	public ListData<DetectedRecycle> getList(int page, int limit) {
 		page = Math.max(page, 1);
 		limit = limit < 1 ? 20 : limit;
 
 		Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(asc("rid")));
 
-		QRecycleResult recycleResult = QRecycleResult.recycleResult;
-		BooleanBuilder where = new BooleanBuilder().and(recycleResult.deletedAt.isNull());
+		QDetectedRecycle detectedRecycle = QDetectedRecycle.detectedRecycle;
+		BooleanBuilder where = new BooleanBuilder().and(detectedRecycle.deletedAt.isNull());
 
-		Page<RecycleResult> data = repository.findAll(where, pageable);
+		Page<DetectedRecycle> data = repository.findAll(where, pageable);
 
 		Pagination pagination = new Pagination(page, (int) data.getTotalElements(), 10, limit, request);
 		return new ListData<>(data.getContent(), pagination);

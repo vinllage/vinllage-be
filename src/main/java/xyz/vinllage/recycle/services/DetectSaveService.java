@@ -26,7 +26,7 @@ public class DetectSaveService {
     private final ObjectMapper om;
 
     @Transactional
-    public void process(List<MultipartFile> files, String itemsJson, Member member) {
+    public DetectedRecycle process(List<MultipartFile> files, String itemsJson, Member member) {
         if (files == null || files.isEmpty()) {
             throw new IllegalArgumentException("업로드할 파일이 없습니다.");
         }
@@ -70,5 +70,7 @@ public class DetectSaveService {
 
         // 3) 파일 그룹 작업 완료 처리
         fileUploadService.processDone(gid);
+
+        return entity;
     }
 }
