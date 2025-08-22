@@ -54,12 +54,12 @@ public class Member extends BaseEntity implements Serializable {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime credentialChangedAt; // 비밀번호 변경 일시
+
     @Enumerated(EnumType.STRING)
     private SocialChannel socialChannel;
 
     @Column(length = 45)
     private String socialToken;
-
 
     // 해당 회원이 관리자 권한인지 확인
     public boolean isAdmin() {
