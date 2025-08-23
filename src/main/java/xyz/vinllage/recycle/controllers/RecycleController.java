@@ -17,7 +17,6 @@ import xyz.vinllage.member.libs.MemberUtil;
 import xyz.vinllage.recycle.entities.DetectedRecycle;
 import xyz.vinllage.recycle.services.DetectInfoService;
 import xyz.vinllage.recycle.services.DetectSaveService;
-import xyz.vinllage.recycle.services.RecycleInfoService;
 
 import java.util.List;
 import java.util.Map;
@@ -29,7 +28,6 @@ import java.util.Map;
 public class RecycleController {
     private final DetectSaveService detectSaveService;
     private final DetectInfoService detectInfoService;
-    private final RecycleInfoService recycleInfoService;
     private final MemberUtil memberUtil;
     private final Utils utils;
 
