@@ -1,4 +1,4 @@
-package xyz.vinllage.Crawler.controllers;
+package xyz.vinllage.crawler.controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
