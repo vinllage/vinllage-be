@@ -1,10 +1,9 @@
-package xyz.vinllage.Crawler.services;
+package xyz.vinllage.crawler.services;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import xyz.vinllage.crawler.controllers.RequestCrawling;
-import xyz.vinllage.crawler.services.CrawlingService;
 
 import java.util.List;
 
@@ -16,8 +15,9 @@ public class CrawlingserviceTest {
     @Test
     void crawlingTest() {
         RequestCrawling form = new RequestCrawling();
-        form.setUrl("https://www.me.go.kr/mamo/web/index.do?menuId=631");
-        form.setKeywords(List.of("환경", "수도권"));
+        //form.setUrl("https://www.me.go.kr/mamo/web/index.do?menuId=631");
+        form.setUrl("https://www.me.go.kr/hg/web/index.do?menuId=1259");
+        form.setKeywords(List.of("환경"));
         form.setLinkSelector(".brd_body .title a");
         form.setTitleSelector(".board_view .board_tit");
         form.setDateSelector(".board_view .createDate");
