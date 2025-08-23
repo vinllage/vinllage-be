@@ -18,7 +18,7 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class EmailSendService {
-    private final JavaMailSender javaMailSender;
+    private final JavaMailSender mailSender;
     private final SpringTemplateEngine templateEngine;
 
     public boolean sendMail(EmailEntiry message, String tpl, Map<String, Object> tplData) {
@@ -43,12 +43,12 @@ public class EmailSendService {
         }
 
         try {
-            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
             mimeMessageHelper.setTo(message.to()); // 메일 수신자
             mimeMessageHelper.setSubject(message.subject());  // 메일 제목
             mimeMessageHelper.setText(text, true); // 메일 내용
-            javaMailSender.send(mimeMessage);
+            mailSender.send(mimeMessage);
 
             return true;
         }catch (MessagingException e){
@@ -62,5 +62,27 @@ public class EmailSendService {
         return sendMail(message, null , null);
     }
 
+    public void sendVerificationEmail(String to, String code) {
+        // 1) 템플릿에 전달할 데이터
+        Context context = new Context();
+        context.setVariable("code", code);
+
+        // 2) 템플릿 처리
+        String htmlContent = templateEngine.process("email/email", context);
+
+        try {
+            // 3) 메일 작성
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setTo(to);
+            helper.setSubject("이메일 인증 코드");
+            helper.setText(htmlContent, true); // true = HTML
+
+            // 4) 메일 발송
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
