@@ -68,4 +68,10 @@ public class Member extends BaseEntity implements Serializable {
 
     @Transient
     private FileInfo profileImage;
+
+    // 삭제 여부 확인
+    @Transient
+    public boolean isDeleted() {
+        return super.getDeletedAt() != null;
+    }
 }

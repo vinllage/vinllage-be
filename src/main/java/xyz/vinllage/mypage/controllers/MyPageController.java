@@ -2,6 +2,8 @@ package xyz.vinllage.mypage.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,6 +29,7 @@ public class MyPageController {
 
     /**
      * 1) 내 정보 조회
+     *
      * @return
      */
     @GetMapping
@@ -37,7 +40,8 @@ public class MyPageController {
     }
 
     /**
-     * 프로필 수정 (비밀번호는 선택)
+     * 2) 프로필 수정 (비밀번호는 선택)
+     *
      * @param form
      * @return
      */
@@ -61,14 +65,27 @@ public class MyPageController {
     }
 
     /**
-     * 3) 회원 탈퇴
+     * 3) 회원 탈퇴 (소프트 삭제 + Spring Security 로그아웃)
      */
     @DeleteMapping
     @PreAuthorize("isAuthenticated()")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Operation(summary = "회원 탈퇴")
-    public void deleteMe() {
+    @Operation(summary = "회원 탈퇴 (소프트 삭제, 로그아웃 처리)")
+    public void deleteMe(HttpServletRequest request) {
         Member me = memberUtil.getMember();
-        memberRepository.delete(me);
+
+        // 소프트 삭제 처리
+        if (!me.isDeleted()) {
+            me.setDeletedAt(LocalDateTime.now());
+            memberRepository.saveAndFlush(me); // DB 업데이트만 수행
+        }
+
+        // Spring Security 인증 초기화
+        org.springframework.security.core.context.SecurityContextHolder.clearContext();
+
+        // HTTP 세션 무효화: 브라우저와 연결된 세션 제거
+        if (request.getSession(false) != null) {
+            request.getSession().invalidate();
+        }
     }
 }
