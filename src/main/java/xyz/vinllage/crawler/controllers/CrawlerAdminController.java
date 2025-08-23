@@ -5,9 +5,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import xyz.vinllage.crawler.entities.CrawledData;
 import xyz.vinllage.crawler.entities.CrawlerConfig;
 import xyz.vinllage.crawler.services.CrawlerConfigService;
 import xyz.vinllage.crawler.services.CrawlerSettingService;
+import xyz.vinllage.crawler.services.CrawlingService;
 
 import java.util.List;
 import java.util.Map;
@@ -20,6 +22,7 @@ import java.util.Map;
 public class CrawlerAdminController {
     private final CrawlerConfigService configService;
     private final CrawlerSettingService settingService;
+    private final CrawlingService crawlingService;
 
     @Operation(summary = "크롤러 사이트 설정 목록")
     @GetMapping("/configs")
@@ -31,6 +34,12 @@ public class CrawlerAdminController {
     @PostMapping("/configs")
     public void save(@RequestBody List<RequestCrawling> forms) {
         configService.save(forms);
+    }
+
+    @Operation(summary = "크롤링 테스트")
+    @PostMapping("/test")
+    public List<CrawledData> test(@RequestBody RequestCrawling form) {
+        return crawlingService.process(form);
     }
 
     @Operation(summary = "스케줄러 상태 조회")

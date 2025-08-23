@@ -37,8 +37,8 @@ public class DetectInfoService {
         Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(asc("gid")));
 
         QDetectedRecycle detectedRecycle = QDetectedRecycle.detectedRecycle;
-        BooleanBuilder where = new BooleanBuilder().and(detectedRecycle.deletedAt.isNull())
-                .and(detectedRecycle.gid.eq(gid));
+        BooleanBuilder where = new BooleanBuilder().and(detectedRecycle.deletedAt.isNull());
+                //.and(detectedRecycle.gid.eq(gid));
 
         Page<DetectedRecycle> data = repository.findAll(where, pageable);
 

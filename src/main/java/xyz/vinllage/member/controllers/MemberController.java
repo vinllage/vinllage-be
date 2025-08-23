@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import xyz.vinllage.global.exceptions.BadRequestException;
@@ -62,7 +62,7 @@ public class MemberController {
             @Parameter(name="socialToken", required = true, description = "쇼설 로그인 발급 받은 회원을 구분 값  , 소셜 로그인 시 필수 "),
     })
     @ApiResponse(responseCode = "200", description = "인증 성공시 토큰(JWT)발급")
-    @PostMapping({"/token", "/social.token"})
+    @PostMapping({"/token", "/social/token"})
     public String token(@Valid @RequestBody RequestToken form, Errors errors) {
         form.setSocial(request.getRequestURI().contains("/social"));
         tokenValidator.validate(form, errors);
@@ -83,8 +83,7 @@ public class MemberController {
     @Operation(summary = "로그인 상태인 회원 정보를 조회", method = "GET")
     @ApiResponse(responseCode = "200")
     @GetMapping // GET /api/v1/member
-    @PreAuthorize("isAuthenticated()")
-    public Member myInfo() {
-        return memberUtil.getMember();
+    public ResponseEntity<Member> myInfo() {
+        return memberUtil.isLogin() ? ResponseEntity.ok(memberUtil.getMember()) : ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }
