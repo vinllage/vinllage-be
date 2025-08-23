@@ -3,7 +3,6 @@ package xyz.vinllage.global.email.sevices;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -64,11 +63,26 @@ public class EmailSendService {
     }
 
     public void sendVerificationEmail(String to, String code) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject("이메일 인증 코드");
-        message.setText("인증 코드는 " + code + " 입니다. 5분 이내에 입력해주세요.");
-        mailSender.send(message);
+        // 1) 템플릿에 전달할 데이터
+        Context context = new Context();
+        context.setVariable("code", code);
+
+        // 2) 템플릿 처리
+        String htmlContent = templateEngine.process("email/email", context);
+
+        try {
+            // 3) 메일 작성
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setTo(to);
+            helper.setSubject("이메일 인증 코드");
+            helper.setText(htmlContent, true); // true = HTML
+
+            // 4) 메일 발송
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 
 }

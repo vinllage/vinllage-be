@@ -1,5 +1,6 @@
 package xyz.vinllage.global.email.controller;
 
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +18,7 @@ public class EmailController {
     private final EmailVerifyService verifyService;
 
     @PostMapping("/send-code")
-    public ResponseEntity<?> sendCode(@RequestParam String email) {
+    public ResponseEntity<?> sendCode(@RequestParam String email) throws MessagingException {
         String code = verifyService.generateCode(email);
         sendService.sendVerificationEmail(email, code);
         return ResponseEntity.ok("인증 코드 전송 완료");
