@@ -20,11 +20,9 @@ import xyz.vinllage.crawler.repositories.CrawlerConfigRepository;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -59,15 +57,25 @@ public class CrawlingService {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             for (Object data : response.getBody()) {
                 Map<String , Object> item = (Map<String , Object>) data;
-                String link = (String)item.get("link");
+                String link = normalizeLink((String) item.get("link"));
                 int hash = Objects.hash(link);
                 LocalDate date =  item.get("date") == null ? null : LocalDate.parse((String)item.get("date"), formatter);
                 String title = (String)item.get("title");
                 String content = (String)item.get("content");
                 boolean html =  (boolean)item.get("is_html");
-                List<String> images = (List<String>) item.get("image");
 
-                CrawledData _item = new CrawledData();
+                Object imageObj = item.get("image");
+                List<String> images = null;
+                if (imageObj instanceof List<?> list) {
+                    images = list.stream()
+                            .filter(Objects::nonNull)
+                            .map(Object::toString)
+                            .toList();
+                } else if (imageObj instanceof String str) {
+                    images = List.of(str);
+                }
+
+                CrawledData _item = repository.findById(hash).orElseGet(CrawledData::new);
                 _item.setHash(hash);
                 _item.setLink(link);
                 _item.setDate(date);
@@ -86,6 +94,31 @@ public class CrawlingService {
         }
 
         return null;
+    }
+
+    /**
+     * jsessionid가 포함된 경우 제거하여 링크를 정규화
+     * @param link 원본 링크
+     * @return 정규화된 링크
+     */
+    private String normalizeLink(String link) {
+        if (link == null) {
+            return null;
+        }
+
+        // 세미콜론으로 연결된 jsessionid 제거
+        link = link.replaceAll("(?i);jsessionid=[^?]*", "");
+
+        int qIndex = link.indexOf('?');
+        if (qIndex != -1) {
+            String base = link.substring(0, qIndex);
+            String query = Arrays.stream(link.substring(qIndex + 1).split("&"))
+                    .filter(p -> !p.toLowerCase().startsWith("jsessionid="))
+                    .collect(Collectors.joining("&"));
+            link = query.isEmpty() ? base : base + "?" + query;
+        }
+
+        return link;
     }
 
     /**

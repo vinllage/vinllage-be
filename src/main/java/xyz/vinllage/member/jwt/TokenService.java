@@ -72,7 +72,8 @@ public class TokenService {
     }
 
     public String create(SocialChannel channel, String token) {
-        Member member = repository.findBySocialChannelAndSocialToken(channel, token).orElseThrow(MemberNotFoundException::new);
+        Member member = repository.findBySocialChannelAndSocialToken(channel, token)
+                .orElseThrow(MemberNotFoundException::new);
 
         return create(member.getEmail());
     }

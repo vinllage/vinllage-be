@@ -1,0 +1,8 @@
+{
+  "name": "vinllage-be",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/vinllage/vinllage-be.git",
+  "author": "songmikim <ksm0200@gmail.com>",
+  "license": "MIT"
+}
