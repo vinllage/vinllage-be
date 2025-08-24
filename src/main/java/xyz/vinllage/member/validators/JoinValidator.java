@@ -8,6 +8,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import xyz.vinllage.global.validators.MobileValidator;
+import xyz.vinllage.global.validators.Password;
 import xyz.vinllage.global.validators.PasswordValidator;
 import xyz.vinllage.member.controllers.RequestJoin;
 import xyz.vinllage.member.repositories.MemberRepository;
@@ -15,7 +16,7 @@ import xyz.vinllage.member.repositories.MemberRepository;
 @Lazy
 @Component
 @RequiredArgsConstructor
-public class JoinValidator implements Validator, PasswordValidator, MobileValidator {
+public class JoinValidator implements Validator, PasswordValidator, MobileValidator, Pa {
 
     private final MemberRepository repository;
 
@@ -56,10 +57,6 @@ public class JoinValidator implements Validator, PasswordValidator, MobileValida
         if (repository.existsByEmail(form.getEmail())) {
             errors.rejectValue("email", "Duplicated");
         }
-
-
-
-
 
         if (!isSocial) {
             // 2. 비밀번호 복잡성
