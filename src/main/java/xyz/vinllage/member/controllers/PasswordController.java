@@ -7,9 +7,9 @@ import xyz.vinllage.global.validators.Password;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/paaword")
+@RequestMapping("/api/password")
 @RequiredArgsConstructor
-public class PasswordContoller {
+public class PasswordController {
     private final Password password;
 
     @GetMapping("/check")
