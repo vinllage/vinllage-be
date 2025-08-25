@@ -8,7 +8,6 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import xyz.vinllage.global.validators.MobileValidator;
-import xyz.vinllage.global.validators.Password;
 import xyz.vinllage.global.validators.PasswordValidator;
 import xyz.vinllage.member.controllers.RequestJoin;
 import xyz.vinllage.member.repositories.MemberRepository;
@@ -16,7 +15,7 @@ import xyz.vinllage.member.repositories.MemberRepository;
 @Lazy
 @Component
 @RequiredArgsConstructor
-public class JoinValidator implements Validator, PasswordValidator, MobileValidator, Pa {
+public class JoinValidator implements Validator, PasswordValidator, MobileValidator  {
 
     private final MemberRepository repository;
 
@@ -63,6 +62,14 @@ public class JoinValidator implements Validator, PasswordValidator, MobileValida
             if (!checkAlpha(password, false) || !checkNumber(password) || !checkSpecialChars(password)) {
                 errors.rejectValue("password", "Complexity");
             }
+            int strength = 0;
+            if(!checkAlpha(password, false)) strength ++;
+            if (checkNumber(password)) strength ++;
+            if(checkSpecialChars(password)) strength ++;
+            if(strength > 0){
+                errors.rejectValue("pasword", "Comlexiy");
+            }
+
 
             // 3. 비밀번호 확인 일치 여부
             if (!password.equals(confirmPassword)) {
@@ -75,5 +82,9 @@ public class JoinValidator implements Validator, PasswordValidator, MobileValida
         if (!checkMobile(mobile)) {
             errors.rejectValue("mobile", "Mobile");
         }
+
+
     }
+
+
 }
