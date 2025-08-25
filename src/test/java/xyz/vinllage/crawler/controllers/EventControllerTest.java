@@ -14,7 +14,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import xyz.vinllage.crawler.entities.CrawledData;
 import xyz.vinllage.crawler.repositories.CrawledDataRepository;
 import xyz.vinllage.global.search.ListData;
-import xyz.vinllage.member.validators.JoinValidator;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -37,8 +36,6 @@ public class EventControllerTest {
     @Autowired
     private CrawledDataRepository repository;
 
-    @Autowired
-    private JoinValidator validator;
 
     /**
      *  각 테스트 실행 전 초기화 작업 수행
@@ -142,11 +139,4 @@ public class EventControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    /**
-     * 비밀 번호 보안
-     */
-    @Test
-    @DisplayName("/비밀 번호 보안 테스트 ")
-    void gerPasswordTest() throws  Exception {
-    }
 }

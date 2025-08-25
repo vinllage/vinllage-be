@@ -43,6 +43,7 @@ public interface PasswordValidator {
 
         return password.matches(pattern);
     }
+
     default int passwordCheck(String password){
         int score = 0;
         // 길이 점수
@@ -68,10 +69,10 @@ public interface PasswordValidator {
 
     default  String sPassword(String password) {
         int score = passwordCheck(password);
-        if(score <=2) return "매우 약함";
-        else if(score <=4) return "약함";
-        else if(score <=6) return "보통";
-        else if(score <=8) return "강함";
+        if(score <= 2) return "매우 약함";
+        else if(score <= 4) return "약함";
+        else if(score <= 6) return "보통";
+        else if(score <= 8) return "강함";
         else  return "매우 강함";
 
     }
