@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import xyz.vinllage.global.exceptions.BadRequestException;
@@ -85,5 +86,16 @@ public class MemberController {
     @GetMapping // GET /api/v1/member
     public ResponseEntity<Member> myInfo() {
         return memberUtil.isLogin() ? ResponseEntity.ok(memberUtil.getMember()) : ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    @Operation(summary = "로그인한 회원의 회원정보를 수정 처리", method = "PATCH")
+    @PatchMapping("/update")
+    @PreAuthorize("isAuthenticated()")
+    public Member update(@Valid @RequestBody RequestProfile form, Errors errors) {
+
+        if (errors.hasErrors()) {
+            throw new BadRequestException(utils.getErrorMessages(errors));
+        }
+        return null;
     }
 }
