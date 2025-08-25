@@ -1,4 +1,4 @@
-package xyz.vinllage.global.email.sevices;
+package xyz.vinllage.global.email.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;

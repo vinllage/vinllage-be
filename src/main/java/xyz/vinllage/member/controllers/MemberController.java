@@ -13,14 +13,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import xyz.vinllage.global.email.dtos.RequestEmail;
 import xyz.vinllage.global.exceptions.BadRequestException;
 import xyz.vinllage.global.libs.Utils;
 import xyz.vinllage.member.entities.Member;
 import xyz.vinllage.member.jwt.TokenService;
 import xyz.vinllage.member.libs.MemberUtil;
+import xyz.vinllage.member.repositories.MemberRepository;
 import xyz.vinllage.member.services.JoinService;
+import xyz.vinllage.member.services.TemporaryPasswordService;
 import xyz.vinllage.member.validators.JoinValidator;
 import xyz.vinllage.member.validators.TokenValidator;
+
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,6 +36,8 @@ public class MemberController {
     private final JoinService joinService;
     private final TokenValidator tokenValidator;
     private final TokenService tokenService;
+    private final MemberRepository repository;
+    private final TemporaryPasswordService passwordService;
     private final HttpServletRequest request;
     private final MemberUtil memberUtil;
     private final Utils utils;
@@ -98,4 +105,21 @@ public class MemberController {
         }
         return null;
     }
+
+    @Operation(summary = "임시 비밀번호를 메일로 발송", method = "POST")
+    @ApiResponse(responseCode = "200")
+    @PostMapping("/find-password")
+    public ResponseEntity<?> findPassword(@RequestBody RequestEmail request) {
+        String email = request.getEmail();
+
+        if (!repository.existsByEmail(email)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "등록되지 않은 이메일입니다."));
+        }
+
+        passwordService.process(email);
+
+        return ResponseEntity.ok(Map.of("message", "임시 비밀번호가 이메일로 발송되었습니다."));
+    }
+
 }

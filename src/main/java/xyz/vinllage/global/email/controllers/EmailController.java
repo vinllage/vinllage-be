@@ -1,14 +1,13 @@
-package xyz.vinllage.global.email.controller;
+package xyz.vinllage.global.email.controllers;
 
-import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import xyz.vinllage.global.email.dtos.RequestEmail;
-import xyz.vinllage.global.email.sevices.EmailSendService;
-import xyz.vinllage.global.email.sevices.EmailVerifyService;
+import xyz.vinllage.global.email.services.EmailSendService;
+import xyz.vinllage.global.email.services.EmailVerifyService;
 import xyz.vinllage.global.libs.Utils;
 import xyz.vinllage.global.validators.EmailAuthValidator;
 
@@ -24,7 +23,7 @@ public class EmailController {
     private final EmailVerifyService verifyService;
 
     @PostMapping("/send-code")
-    public ResponseEntity<?> sendCode(@Valid @RequestBody RequestEmail request, Errors errors) throws MessagingException {
+    public ResponseEntity<?> sendCode(@Valid @RequestBody RequestEmail request, Errors errors) {
         // 이메일 중복 검증
         emailAuthValidator.validate(request, errors);
 
