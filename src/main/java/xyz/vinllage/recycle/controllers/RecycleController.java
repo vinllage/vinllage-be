@@ -17,7 +17,6 @@ import xyz.vinllage.member.libs.MemberUtil;
 import xyz.vinllage.recycle.entities.DetectedRecycle;
 import xyz.vinllage.recycle.services.DetectInfoService;
 import xyz.vinllage.recycle.services.DetectSaveService;
-import xyz.vinllage.recycle.services.RecycleInfoService;
 
 import java.util.List;
 
@@ -28,7 +27,6 @@ import java.util.List;
 public class RecycleController {
     private final DetectSaveService detectSaveService;
     private final DetectInfoService detectInfoService;
-    private final RecycleInfoService recycleInfoService;
     private final MemberUtil memberUtil;
     private final Utils utils;
 
@@ -57,7 +55,7 @@ public class RecycleController {
     public ListData<DetectedRecycle> list(
         @RequestParam(defaultValue = "1") int page,
         @RequestParam(defaultValue = "20") int limit,
-        @RequestParam(defaultValue = "8aa81fc7-9416-4ab5-89f9-4905a35d6b8e") String gid
+        @RequestParam String gid
     ) {
         return detectInfoService.getList(gid, page, limit);
     }

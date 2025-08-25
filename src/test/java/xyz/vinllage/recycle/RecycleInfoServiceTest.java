@@ -10,7 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import xyz.vinllage.global.search.ListData;
-import xyz.vinllage.recycle.services.RecycleInfoService;
 
 import java.util.List;
 
