@@ -3,7 +3,6 @@ package xyz.vinllage.mypage.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -60,6 +59,10 @@ public class MyPageController {
         // 이름/휴대폰
         me.setName(form.getName().trim());
         me.setMobile(form.getMobile().replaceAll("\\D", ""));
+
+        if (form.getProfileImage() != null) {
+            me.setProfileImage(form.getProfileImage());
+        }
 
         return memberRepository.saveAndFlush(me);
     }
