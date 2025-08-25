@@ -44,37 +44,37 @@ public interface PasswordValidator {
         return password.matches(pattern);
     }
 
-    default int passwordCheck(String password){
-        int score = 0;
-        // 길이 점수
-        int length = password.length();
-        if(length >= 17) score +=3;
-        else if(length >= 13) score +=2;
-        else if(length  >= 8) score +=1;
-        // 알파벳 점수
-        if(password.matches(".*[a-z].*") && password.matches(".*[A-Z].*")) score +=2;
-        else if(password.matches(".*[a-zA-Z].*")) score += 1;
-        // 숫자 점수
-        int number = password.replaceAll("[^0-9]", "").length();
-        if(number >=2) score +=2;
-        else if(number == 1) score +=1;
-        // 특수문자 점수
-        int special = password.replaceAll("[0-9a-zA-Zㄱ-ㅎ가-힣]", "").length();
-        if(special >=2) score += 2;
-        else if(special ==1) score +=1;
-
-        return score;
-
-    }
-
-    default  String sPassword(String password) {
-        int score = passwordCheck(password);
-        if(score <= 2) return "매우 약함";
-        else if(score <= 4) return "약함";
-        else if(score <= 6) return "보통";
-        else if(score <= 8) return "강함";
-        else  return "매우 강함";
-
-    }
+//    default int passwordCheck(String password){
+//        int score = 0;
+//        // 길이 점수
+//        int length = password.length();
+//        if(length >= 17) score +=3;
+//        else if(length >= 13) score +=2;
+//        else if(length  >= 8) score +=1;
+//        // 알파벳 점수
+//        if(password.matches(".*[a-z].*") && password.matches(".*[A-Z].*")) score +=2;
+//        else if(password.matches(".*[a-zA-Z].*")) score += 1;
+//        // 숫자 점수
+//        int number = password.replaceAll("[^0-9]", "").length();
+//        if(number >=2) score +=2;
+//        else if(number == 1) score +=1;
+//        // 특수문자 점수
+//        int special = password.replaceAll("[0-9a-zA-Zㄱ-ㅎ가-힣]", "").length();
+//        if(special >=2) score += 2;
+//        else if(special ==1) score +=1;
+//
+//        return score;
+//
+//    }
+//
+//    default  String sPassword(String password) {
+//        int score = passwordCheck(password);
+//        if(score <= 2) return "매우 약함";
+//        else if(score <= 4) return "약함";
+//        else if(score <= 6) return "보통";
+//        else if(score <= 8) return "강함";
+//        else  return "매우 강함";
+//
+//    }
 
 }

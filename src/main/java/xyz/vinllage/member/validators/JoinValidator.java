@@ -62,6 +62,13 @@ public class JoinValidator implements Validator, PasswordValidator, MobileValida
             if (!checkAlpha(password, false) || !checkNumber(password) || !checkSpecialChars(password)) {
                 errors.rejectValue("password", "Complexity");
             }
+            int strength = 0;
+            if(!checkAlpha(password, false)) strength ++;
+            if (checkNumber(password)) strength ++;
+            if(checkSpecialChars(password)) strength ++;
+            if(strength > 0){
+                errors.rejectValue("pasword", "Comlexiy");
+            }
 
 
             // 3. 비밀번호 확인 일치 여부
@@ -75,10 +82,7 @@ public class JoinValidator implements Validator, PasswordValidator, MobileValida
         if (!checkMobile(mobile)) {
             errors.rejectValue("mobile", "Mobile");
         }
-        // 5. 비밀 번호 보안 관련
-       if(isSocial){
-           String strength = sPassword(password);
-       }
+
 
     }
 
