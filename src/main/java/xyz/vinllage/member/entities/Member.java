@@ -74,4 +74,9 @@ public class Member extends BaseEntity implements Serializable {
     public boolean isDeleted() {
         return super.getDeletedAt() != null;
     }
+    @JsonFormat(pattern = "yyy-MM-dd HH:mm:ss") // 년 월일 시분 초
+    private LocalDateTime tempPasswordExpiresAt;// 임시 비밀 범호 만료 일시
+    @JsonIgnore
+    @Column(length = 65)
+    private String tempPassword; // 새로운 비밀 번호 생성
 }
