@@ -43,7 +43,7 @@ public class ProfileValidator implements Validator, PasswordValidator, MobileVal
             // 1. 비밀번호 자리수
             if (password.length() < 8) {
                 errors.rejectValue("password", "Size");
-            }햣
+            }
 
             // 2. 비밀번호 복잡성
             if (!checkAlpha(password, false) || !checkNumber(password) || !checkSpecialChars(password)) {
