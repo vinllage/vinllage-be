@@ -55,9 +55,4 @@ public class ProfileValidator implements Validator, PasswordValidator, MobileVal
         }
 
     }
-
-    @Override
-    public int passwordCheck(String password) {
-        return 0;
-    }
 }
