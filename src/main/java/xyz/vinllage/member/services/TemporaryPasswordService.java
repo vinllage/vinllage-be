@@ -6,11 +6,12 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import xyz.vinllage.global.email.services.EmailSendService;
+import xyz.vinllage.member.controllers.RequestToken;
 import xyz.vinllage.member.entities.Member;
 import xyz.vinllage.member.repositories.MemberRepository;
 
 import java.security.SecureRandom;
-import java.util.concurrent.TimeUnit;
+import java.time.LocalDateTime;
 
 @Lazy
 @Service
@@ -25,25 +26,12 @@ public class TemporaryPasswordService {
     private final PasswordEncoder encoder;
 
     /**
-     * 임시 비밀번호 생성 및 Redis 저장
-     * @param email 사용자 이메일
+     * 임시 비밀번호 생성
+     *
      * @return 생성된 임시 비밀번호
      */
-    private String generateTemporaryPassword(String email) {
-        String tempPassword = generateRandomPassword(PASSWORD_LENGTH);
-        redisTemplate.opsForValue().set("tempPwd:" + email, tempPassword, 10, TimeUnit.MINUTES);
-        return tempPassword;
-    }
-
-    /**
-     * 입력한 비밀번호가 Redis에 저장된 임시 비밀번호와 일치하는지 검증
-     * @param email 사용자 이메일
-     * @param inputPassword 사용자가 입력한 임시 비밀번호
-     * @return 일치 여부
-     */
-    public boolean verifyTemporaryPassword(String email, String inputPassword) {
-        String savedPassword = redisTemplate.opsForValue().get("tempPwd:" + email);
-        return savedPassword != null && savedPassword.equals(inputPassword);
+    private String generateTemporaryPassword() {
+        return generateRandomPassword(PASSWORD_LENGTH);
     }
 
     /**
@@ -60,17 +48,40 @@ public class TemporaryPasswordService {
         return sb.toString();
     }
 
-    public void process(String email) {
-        // 임시 비번 생성 + 저장 + 이메일 발송
-        String tempPassword = generateTemporaryPassword(email);
+    public void process(Member member) {
+        // 1. 임시 비밀번호 생성 및 저장
+        String tempPassword = generateTemporaryPassword();
+        member.setTempPassword(encoder.encode(tempPassword));
+        
+        // 2. 임시 비밀번호 유효기간 설정 (5분)
+        member.setTempPasswordExpiresAt(LocalDateTime.now().plusMinutes(5L));
+        
+        // 3. db에 적용
+        memberRepository.saveAndFlush(member);
 
-        Member member = memberRepository.findByEmail(email).orElse(null);
+        // 4. 임시 비밀번호를 메일로 전송
+        emailSendService.sendTemporaryPasswordEmail(member.getEmail(), tempPassword);
+    }
 
-        if (member != null) {
-            member.setPassword(encoder.encode(tempPassword));         // 임시 비밀번호 변경
+    public boolean matchesPassword(String formPw, Member member) {
+        return encoder.matches(formPw, member.getPassword());
+    }
+
+    public boolean matchesTempPassword(String formPw, Member member) {
+        return encoder.matches(formPw, member.getTempPassword());
+    }
+
+    /**
+     * 정상 로그인 -> 임시 비밀번호 제거
+     *
+     * @param form
+     * @param member
+     */
+    public void deleteTempPassword(RequestToken form, Member member) {
+        if (member.getTempPassword() != null && matchesPassword(form.getPassword(), member)) {
+            member.setTempPassword(null);
+            member.setTempPasswordExpiresAt(null);
             memberRepository.saveAndFlush(member);
         }
-
-        emailSendService.sendTemporaryPasswordEmail(email, tempPassword);  // 메일 전송
     }
 }

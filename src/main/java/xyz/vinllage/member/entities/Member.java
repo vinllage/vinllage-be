@@ -37,6 +37,10 @@ public class Member extends BaseEntity implements Serializable {
     @Column(length = 65)
     private String password;
 
+    @JsonIgnore
+    @Column(length = 65)
+    private String tempPassword; // 비밀번호 찾기 시 임시 비밀번호
+
     @Column(length = 45, nullable = false)
     private String name;
 
@@ -54,6 +58,9 @@ public class Member extends BaseEntity implements Serializable {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime credentialChangedAt; // 비밀번호 변경 일시
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime tempPasswordExpiresAt; // 임시 비밀번호 만료 일시
 
     @Enumerated(EnumType.STRING)
     private SocialChannel socialChannel;

@@ -71,15 +71,30 @@ public class MemberController {
     })
     @ApiResponse(responseCode = "200", description = "인증 성공시 토큰(JWT)발급")
     @PostMapping({"/token", "/social/token"})
-    public String token(@Valid @RequestBody RequestToken form, Errors errors) {
+    public TokenResponse token(@Valid @RequestBody RequestToken form, Errors errors) {
         form.setSocial(request.getRequestURI().contains("/social"));
+
         tokenValidator.validate(form, errors);
 
         if (errors.hasErrors()) {
             throw new BadRequestException(utils.getErrorMessages(errors));
         }
+        
+        // 일반, 소셜 구분해서 토큰 발급
+        TokenResponse tokenResponse = new TokenResponse();
+        tokenResponse.setToken(form.isSocial() ? tokenService.create(form.getSocialChannel(), form.getSocialToken()) : tokenService.create(form.getEmail()));
 
-        return form.isSocial() ? tokenService.create(form.getSocialChannel(), form.getSocialToken()) : tokenService.create(form.getEmail());
+        Member member = repository.findByEmail(form.getEmail()).orElse(null);
+
+        // 정상적으로 로그인 시도 -> 기존에 있던 임시 비밀번호 제거
+        passwordService.deleteTempPassword(form, member);
+
+        // 임시 비밀번호 여부 (일반 회원일 때만 검사)
+        if (!form.isSocial() && member.getTempPassword() != null) {
+            tokenResponse.setForceChangePassword(passwordService.matchesTempPassword(form.getPassword(), member));
+        }
+
+        return tokenResponse;
     }
 
 
@@ -112,13 +127,19 @@ public class MemberController {
     public ResponseEntity<?> findPassword(@RequestBody RequestEmail request) {
         String email = request.getEmail();
 
-        if (!repository.existsByEmail(email)) {
+        // 멤버 조회
+        Member member = repository.findByEmail(email).orElse(null);
+
+        // 존재하지 않으면 프론트엔드에 검증 메시지 전달
+        if (member == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", "등록되지 않은 이메일입니다."));
         }
 
-        passwordService.process(email);
+        // db 처리 및 메일 전송
+        passwordService.process(member);
 
+        // 프론트엔드에 메일 발송 성공 메시지 전달
         return ResponseEntity.ok(Map.of("message", "임시 비밀번호가 이메일로 발송되었습니다."));
     }
 
