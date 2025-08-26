@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import xyz.vinllage.global.email.dtos.RequestEmail;
 import xyz.vinllage.global.exceptions.BadRequestException;
 import xyz.vinllage.global.libs.Utils;
 import xyz.vinllage.member.entities.FinPw;
@@ -22,6 +23,7 @@ import xyz.vinllage.member.libs.MemberUtil;
 import xyz.vinllage.member.repositories.MemberRepository;
 import xyz.vinllage.member.services.JoinService;
 import xyz.vinllage.member.services.NewPasswordService;
+import xyz.vinllage.member.services.PasswordService;
 import xyz.vinllage.member.validators.JoinValidator;
 import xyz.vinllage.member.validators.TokenValidator;
 
@@ -41,6 +43,8 @@ public class MemberController {
     private final Utils utils;
     private final NewPasswordService password;
     private final MemberRepository repository;
+    private final PasswordService passwordService;
+
     @Operation(summary = "회원가입처리", method = "POST")
     @ApiResponse(responseCode = "201", description = "회원가입 성공시 201로 응답, 검증 실패시 400")
     @PostMapping
@@ -81,7 +85,6 @@ public class MemberController {
         return form.isSocial() ? tokenService.create(form.getSocialChannel(), form.getSocialToken()) : tokenService.create(form.getEmail());
     }
 
-
     /**
      * 로그인한 회원 정보 출력
      *
@@ -117,6 +120,25 @@ public class MemberController {
         return ResponseEntity.ok(Map.of("message", "임시 비밀 번호 가 발송 되없습니다"));
     }
 
+    @Operation(summary = "임시 비밀번호를 메일로 발송", method = "POST")
+    @ApiResponse(responseCode = "200")
+    @PostMapping("/find-password")
+    public ResponseEntity<?> findPassword(@RequestBody RequestEmail request) {
+        String email = request.getEmail();
 
+        // 멤버 조회
+        Member member = repository.findByEmail(email).orElse(null);
 
+        // 존재하지 않으면 프론트엔드에 검증 메시지 전달
+        if (member == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "등록되지 않은 이메일입니다."));
+        }
+
+        // db 처리 및 메일 전송
+        passwordService.process(member);
+
+        // 프론트엔드에 메일 발송 성공 메시지 전달
+        return ResponseEntity.ok(Map.of("message", "임시 비밀번호가 이메일로 발송되었습니다."));
+    }
 }
