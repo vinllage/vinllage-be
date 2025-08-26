@@ -18,6 +18,10 @@ public class ProfileValidator implements Validator, PasswordValidator, MobileVal
 
     @Override
     public void validate(Object target, Errors errors) {
+        if (errors.hasErrors()) {
+            return;
+        }
+
         /**
          *
          * password, confirmPassword는
@@ -33,6 +37,30 @@ public class ProfileValidator implements Validator, PasswordValidator, MobileVal
         String confirmPassword = form.getConfirmPassword();
         if (StringUtils.hasText(password)) {
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "confirmPassword", "NotBlank");
+
+            if (errors.hasErrors()) return;
+
+            // 1. 비밀번호 자리수
+            if (password.length() < 8) {
+                errors.rejectValue("password", "Size");
+            }햣
+
+            // 2. 비밀번호 복잡성
+            if (!checkAlpha(password, false) || !checkNumber(password) || !checkSpecialChars(password)) {
+                errors.rejectValue("password", "Complexity");
+            }
+
+            // 3. 비밀번호 확인 일치 여부
+            if (!password.equals(confirmPassword)) {
+                errors.rejectValue("confirmPassword", "Mismatch");
+            }
+        }
+
+        // 4. 휴대전화번호 형식 검증
+        String mobile = form.getMobile();
+        if (!checkMobile(mobile)) {
+            errors.rejectValue("mobile", "Mobile");
         }
     }
 }
+

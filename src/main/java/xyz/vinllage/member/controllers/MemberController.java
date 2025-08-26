@@ -19,7 +19,9 @@ import xyz.vinllage.member.entities.Member;
 import xyz.vinllage.member.jwt.TokenService;
 import xyz.vinllage.member.libs.MemberUtil;
 import xyz.vinllage.member.services.JoinService;
+import xyz.vinllage.member.services.ProfileUpdateService;
 import xyz.vinllage.member.validators.JoinValidator;
+import xyz.vinllage.member.validators.ProfileValidator;
 import xyz.vinllage.member.validators.TokenValidator;
 
 @RestController
@@ -31,6 +33,8 @@ public class MemberController {
     private final JoinService joinService;
     private final TokenValidator tokenValidator;
     private final TokenService tokenService;
+    private final ProfileValidator profileValidator;
+    private final ProfileUpdateService profileUpdateService;
     private final HttpServletRequest request;
     private final MemberUtil memberUtil;
     private final Utils utils;
@@ -93,9 +97,12 @@ public class MemberController {
     @PreAuthorize("isAuthenticated()")
     public Member update(@Valid @RequestBody RequestProfile form, Errors errors) {
 
+        profileValidator.validate(form, errors);
+
         if (errors.hasErrors()) {
             throw new BadRequestException(utils.getErrorMessages(errors));
         }
-        return null;
+
+        return profileUpdateService.process(form);
     }
 }
