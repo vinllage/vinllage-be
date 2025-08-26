@@ -11,16 +11,16 @@ import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
- * QBoardData_Seul is a Querydsl query type for BoardData_Seul
+ * QBoardData_seul is a Querydsl query type for BoardData_seul
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QBoardData_Seul extends EntityPathBase<BoardData_Seul> {
+public class QBoardData_seul extends EntityPathBase<BoardData_seul> {
 
-    private static final long serialVersionUID = -334162L;
+    private static final long serialVersionUID = 619150L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
-    public static final QBoardData_Seul boardData_Seul = new QBoardData_Seul("boardData_Seul");
+    public static final QBoardData_seul boardData_seul = new QBoardData_seul("boardData_seul");
 
     public final xyz.vinllage.board_seul.entities.QBoardEntity_seul _super;
 
@@ -71,23 +71,23 @@ public class QBoardData_Seul extends EntityPathBase<BoardData_Seul> {
 
     public final NumberPath<Integer> viewCount = createNumber("viewCount", Integer.class);
 
-    public QBoardData_Seul(String variable) {
-        this(BoardData_Seul.class, forVariable(variable), INITS);
+    public QBoardData_seul(String variable) {
+        this(BoardData_seul.class, forVariable(variable), INITS);
     }
 
-    public QBoardData_Seul(Path<? extends BoardData_Seul> path) {
+    public QBoardData_seul(Path<? extends BoardData_seul> path) {
         this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
-    public QBoardData_Seul(PathMetadata metadata) {
+    public QBoardData_seul(PathMetadata metadata) {
         this(metadata, PathInits.getFor(metadata, INITS));
     }
 
-    public QBoardData_Seul(PathMetadata metadata, PathInits inits) {
-        this(BoardData_Seul.class, metadata, inits);
+    public QBoardData_seul(PathMetadata metadata, PathInits inits) {
+        this(BoardData_seul.class, metadata, inits);
     }
 
-    public QBoardData_Seul(Class<? extends BoardData_Seul> type, PathMetadata metadata, PathInits inits) {
+    public QBoardData_seul(Class<? extends BoardData_seul> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this._super = new xyz.vinllage.board_seul.entities.QBoardEntity_seul(type, metadata, inits);
         this.boardSeul = inits.isInitialized("boardSeul") ? new xyz.vinllage.board_seul.board.entities.QBoard_seul(forProperty("boardSeul")) : null;

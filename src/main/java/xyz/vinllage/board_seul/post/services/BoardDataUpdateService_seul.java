@@ -9,7 +9,7 @@ import xyz.vinllage.board_seul.board.entities.Board_seul;
 import xyz.vinllage.board_seul.board.repositories.BoardRepository_seul;
 import xyz.vinllage.board_seul.board.services.BoardInfoService_seul;
 import xyz.vinllage.board_seul.post.controllers.RequestBoardData_seul;
-import xyz.vinllage.board_seul.post.entities.BoardData_Seul;
+import xyz.vinllage.board_seul.post.entities.BoardData_seul;
 import xyz.vinllage.board_seul.post.repositories.BoardDataRepository_seul;
 import xyz.vinllage.board_seul.repositories.BaseRepository_seul;
 import xyz.vinllage.board_seul.services.UpdateService;
@@ -18,7 +18,7 @@ import xyz.vinllage.member.libs.MemberUtil;
 @Lazy
 @Service
 @Transactional
-public class BoardDataUpdateService_seul extends UpdateService<BoardData_Seul, Long, RequestBoardData_seul> {
+public class BoardDataUpdateService_seul extends UpdateService<BoardData_seul, Long, RequestBoardData_seul> {
 
     private final BoardDataRepository_seul repository;
     private final BoardInfoService_seul boardInfoServiceSeul;
@@ -41,13 +41,13 @@ public class BoardDataUpdateService_seul extends UpdateService<BoardData_Seul, L
     }
 
     @Override
-    protected BaseRepository_seul<BoardData_Seul, Long> getRepository() {
+    protected BaseRepository_seul<BoardData_seul, Long> getRepository() {
         return repository;
     }
 
     // 전처리 - RequestBoardData를 받아서 BoardData를 반환
     @Override
-    public BoardData_Seul beforeProcess(RequestBoardData_seul form) {
+    public BoardData_seul beforeProcess(RequestBoardData_seul form) {
         String bid = form.getBid();
         Long seq = form.getSeq();
         String gid = form.getGid();
@@ -55,7 +55,7 @@ public class BoardDataUpdateService_seul extends UpdateService<BoardData_Seul, L
         // 게시판 설정 보기
         Board_seul boardSeul = boardInfoServiceSeul.get(bid);
 
-        BoardData_Seul item = null;
+        BoardData_seul item = null;
         if (seq != null && seq > 0L && (item = repository.findById(seq).orElse(null)) != null) {
             // 글 수정
             System.out.println("기존 게시글 수정: " + seq);
@@ -67,7 +67,7 @@ public class BoardDataUpdateService_seul extends UpdateService<BoardData_Seul, L
              * 3. gid
              * 4. 아이피 정보(ipAddr) & 브라우저 정보(요청 헤더 - User-Agent)
              */
-            item = new BoardData_Seul();
+            item = new BoardData_seul();
             item.setBoardSeul(boardSeul);
             item.setGid(gid);
             item.setMember(memberUtil.getMember());
@@ -99,7 +99,7 @@ public class BoardDataUpdateService_seul extends UpdateService<BoardData_Seul, L
     }
 
     @Override
-    public void afterProcess(BoardData_Seul item) {
+    public void afterProcess(BoardData_seul item) {
         // 후처리 로직 (예: 파일 정리, 알림 발송 등)
         System.out.println("게시글 처리 완료: " + item.getSubject());
     }

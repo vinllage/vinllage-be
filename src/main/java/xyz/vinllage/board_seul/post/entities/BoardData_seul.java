@@ -17,7 +17,7 @@ import java.util.List;
         @Index(name="idx_board_data_basic", columnList = "bid, notice DESC, createdAt DESC"),
         @Index(name="idx_baord_data_category", columnList = "bid, category, notice DESC, createdAt DESC")
 })
-public class BoardData_Seul extends BoardEntity_seul implements Serializable {
+public class BoardData_seul extends BoardEntity_seul implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seq;

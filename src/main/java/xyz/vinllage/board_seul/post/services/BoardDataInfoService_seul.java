@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import xyz.vinllage.board_seul.board.controllers.RequestBoard_seul;
 import xyz.vinllage.board_seul.controllers.BoardSearch_seul;
-import xyz.vinllage.board_seul.post.entities.BoardData_Seul;
-import xyz.vinllage.board_seul.post.entities.QBoardData_Seul;
+import xyz.vinllage.board_seul.post.entities.BoardData_seul;
+import xyz.vinllage.board_seul.post.entities.QBoardData_seul;
 import xyz.vinllage.board_seul.post.repositories.BoardDataRepository_seul;
 import xyz.vinllage.board_seul.repositories.BaseRepository_seul;
 import xyz.vinllage.board_seul.services.InfoService;
@@ -22,7 +22,7 @@ import java.util.List;
 @Lazy
 @Service
 @Transactional
-public class BoardDataInfoService_seul extends InfoService<BoardData_Seul, Long>{
+public class BoardDataInfoService_seul extends InfoService<BoardData_seul, Long>{
 
     private final BoardDataRepository_seul repository;
     private final ModelMapper mapper;
@@ -35,7 +35,7 @@ public class BoardDataInfoService_seul extends InfoService<BoardData_Seul, Long>
     }
 
     @Override
-    protected BaseRepository_seul<BoardData_Seul, Long> getRepository() { return repository; }
+    protected BaseRepository_seul<BoardData_seul, Long> getRepository() { return repository; }
 
 
     /**
@@ -44,7 +44,7 @@ public class BoardDataInfoService_seul extends InfoService<BoardData_Seul, Long>
      * @return
      */
     public RequestBoard_seul getForm(Long seq) {
-        BoardData_Seul item = get(seq);
+        BoardData_seul item = get(seq);
         RequestBoard_seul form = mapper.map(item, RequestBoard_seul.class);
         form.setBid(item.getBoardSeul().getBid());
         return form;
@@ -58,10 +58,13 @@ public class BoardDataInfoService_seul extends InfoService<BoardData_Seul, Long>
         LocalDate sDate = search.getSDate();
         LocalDate eDate = search.getEDate();
         List<String> emails = search.getEmail();
-        List<String> bids = search.getBid();
+        String bids = search.getBid();
 
         BooleanBuilder andBuilder = new BooleanBuilder();
-        QBoardData_Seul boardData = QBoardData_Seul.boardData_Seul;
+        QBoardData_seul boardData = QBoardData_seul.boardData_seul;
+
+        //deletedAt 필터링
+        andBuilder.and(boardData.deletedAt.isNull());
 
         if (bids != null && !bids.isEmpty())  { // 게시판 아이디 조회
             andBuilder.and(boardData.boardSeul.bid.in(bids));
