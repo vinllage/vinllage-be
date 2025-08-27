@@ -1,7 +1,7 @@
-package xyz.vinllage.recycle;
+//package xyz.vinllage.recycle;
 
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
+//import org.junit.jupiter.api.extension.ExtendWith;
+//import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  * RecycleInfoService.getList() 단위 테스트
@@ -9,8 +9,37 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * - 정렬: rid DESC 적용 확인
  * - 반환: ListData(items+pagination) 확인
  */
-@ExtendWith(MockitoExtension.class)
-class RecycleInfoServiceTest {
+//@ExtendWith(MockitoExtension.class)
+//class RecycleInfoServiceTest {
+
+//package xyz.vinllage.recycle;
+//
+//import com.querydsl.core.types.Predicate;
+//import jakarta.servlet.http.HttpServletRequest;
+//import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.extension.ExtendWith;
+//import org.mockito.InjectMocks;
+//import org.mockito.Mock;
+//import org.mockito.junit.jupiter.MockitoExtension;
+//import org.springframework.data.domain.PageImpl;
+//import org.springframework.data.domain.Pageable;
+//import xyz.vinllage.global.search.ListData;
+//
+//import java.util.List;
+//
+//import static org.junit.jupiter.api.Assertions.assertEquals;
+//import static org.mockito.ArgumentMatchers.any;
+//import static org.mockito.Mockito.when;
+//
+///**
+// * RecycleInfoService.getList() 단위 테스트
+// * - page/limit 보정(0,음수 → 1, 20)
+// * - 정렬: rid DESC 적용 확인
+// * - 반환: ListData(items+pagination) 확인
+// */
+//@ExtendWith(MockitoExtension.class)
+//class RecycleInfoServiceTest {
+//
 
 //	@Mock
 //	RecycleRepository repository;
@@ -39,4 +68,4 @@ class RecycleInfoServiceTest {
 //
 //		assertEquals(2, result.getItems().size());
 //	}
-}
+//}
