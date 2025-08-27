@@ -40,7 +40,7 @@ public class PasswordService {
         return sb.toString();
     }
 
-    public void  process(Member member){
+    public void process(Member member){
         // 1. 임시 비밀번호 생성 밎 저장
         String tempPw = generateRandomPassword(12);
         member.setTempPassword(encoder.encode(tempPw));

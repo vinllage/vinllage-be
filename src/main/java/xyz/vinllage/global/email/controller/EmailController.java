@@ -34,8 +34,24 @@ public class EmailController {
                     .body(Map.of("messages", utils.getErrorMessages(errors)));
         }
 
-        String code = verifyService.generateCode(request.getEmail());
-        sendService.sendVerificationEmail(request.getEmail(), code);
+        String code = "";
+        String subject = "";
+        String title = "";
+        switch (request.getType()) {
+            case SIGN_UP_VERIFICATION -> {
+                code = verifyService.generateCode(request.getEmail());
+                subject = "회원가입 인증 메일";
+                title = "Vinllage 회원가입 인증 코드";
+            }
+            // 탈퇴 인증 메일
+            case WITHDRAWAL_VERIFICATION -> {
+                code = verifyService.generateCode(request.getEmail());
+                subject = "탈퇴 인증 메일";
+                title = "Vinllage 탈퇴 인증 코드";
+            }
+        }
+
+        sendService.sendEmail(request.getEmail(), subject, title, code);
         return ResponseEntity.ok("인증 코드 전송 완료");
     }
 
