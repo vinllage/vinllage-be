@@ -14,6 +14,7 @@ import xyz.vinllage.file.repositories.FileInfoRepository;
 import xyz.vinllage.global.configs.FileProperties;
 import xyz.vinllage.global.libs.Utils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -59,14 +60,19 @@ public class FileInfoService {
 
         QFileInfo fileInfo = QFileInfo.fileInfo;
         BooleanBuilder andBuilder = new BooleanBuilder();
-        andBuilder.and(fileInfo.gid.eq(gid));
-
+        if (StringUtils.hasText(gid)) {
+            andBuilder.and(fileInfo.gid.eq(gid));
+        }
         if (StringUtils.hasText(location)) {
             andBuilder.and(fileInfo.location.eq(location));
         }
 
         if (status != FileStatus.ALL) {
             andBuilder.and(fileInfo.done.eq(status == FileStatus.DONE));
+
+            if (status == FileStatus.CLEAR) {
+                andBuilder.and(fileInfo.createdAt.before(LocalDateTime.now().minusDays(1L)));
+            }
         }
 
         List<FileInfo> items = (List<FileInfo>)repository.findAll(andBuilder, fileInfo.createdAt.asc());
