@@ -38,7 +38,7 @@ public class EmailSendService {
         }
     }
     public void sendTemporaryPassword (String to , String code ){
-        sendEmail(to, "임시 비밀 번호 발급 ",code , "")
+        sendEmail(to, "임시 비밀 번호 발급 ",code , "");
     }
 
     public void sendVerificationEmail(String to, String code) {
