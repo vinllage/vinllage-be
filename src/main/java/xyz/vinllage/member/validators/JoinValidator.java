@@ -76,12 +76,13 @@ public class JoinValidator implements Validator, PasswordValidator, MobileValida
 //                errors.rejectValue("confirmPassword", "Mismatch");
 //            }
 
-//            //2.  비밀 번호 복잡성
-//            if(checkAlpha(password)checkNumber(password)checkSpecialChars(password)){
-//
-//            }
+            // 2.  비밀 번호 복잡성\
+            if(!password){
+                r
+            }
 
         }
+
 
         // 4. 휴대전화번호 형식 검증
         String mobile = form.getMobile();
