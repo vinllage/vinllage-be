@@ -1,4 +1,18 @@
 //package xyz.vinllage.recycle;
+
+//import org.junit.jupiter.api.extension.ExtendWith;
+//import org.mockito.junit.jupiter.MockitoExtension;
+
+/**
+ * RecycleInfoService.getList() 단위 테스트
+ * - page/limit 보정(0,음수 → 1, 20)
+ * - 정렬: rid DESC 적용 확인
+ * - 반환: ListData(items+pagination) 확인
+ */
+//@ExtendWith(MockitoExtension.class)
+//class RecycleInfoServiceTest {
+
+//package xyz.vinllage.recycle;
 //
 //import com.querydsl.core.types.Predicate;
 //import jakarta.servlet.http.HttpServletRequest;
@@ -26,6 +40,7 @@
 //@ExtendWith(MockitoExtension.class)
 //class RecycleInfoServiceTest {
 //
+
 //	@Mock
 //	RecycleRepository repository;
 //
