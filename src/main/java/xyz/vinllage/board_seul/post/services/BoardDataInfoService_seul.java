@@ -1,0 +1,124 @@
+package xyz.vinllage.board_seul.post.services;
+
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.StringExpression;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
+import org.modelmapper.ModelMapper;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import xyz.vinllage.board_seul.board.controllers.RequestBoard_seul;
+import xyz.vinllage.board_seul.controllers.BoardSearch_seul;
+import xyz.vinllage.board_seul.post.entities.BoardData_seul;
+import xyz.vinllage.board_seul.post.entities.QBoardData_seul;
+import xyz.vinllage.board_seul.post.repositories.BoardDataRepository_seul;
+import xyz.vinllage.board_seul.repositories.BaseRepository_seul;
+import xyz.vinllage.board_seul.services.InfoService;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@Lazy
+@Service
+@Transactional
+public class BoardDataInfoService_seul extends InfoService<BoardData_seul, Long>{
+
+    private final BoardDataRepository_seul repository;
+    private final ModelMapper mapper;
+
+    public BoardDataInfoService_seul(HttpServletRequest request,
+                                     BoardDataRepository_seul repository, ModelMapper mapper) {
+        super(request);
+        this.repository = repository;
+        this.mapper=mapper;
+    }
+
+    @Override
+    protected BaseRepository_seul<BoardData_seul, Long> getRepository() { return repository; }
+
+
+    /**
+     * 게시글 수정시 조회
+     * @param seq
+     * @return
+     */
+    public RequestBoard_seul getForm(Long seq) {
+        BoardData_seul item = get(seq);
+        RequestBoard_seul form = mapper.map(item, RequestBoard_seul.class);
+        form.setBid(item.getBoardSeul().getBid());
+        return form;
+    }
+
+    @Override
+    protected BooleanBuilder search(BoardSearch_seul search) {
+        /* 검색 조건 처리 S */
+        String sopt = search.getSopt();
+        String skey = search.getSkey();
+        LocalDate sDate = search.getSDate();
+        LocalDate eDate = search.getEDate();
+        List<String> emails = search.getEmail();
+        String bids = search.getBid();
+
+        BooleanBuilder andBuilder = new BooleanBuilder();
+        QBoardData_seul boardData = QBoardData_seul.boardData_seul;
+
+        //deletedAt 필터링
+        andBuilder.and(boardData.deletedAt.isNull());
+
+        if (bids != null && !bids.isEmpty())  { // 게시판 아이디 조회
+            andBuilder.and(boardData.boardSeul.bid.in(bids));
+        }
+
+        // 게시글 등록일 조회
+        if (sDate != null) {
+            andBuilder.and(boardData.createdAt.goe(sDate.atStartOfDay()));
+        }
+
+        if (eDate != null) {
+            andBuilder.and(boardData.createdAt.loe(eDate.atTime(23, 59, 59)));
+        }
+
+        /**
+         * 키워드 검색
+         * sopt - ALL : 통합검색 (SUBJECT + CONTENT + NAME)
+         *        SUBJECT : 게시글 제목
+         *        CONTENT : 게시글 내용
+         *        SUBJECT_CONTENT : 게시글 제목 + 내용
+         *        NAME : 작성자명(poster) + 회원명(name) + 이메일(email)
+         */
+        sopt = StringUtils.hasText(sopt) ? sopt.toUpperCase() : "ALL";
+        if (StringUtils.hasText(skey)) {
+            skey = skey.trim();
+
+            StringExpression subject = boardData.subject;
+            StringExpression content = boardData.content;
+            StringExpression name = boardData.poster.concat(boardData.member.name)
+                    .concat(boardData.member.email);
+
+            StringExpression fields = null;
+            if (sopt.equals("SUBJECT")) {
+                fields = subject;
+            } else if (sopt.equals("CONTENT")) {
+                fields = content;
+            } else if (sopt.equals("SUBJECT_CONTENT")) {
+                fields = subject.concat(content);
+            } else if (sopt.equals("NAME")) {
+                fields = name;
+            } else { // 통합검색
+                fields = subject.concat(content).concat(name);
+            }
+
+            andBuilder.and(fields.contains(skey));
+        }
+
+        // 회원 이메일로 게시글 조회
+        if (emails != null && !emails.isEmpty()) {
+            andBuilder.and(boardData.member.email.in(emails));
+        }
+
+        /* 검색 조건 처리 E */
+
+        return andBuilder;
+    }
+}
