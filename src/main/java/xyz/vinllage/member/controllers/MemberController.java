@@ -24,7 +24,9 @@ import xyz.vinllage.member.repositories.MemberRepository;
 import xyz.vinllage.member.services.JoinService;
 import xyz.vinllage.member.services.NewPasswordService;
 import xyz.vinllage.member.services.PasswordService;
+import xyz.vinllage.member.services.ProfileUpdateService;
 import xyz.vinllage.member.validators.JoinValidator;
+import xyz.vinllage.member.validators.ProfileValidator;
 import xyz.vinllage.member.validators.TokenValidator;
 
 import java.util.Map;
@@ -38,6 +40,8 @@ public class MemberController {
     private final JoinService joinService;
     private final TokenValidator tokenValidator;
     private final TokenService tokenService;
+    private final ProfileValidator profileValidator;
+    private final ProfileUpdateService profileUpdateService;
     private final HttpServletRequest request;
     private final MemberUtil memberUtil;
     private final Utils utils;
@@ -102,10 +106,13 @@ public class MemberController {
     @PreAuthorize("isAuthenticated()")
     public Member update(@Valid @RequestBody RequestProfile form, Errors errors) {
 
+        profileValidator.validate(form, errors);
+
         if (errors.hasErrors()) {
             throw new BadRequestException(utils.getErrorMessages(errors));
         }
-        return null;
+
+        return profileUpdateService.process(form);
     }
 
     @Operation(summary = "임시 비밀 번호 메일로 발송", method = "POST")
