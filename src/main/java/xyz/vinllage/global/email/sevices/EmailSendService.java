@@ -15,13 +15,22 @@ public class EmailSendService {
     private final JavaMailSender mailSender;
     private final SpringTemplateEngine templateEngine;
 
-    public void sendEmail(String to, String subject, String code, String template) {
+    /**
+     * 메일 전송
+     *
+     * @param to 전송 대상 이메일
+     * @param subject 메일 제목
+     * @param title 템플릿 내 제목
+     * @param code 전송할 인증 코드
+     */
+    public void sendEmail(String to, String subject, String title, String code) {
         // 1) 템플릿에 전달할 데이터
         Context context = new Context();
+        context.setVariable("title", title);
         context.setVariable("code", code);
 
         // 2) 템플릿 처리
-        String htmlContent = templateEngine.process(template, context);
+        String htmlContent = templateEngine.process("email/email", context);
 
         try {
             // 3) 메일 작성
@@ -38,12 +47,7 @@ public class EmailSendService {
         }
     }
 
-    public void sendVerificationEmail(String to, String code) {
-        sendEmail(to, "이메일 인증 코드", code, "email/email");
-    }
-
     public void sendTemporaryPasswordEmail(String to, String code) {
-        sendEmail(to, "임시 비밀번호 발급", code, "member/email");
+        sendEmail(to, "임시 비밀번호 발급", "Vinllage 임시 비밀번호", code);
     }
-
 }
