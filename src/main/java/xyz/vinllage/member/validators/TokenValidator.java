@@ -10,6 +10,8 @@ import xyz.vinllage.member.controllers.RequestToken;
 import xyz.vinllage.member.entities.Member;
 import xyz.vinllage.member.repositories.MemberRepository;
 
+import java.time.LocalDateTime;
+
 
 @Component
 @RequiredArgsConstructor
@@ -43,11 +45,27 @@ public class TokenValidator implements Validator {
             if (member == null) {
                 errors.reject("NotFound.member.or.password");
             }
-            // 비밀번호 검증
 
-
-            if (member != null && !encoder.matches(form.getPassword(), member.getPassword())) {
-                errors.reject("NotFound.member.or.password");
+            if (member != null) {
+                // 임시 비밀번호 X
+                if (member.getTempPassword() == null) {
+                    // 비밀번호가 일치하지 않은 경우
+                    if (!encoder.matches(form.getPassword(), member.getPassword())) {
+                        errors.reject("NotFound.member.or.password");
+                    }
+                }
+                // 임시 비밀번호 O
+                else {
+                    // 기간이 만료된 경우
+                    if (LocalDateTime.now().isAfter(member.getTempPasswordExpiresAt())) {
+                        errors.reject("Invalid.tempPassword");
+                    }
+                    // 비밀번호와 임시 비밀번호가 모두 일치하지 않은 경우
+                    else if (!encoder.matches(form.getPassword(), member.getTempPassword())
+                            && !encoder.matches(form.getPassword(), member.getPassword())) {
+                        errors.reject("NotFound.member.or.password");
+                    }
+                }
             }
         }
     }
