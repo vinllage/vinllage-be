@@ -19,7 +19,6 @@ import xyz.vinllage.recycle.services.DetectInfoService;
 import xyz.vinllage.recycle.services.DetectSaveService;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,7 +35,7 @@ public class RecycleController {
     @ApiResponse(responseCode = "201", description = "성공 시 201로 응답, 검증 실패시 400")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED) // 201로 응답
-    public Map<String, Object> upload(
+    public DetectedRecycle upload(
             @RequestPart("file") List<MultipartFile> files,
             @RequestPart("items") String itemsJson,
             Errors errors
@@ -46,21 +45,17 @@ public class RecycleController {
         }
 
         Member loggedMember = memberUtil.getMember();
-        DetectedRecycle recycle = detectSaveService.process(files, itemsJson, loggedMember);
+        DetectedRecycle detectedRecycle = detectSaveService.process(files, itemsJson, loggedMember);
 
-        return Map.of(
-                "gid", recycle.getGid(),
-                "count", files.size(),
-                "ids", files.stream().map(MultipartFile::getOriginalFilename).toList()
-        );
+        return detectedRecycle;
     }
-
+  
     @Operation(summary = "쓰레기 목록 조회", description = "page 기본값 1, limit 기본값 20")
     @GetMapping("/result")
-    public ListData<DetectedRecycle> result(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "20") int limit,
-            @RequestParam(defaultValue = "2362a2bc-1d87-4f66-bfdb-b7b42d991c02") String gid
+    public ListData<DetectedRecycle> list(
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam(defaultValue = "20") int limit,
+        @RequestParam String gid
     ) {
         return detectInfoService.getList(gid, page, limit);
     }

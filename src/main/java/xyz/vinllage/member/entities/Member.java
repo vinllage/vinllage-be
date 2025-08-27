@@ -68,4 +68,17 @@ public class Member extends BaseEntity implements Serializable {
 
     @Transient
     private FileInfo profileImage;
+
+    // 삭제 여부 확인
+    @Transient
+    public boolean isDeleted() {
+        return super.getDeletedAt() != null;
+    }
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime tempPasswordExpiresAt; // 임시 비밀번호 만료 일시
+
+    @JsonIgnore
+    @Column(length = 65)
+    private String tempPassword; // 임시 비밀번호
 }

@@ -1,6 +1,7 @@
 package xyz.vinllage.recycle.services;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
@@ -25,20 +26,24 @@ public class DetectInfoService {
     private final DetectedRecycleRepository repository;
     private final HttpServletRequest request;
 
-    // 분리수거 결과 조회
+    public DetectedRecycle get() {
+
+        return null;
+    }
+
     public ListData<DetectedRecycle> getList(String gid, int page, int limit) {
         page = Math.max(page, 1);
         limit = limit < 1 ? 20 : limit;
 
-        Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(asc("gid")));
+		Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(asc("gid")));
 
-        QDetectedRecycle detectedRecycle = QDetectedRecycle.detectedRecycle;
-        BooleanBuilder where = new BooleanBuilder().and(detectedRecycle.deletedAt.isNull())
-                .and(detectedRecycle.gid.eq(gid));
+		QDetectedRecycle detectedRecycle = QDetectedRecycle.detectedRecycle;
+		BooleanBuilder where = new BooleanBuilder().and(detectedRecycle.deletedAt.isNull())
+				.and(detectedRecycle.gid.eq(gid));
 
-        Page<DetectedRecycle> data = repository.findAll(where, pageable);
+		Page<DetectedRecycle> data = repository.findAll(where, pageable);
 
-        Pagination pagination = new Pagination(page, (int) data.getTotalElements(), 10, limit, request);
-        return new ListData<>(data.getContent(), pagination);
-    }
+		Pagination pagination = new Pagination(page, (int) data.getTotalElements(), 10, limit, request);
+		return new ListData<>(data.getContent(), pagination);
+	}
 }
