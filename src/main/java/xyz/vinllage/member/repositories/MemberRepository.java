@@ -2,6 +2,7 @@ package xyz.vinllage.member.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import xyz.vinllage.member.constants.SocialChannel;
 import xyz.vinllage.member.entities.Member;
 
 import java.util.Optional;
@@ -18,4 +19,7 @@ import java.util.Optional;
  public interface MemberRepository extends JpaRepository<Member, Long>, QuerydslPredicateExecutor<Member> {
     Optional<Member> findByEmail(String email);
     boolean existsByEmail(String email);
+
+    Optional<Member> findBySocialChannelAndSocialToken(SocialChannel socialChannel, String socialToken);
+
 }

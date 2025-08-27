@@ -1,6 +1,7 @@
 package xyz.vinllage.crawler.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 
 @Data
 @Entity
+@Schema(description = "크롤링된 데이터 정보")
 public class CrawledData extends BaseEntity {
     @Id
     private Integer hash;

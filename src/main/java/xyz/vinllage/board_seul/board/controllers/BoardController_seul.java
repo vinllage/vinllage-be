@@ -10,17 +10,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import xyz.vinllage.board_seul.board.entities.Board_seul;
-import xyz.vinllage.board_seul.post.entities.BoardData_seul;
 import xyz.vinllage.board_seul.board.services.BoardInfoService_seul;
 import xyz.vinllage.board_seul.board.services.BoardUpdateService_seul;
 import xyz.vinllage.board_seul.board.validator.BoardValidator_seul;
 import xyz.vinllage.board_seul.controllers.BoardSearch_seul;
 import xyz.vinllage.board_seul.post.services.BoardDataInfoService_seul;
-import xyz.vinllage.global.search.CommonSearch;
 import xyz.vinllage.global.search.ListData;
 import xyz.vinllage.member.constants.Authority;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -124,23 +121,15 @@ public class BoardController_seul {
         ));
     }
 
-    /**
-     * 게시글 목록 조회
-     */
-    @Operation(summary = "게시글 목록 조회")
-    @GetMapping("/posts")
-    public ResponseEntity<ListData<BoardData_seul>> getPosts(@ModelAttribute BoardSearch_seul search) {
-        ListData<BoardData_seul> data = dataInfoService.getList(search);
-        return ResponseEntity.ok(data);
-    }
-
     @Operation(summary = "게시판 삭제")
     @PutMapping("/delete")
     public ResponseEntity<?> delete(
-            @PathVariable("bid") String bid,
             @Valid @RequestBody RequestBoard_seul form,
             Errors errors) {
-        return null;
+        return ResponseEntity.ok(Map.of(
+                "success", true,
+                "message", "게시판이 삭제되었습니다."
+        ));
     }
 
     /**
