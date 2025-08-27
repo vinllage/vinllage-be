@@ -1,7 +1,6 @@
 package xyz.vinllage.recycle.services;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,7 +20,6 @@ import static org.springframework.data.domain.Sort.Order.asc;
 @RequiredArgsConstructor
 public class DetectInfoService {
 
-	private final JPAQueryFactory queryFactory;
 	private final DetectedRecycleRepository repository;
 	private final HttpServletRequest request;
 
@@ -30,6 +28,14 @@ public class DetectInfoService {
 		return null;
 	}
 
+	/**
+	 * DetectedRecycle 찾아서 이미지 JSON 반환
+	 *
+	 * @param gid
+	 * @param page
+	 * @param limit
+	 * @return
+	 */
 	public ListData<DetectedRecycle> getList(String gid, int page, int limit) {
 		page = Math.max(page, 1);
 		limit = limit < 1 ? 20 : limit;

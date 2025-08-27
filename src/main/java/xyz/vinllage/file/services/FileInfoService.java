@@ -68,7 +68,7 @@ public class FileInfoService {
         }
 
         if (status != FileStatus.ALL) {
-            andBuilder.and(fileInfo.done.eq(status == FileStatus.DONE));
+            andBuilder.and(fileInfo.status.eq(FileStatus.DONE));
 
             if (status == FileStatus.CLEAR) {
                 andBuilder.and(fileInfo.createdAt.before(LocalDateTime.now().minusDays(1L)));
