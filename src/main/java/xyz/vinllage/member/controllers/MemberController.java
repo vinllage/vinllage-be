@@ -101,14 +101,14 @@ public class MemberController {
 //        return tokenResponse;
 //    }
 
-    @Operation(summary = "회원 인증 처리", description = "이메일과 비밀번호로 인증한 후 회원 전용 요청을 보낼수 있는 토큰(JWT)을 발급")
+    @Operation(summary = "회원 인증 처리", description = "이메일과 비밀번호로 인증한 후 회원 전용 요청을 보낼 수 있는 토큰(JWT)을 발급")
     @Parameters({
-            @Parameter(name="email", required = true, description = "이메일 ,일반 로그인 시 필수"),
+            @Parameter(name="email", required = true, description = "이메일, 일반 로그인 시 필수"),
             @Parameter(name="password", required = true, description = "비밀번호, 일반 로그인 시 필수"),
-            @Parameter(name="socialChannel", required = true, description = "쇼설 로그인 구분 , 소셜 로그인 시 필수 "),
-            @Parameter(name="socialToken", required = true, description = "쇼설 로그인 발급 받은 회원을 구분 값  , 소셜 로그인 시 필수 "),
+            @Parameter(name="socialChannel", required = true, description = "소셜 로그인 구분, 소셜 로그인 시 필수"),
+            @Parameter(name="socialToken", required = true, description = "소셜 로그인 발급 받은 회원을 구분하는 값, 소셜 로그인 시 필수"),
     })
-    @ApiResponse(responseCode = "200", description = "인증 성공시 토큰(JWT)발급")
+    @ApiResponse(responseCode = "200", description = "인증 성공 시 토큰(JWT) 발급")
     @PostMapping({"/token", "/social/token"})
     public String token(@Valid @RequestBody RequestToken form, Errors errors) {
         form.setSocial(request.getRequestURI().contains("/social"));
@@ -133,7 +133,7 @@ public class MemberController {
         return memberUtil.isLogin() ? ResponseEntity.ok(memberUtil.getMember()) : ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    @Operation(summary = "로그인한 회원의 회원정보를 수정 처리", method = "PATCH")
+    @Operation(summary = "로그인한 회원의 회원 정보를 수정 처리", method = "PATCH")
     @PatchMapping("/update")
     @PreAuthorize("isAuthenticated()")
     public Member update(@Valid @RequestBody RequestProfile form, Errors errors) {
