@@ -116,7 +116,7 @@ public class MemberController {
         if(!repository.existsByEmail(email)){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("member","등록되지 않은 이메일 입니다"));
         }
-        password.nPassword(email);
+        password.process(email);
         return ResponseEntity.ok(Map.of("message", "임시 비밀 번호 가 발송 되없습니다"));
     }
 

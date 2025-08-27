@@ -67,7 +67,7 @@ public class JoinValidator implements Validator, PasswordValidator, MobileValida
             if (checkNumber(password)) strength ++;
             if(checkSpecialChars(password)) strength ++;
             if(strength > 0){
-                errors.rejectValue("pasword", "Comlexiy");
+                errors.rejectValue("password", "Comlexiy");
             }
 
 
