@@ -90,12 +90,14 @@ public class MemberController {
 
         Member member = repository.findByEmail(form.getEmail()).orElse(null);
 
-        // 정상적으로 로그인 시도 -> 기존에 있던 임시 비밀번호 제거
-        passwordService.deleteTempPassword(form, member);
+        // 정상적으로 로그인 시도 -> 기존에 있던 임시 비밀번호 제거(일반 회원일 때만 검사)
+        if (!form.isSocial()) {
+            passwordService.deleteTempPassword(form, member);
 
-        // 임시 비밀번호 여부 (일반 회원일 때만 검사)
-        if (!form.isSocial() && member.getTempPassword() != null) {
-            tokenResponse.setForceChangePassword(passwordService.matchesTempPassword(form.getPassword(), member));
+            // 임시 비밀번호 여부
+            if (member.getTempPassword() != null) {
+                tokenResponse.setForceChangePassword(passwordService.matchesTempPassword(form.getPassword(), member));
+            }
         }
 
         return tokenResponse;
