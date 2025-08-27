@@ -74,6 +74,7 @@ springdoc:
     - /api/v1/**                # 해당 경로의 API만 문서화
 
 # JWT 설정
+
 member:
   jwt:
     secret: ${jwt.secret}       # 로그인 시 발급되는 JWT 토큰의 비밀키
