@@ -1,6 +1,5 @@
 package xyz.vinllage.global.email.controller;
 
-import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,7 @@ public class EmailController {
     private final EmailVerifyService verifyService;
 
     @PostMapping("/send-code")
-    public ResponseEntity<?> sendCode(@Valid @RequestBody RequestEmail request, Errors errors) throws MessagingException {
+    public ResponseEntity<?> sendCode(@Valid @RequestBody RequestEmail request, Errors errors) {
         // 이메일 중복 검증
         emailAuthValidator.validate(request, errors);
 
