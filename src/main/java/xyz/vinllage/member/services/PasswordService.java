@@ -50,7 +50,7 @@ public class PasswordService {
         String tem = generateTemporaryPassword();
         member.setTempPassword(encoder.encode(tem));
         // 2. 임시 비밀 번호 유호 기간 설정 (3뷴)
-        member.setTemPasswordExpiresAt(LocalDateTime.now().plusMinutes(3));
+        member.setTempPasswordExpiresAt(LocalDateTime.now().plusMinutes(3));
         // 3. db에 저장
         repository.saveAndFlush(member);
         // 4. 임시 비밀 번호를 메일로 전송
@@ -71,7 +71,7 @@ public class PasswordService {
     public void delete(RequestToken form, Member member){
         if(member.getTempPassword()!= null && matchesPassword(form.getPassword(), member)){
             member.setTempPassword(null);
-            member.setTemPasswordExpiresAt(null);
+            member.setTempPasswordExpiresAt(null);
             repository.saveAndFlush(member);
         }
     }
