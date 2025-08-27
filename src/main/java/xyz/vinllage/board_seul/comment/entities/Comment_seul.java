@@ -7,7 +7,7 @@ import xyz.vinllage.board_seul.entities.BoardEntity_seul;
 @Data
 @Entity
 @Table(name = "comments", indexes = {
-        @Index(name = "idx_comment_board", columnList = "boardDataSeq,deleted,createdAt")
+        @Index(name = "idx_comment_board", columnList = "boardDataSeq,deletedAt,createdAt")
 })
 public class Comment_seul extends BoardEntity_seul {
     @Id
