@@ -37,9 +37,6 @@ public class EmailSendService {
             e.printStackTrace();
         }
     }
-    public void sendTemporaryPassword (String to , String code ){
-        sendEmail(to, "임시 비밀 번호 발급 ",code , "");
-    }
 
     public void sendVerificationEmail(String to, String code) {
         sendEmail(to, "이메일 인증 코드", code, "email/email");
