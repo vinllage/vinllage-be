@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import xyz.vinllage.file.constants.FileStatus;
 import xyz.vinllage.file.controllers.RequestUpload;
 import xyz.vinllage.file.entities.FileInfo;
+import xyz.vinllage.file.repositories.FileInfoRepository;
 import xyz.vinllage.file.services.FileUploadService;
 import xyz.vinllage.member.entities.Member;
 import xyz.vinllage.recycle.entities.DetectedRecycle;
@@ -21,6 +23,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class DetectSaveService {
 
+    private final FileInfoRepository fileInfoRepository;
     private final FileUploadService fileUploadService;
     private final DetectedRecycleRepository recycleFileDataRepository;
     private final ObjectMapper om;
@@ -69,7 +72,11 @@ public class DetectSaveService {
         recycleFileDataRepository.saveAndFlush(entity);
 
         // 3) 파일 그룹 작업 완료 처리
-        fileUploadService.processDone(gid);
+        for (FileInfo f : fileInfos) {
+            if (member != null) f.setStatus(FileStatus.DONE);
+            else f.setStatus(FileStatus.CLEAR);
+            fileInfoRepository.saveAndFlush(f);
+        }
 
         return entity;
     }
