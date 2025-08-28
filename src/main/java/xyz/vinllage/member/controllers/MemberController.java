@@ -16,13 +16,11 @@ import org.springframework.web.bind.annotation.*;
 import xyz.vinllage.global.email.dtos.RequestEmail;
 import xyz.vinllage.global.exceptions.BadRequestException;
 import xyz.vinllage.global.libs.Utils;
-import xyz.vinllage.member.entities.FinPw;
 import xyz.vinllage.member.entities.Member;
 import xyz.vinllage.member.jwt.TokenService;
 import xyz.vinllage.member.libs.MemberUtil;
 import xyz.vinllage.member.repositories.MemberRepository;
 import xyz.vinllage.member.services.JoinService;
-import xyz.vinllage.member.services.NewPasswordService;
 import xyz.vinllage.member.services.PasswordService;
 import xyz.vinllage.member.services.ProfileUpdateService;
 import xyz.vinllage.member.validators.JoinValidator;
@@ -45,7 +43,6 @@ public class MemberController {
     private final HttpServletRequest request;
     private final MemberUtil memberUtil;
     private final Utils utils;
-    private final NewPasswordService password;
     private final MemberRepository repository;
     private final PasswordService passwordService;
 
@@ -113,18 +110,6 @@ public class MemberController {
         }
 
         return profileUpdateService.process(form);
-    }
-
-    @Operation(summary = "임시 비밀 번호 메일로 발송", method = "POST")
-    @ApiResponse(responseCode = "200")
-    @PostMapping("/find-pw")
-    public ResponseEntity<?> findPw(@RequestBody FinPw form){
-        String email  = form.getEmail();
-        if(!repository.existsByEmail(email)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("member","등록되지 않은 이메일 입니다"));
-        }
-        password.nPassword(email);
-        return ResponseEntity.ok(Map.of("message", "임시 비밀 번호 가 발송 되없습니다"));
     }
 
     @Operation(summary = "임시 비밀번호를 메일로 발송", method = "POST")
