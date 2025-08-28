@@ -43,7 +43,7 @@ public class JoinValidator implements Validator, PasswordValidator, MobileValida
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotBlank");
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "confirmPassword", "NotBlank");
 
-            if (StringUtils.hasText(password) && password.length() < 8) {
+            if (StringUtils.hasText(password) && password.length() < 16) {
                 errors.rejectValue("password", "Size");
             }
         }
@@ -59,28 +59,14 @@ public class JoinValidator implements Validator, PasswordValidator, MobileValida
 
         if (!isSocial) {
             // 2. 비밀번호 복잡성
-//            if (!checkAlpha(password, false) || !checkNumber(password) || !checkSpecialChars(password)) {
-//                errors.rejectValue("password", "Complexity");
-//            }
-//            int strength = 0;
-//            if(!checkAlpha(password, false)) strength ++;
-//            if (checkNumber(password)) strength ++;
-//            if(checkSpecialChars(password)) strength ++;
-//            if(strength > 0){
-//                errors.rejectValue("password", "Comlexiy");
-//            }
-//
-//
-//            // 3. 비밀번호 확인 일치 여부
-//            if (!password.equals(confirmPassword)) {
-//                errors.rejectValue("confirmPassword", "Mismatch");
-//            }
-
-            // 2.  비밀 번호 복잡성\
-            if(!password){
-                r
+            if (!checkAlpha(password, false) || !checkNumber(password) || !checkSpecialChars(password)) {
+                errors.rejectValue("password", "Complexity");
             }
 
+            // 3. 비밀번호 확인 일치 여부
+            if (!password.equals(confirmPassword)) {
+                errors.rejectValue("confirmPassword", "Mismatch");
+            }
         }
 
 
