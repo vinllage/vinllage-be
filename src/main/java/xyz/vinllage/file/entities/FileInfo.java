@@ -12,9 +12,9 @@ import xyz.vinllage.global.entities.BaseEntity;
 @Table(indexes = {
         // 검색 성능을 빠르게 하기 위해 사용
         @Index(name="idx_fileinfo_gid1", columnList = "gid,createdAt"),
-        @Index(name="idx_fileinfo_gid2", columnList = "gid,done,createdAt"),
+        @Index(name="idx_fileinfo_gid2", columnList = "gid,status,createdAt"),
         @Index(name="idx_fileinfo_location1", columnList = "gid,location,createdAt"),
-        @Index(name="idx_fileinfo_location2", columnList = "gid,location,done,createdAt")
+        @Index(name="idx_fileinfo_location2", columnList = "gid,location,status,createdAt")
 })
 @EntityListeners(AuditingEntityListener.class)
 public class FileInfo extends BaseEntity {

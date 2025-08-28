@@ -1,8 +1,10 @@
 package xyz.vinllage.recycle.services;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,29 +18,22 @@ import xyz.vinllage.recycle.repositories.DetectedRecycleRepository;
 
 import static org.springframework.data.domain.Sort.Order.asc;
 
+@Lazy
 @Service
 @RequiredArgsConstructor
 public class DetectInfoService {
 
-	private final DetectedRecycleRepository repository;
-	private final HttpServletRequest request;
+    private final DetectedRecycleRepository repository;
+    private final HttpServletRequest request;
 
-	public DetectedRecycle get() {
+    public DetectedRecycle get() {
 
-		return null;
-	}
+        return null;
+    }
 
-	/**
-	 * DetectedRecycle 찾아서 이미지 JSON 반환
-	 *
-	 * @param gid
-	 * @param page
-	 * @param limit
-	 * @return
-	 */
-	public ListData<DetectedRecycle> getList(String gid, int page, int limit) {
-		page = Math.max(page, 1);
-		limit = limit < 1 ? 20 : limit;
+    public ListData<DetectedRecycle> getList(String gid, int page, int limit) {
+        page = Math.max(page, 1);
+        limit = limit < 1 ? 20 : limit;
 
 		Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(asc("gid")));
 
