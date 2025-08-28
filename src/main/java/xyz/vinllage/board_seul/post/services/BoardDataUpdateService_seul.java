@@ -68,7 +68,7 @@ public class BoardDataUpdateService_seul extends UpdateService<BoardData_seul, L
              * 4. 아이피 정보(ipAddr) & 브라우저 정보(요청 헤더 - User-Agent)
              */
             item = new BoardData_seul();
-            item.setBoardSeul(boardSeul);
+            item.setBoard(boardSeul);
             item.setGid(gid);
             item.setMember(memberUtil.getMember());
             item.setIp(request.getRemoteAddr());

@@ -24,7 +24,7 @@ public class QBoardData_seul extends EntityPathBase<BoardData_seul> {
 
     public final xyz.vinllage.board_seul.entities.QBoardEntity_seul _super;
 
-    public final xyz.vinllage.board_seul.board.entities.QBoard_seul boardSeul;
+    public final xyz.vinllage.board_seul.board.entities.QBoard_seul board;
 
     public final StringPath category = createString("category");
 
@@ -90,7 +90,7 @@ public class QBoardData_seul extends EntityPathBase<BoardData_seul> {
     public QBoardData_seul(Class<? extends BoardData_seul> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this._super = new xyz.vinllage.board_seul.entities.QBoardEntity_seul(type, metadata, inits);
-        this.boardSeul = inits.isInitialized("boardSeul") ? new xyz.vinllage.board_seul.board.entities.QBoard_seul(forProperty("boardSeul")) : null;
+        this.board = inits.isInitialized("board") ? new xyz.vinllage.board_seul.board.entities.QBoard_seul(forProperty("board")) : null;
         this.content = _super.content;
         this.createdAt = _super.createdAt;
         this.deletedAt = _super.deletedAt;

@@ -101,7 +101,7 @@ public class BoardDataController_seul {
     }
 
     // 게시글 저장
-    @PostMapping("/save")
+    @RequestMapping(path="/save", method={RequestMethod.POST, RequestMethod.PATCH})
     public ResponseEntity<?> save(@Valid @RequestBody RequestBoardData_seul form, Errors errors) {
         try {
             String mode = StringUtils.hasText(form.getMode()) ? form.getMode() : "register";
@@ -155,7 +155,7 @@ public class BoardDataController_seul {
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("post", boardData);
-            response.put("board", boardData.getBoardSeul());
+            response.put("board", boardData.getBoard());
             response.put("canEdit", permissionService.canEdit(boardData));
             response.put("canDelete", permissionService.canEdit(boardData));
             response.put("isGuest", permissionService.memberOrGuest(boardData));
@@ -179,6 +179,7 @@ public class BoardDataController_seul {
             }
 
             if (!permissionService.canEdit(boardData)) {
+                System.out.println(boardData);
                 return ResponseEntity.status(403).body(Map.of(
                         "success", false,
                         "message", "수정 권한이 없습니다."
@@ -197,23 +198,9 @@ public class BoardDataController_seul {
                     ));
                 }
             }
-
-            RequestBoardData_seul form = new RequestBoardData_seul();
-            form.setMode("update");
-            form.setSeq(boardData.getSeq());
-            form.setBid(boardData.getBoardSeul().getBid());
-            form.setGid(boardData.getGid());
-            form.setPoster(boardData.getPoster());
-            form.setSubject(boardData.getSubject());
-            form.setContent(boardData.getContent());
-            form.setNotice(boardData.isNotice());
-            form.setSecret(boardData.isSecret());
-            form.setGuest(boardData.getMember() == null);
-
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
-            response.put("form", form);
-            response.put("board", boardData.getBoardSeul());
+            response.put("form", boardData);
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -261,7 +248,7 @@ public class BoardDataController_seul {
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "message", "글이 삭제되었습니다.",
-                    "redirectTo", "/board/list/" + boardData.getBoardSeul().getBid()
+                    "redirectTo", "/board/list/" + boardData.getBoard().getBid()
             ));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of(

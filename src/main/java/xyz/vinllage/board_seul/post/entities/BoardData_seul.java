@@ -26,8 +26,8 @@ public class BoardData_seul extends BoardEntity_seul implements Serializable {
     private String gid;
 
     @JoinColumn(name="bid")
-    @ManyToOne(fetch= FetchType.LAZY)
-    private Board_seul boardSeul;
+    @ManyToOne(fetch= FetchType.EAGER)
+    private Board_seul board;
 
     @Column(length=60)
     private String category;
@@ -51,6 +51,6 @@ public class BoardData_seul extends BoardEntity_seul implements Serializable {
     private boolean editable;
 
     public Authority getCommentAuthority() {
-        return this.boardSeul.getCommentAuthority();
+        return this.board.getCommentAuthority();
     }
 }
