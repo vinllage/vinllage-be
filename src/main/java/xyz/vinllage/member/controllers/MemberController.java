@@ -27,6 +27,7 @@ import xyz.vinllage.member.validators.JoinValidator;
 import xyz.vinllage.member.validators.ProfileValidator;
 import xyz.vinllage.member.validators.TokenValidator;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @RestController
@@ -148,5 +149,18 @@ public class MemberController {
 
         // 프론트엔드에 메일 발송 성공 메시지 전달
         return ResponseEntity.ok(Map.of("message", "임시 비밀번호가 발송되었습니다"));
+    }
+
+    @Operation(summary = "회원 탈퇴 처리", method = "POST")
+    @ApiResponse(responseCode = "200")
+    @PostMapping("/withdraw")
+    public ResponseEntity<?> withdraw(){
+        Member member = memberUtil.getMember();
+
+        // 탈퇴 시각 기록
+        member.setDeletedAt(LocalDateTime.now());
+        repository.saveAndFlush(member);
+
+        return ResponseEntity.ok(Map.of("message", "탈퇴 처리가 완료되었습니다."));
     }
 }

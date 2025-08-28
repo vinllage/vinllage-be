@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import xyz.vinllage.global.email.dtos.EmailType;
 import xyz.vinllage.global.email.dtos.RequestEmail;
 import xyz.vinllage.member.repositories.MemberRepository;
 
@@ -21,7 +22,7 @@ public class EmailAuthValidator implements Validator {
     public void validate(Object target, Errors errors) {
         RequestEmail request = (RequestEmail) target;
 
-        if (repository.existsByEmail(request.getEmail())) {
+        if (request.getType() == EmailType.SIGN_UP_VERIFICATION && repository.existsByEmail(request.getEmail())) {
             errors.rejectValue("email", "Duplicated.email");
         }
     }
