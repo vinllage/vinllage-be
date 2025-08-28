@@ -1,6 +1,5 @@
 package xyz.vinllage.global.email.controller;
 
-import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,7 @@ public class EmailController {
     private final EmailVerifyService verifyService;
 
     @PostMapping("/send-code")
-    public ResponseEntity<?> sendCode(@Valid @RequestBody RequestEmail request, Errors errors) throws MessagingException {
+    public ResponseEntity<?> sendCode(@Valid @RequestBody RequestEmail request, Errors errors) {
         // 이메일 중복 검증
         emailAuthValidator.validate(request, errors);
 
@@ -35,8 +34,24 @@ public class EmailController {
                     .body(Map.of("messages", utils.getErrorMessages(errors)));
         }
 
-        String code = verifyService.generateCode(request.getEmail());
-        sendService.sendVerificationEmail(request.getEmail(), code);
+        String code = "";
+        String subject = "";
+        String title = "";
+        switch (request.getType()) {
+            case SIGN_UP_VERIFICATION -> {
+                code = verifyService.generateCode(request.getEmail());
+                subject = "회원가입 인증 메일";
+                title = "Vinllage 회원가입 인증 코드";
+            }
+            // 탈퇴 인증 메일
+            case WITHDRAWAL_VERIFICATION -> {
+                code = verifyService.generateCode(request.getEmail());
+                subject = "탈퇴 인증 메일";
+                title = "Vinllage 탈퇴 인증 코드";
+            }
+        }
+
+        sendService.sendEmail(request.getEmail(), subject, title, code);
         return ResponseEntity.ok("인증 코드 전송 완료");
     }
 
