@@ -68,10 +68,11 @@ public class FileInfoService {
         }
 
         if (status != FileStatus.ALL) {
-            andBuilder.and(fileInfo.status.eq(FileStatus.DONE));
-
             if (status == FileStatus.CLEAR) {
+                andBuilder.and(fileInfo.status.eq(FileStatus.CLEAR));
                 andBuilder.and(fileInfo.createdAt.before(LocalDateTime.now().minusDays(1L)));
+            } else {
+                andBuilder.and(fileInfo.status.eq(FileStatus.DONE));
             }
         }
 
@@ -99,7 +100,6 @@ public class FileInfoService {
      * @param item
      */
     public void addInfo(FileInfo item) {
-        item.setFileUrl(getFileUrl(item));
         item.setFilePath(getFilePath(item));
 
         /* 파일이 이미지인지 체크 */
@@ -107,13 +107,15 @@ public class FileInfoService {
         item.setImage(StringUtils.hasText(contentType) && contentType.startsWith("image"));
 
         /* 이미지인 경우 썸네일 기본 URL, 기본 Path  추가 */
-        if (item.isImage()) {
-
-            item.setThumbBaseUrl(utils.getUrl("/file/thumb?seq=" + item.getSeq()));
+        try {
+            item.setFileUrl(getFileUrl(item));
+            if (item.isImage()) {
+                item.setThumbBaseUrl(utils.getUrl("/file/thumb?seq=" + item.getSeq()));
+            }
+            item.setFileDownloadUrl(utils.getUrl("/file/download/" + item.getSeq()));
+        } catch (IllegalStateException e) {
+            // 스케줄러 같은 비웹 환경에서는 URL 세팅 스킵
         }
-
-        // 파일 다운로드 URL
-        item.setFileDownloadUrl(utils.getUrl("/file/download/" + item.getSeq()));
     }
 
     public String folder(FileInfo item) {
