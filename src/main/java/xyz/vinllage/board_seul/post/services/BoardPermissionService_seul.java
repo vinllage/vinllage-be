@@ -17,7 +17,7 @@ public class BoardPermissionService_seul extends PermissionService<BoardData_seu
 
     @Override
     public boolean canAccess(BoardData_seul boardData){
-        Authority auth=boardData.getBoardSeul().getWriteAuthority();
+        Authority auth=boardData.getBoard().getWriteAuthority();
         return authCheck(auth);
     }
 

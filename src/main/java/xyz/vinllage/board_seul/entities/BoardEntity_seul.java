@@ -9,7 +9,7 @@ import xyz.vinllage.member.entities.Member;
 @Data
 public class BoardEntity_seul extends BaseEntity {
     // 작성자 관련 공통 필드
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     protected Member member;
 
     @Column(length = 60, nullable = false)

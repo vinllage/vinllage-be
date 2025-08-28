@@ -32,6 +32,9 @@ public abstract class PermissionService<T extends BoardEntity_seul> {
 
     // 회원 or 비회원
     public boolean memberOrGuest(T item) {
+        System.out.println("관리자"+memberUtil.isAdmin());
+        System.out.println("회원"+item.getMember());
+        System.out.println("회원"+memberUtil.getMember());
         // 관리자는 모든 글 조회/수정/삭제 가능
         if (memberUtil.isAdmin()) {
             return true;
@@ -60,8 +63,10 @@ public abstract class PermissionService<T extends BoardEntity_seul> {
     // 수정*삭제 권한 확인
     public boolean canEdit(T item) {
         boolean auth= canAccess(item);
+        System.out.println(auth);
 
         if (auth) {
+            System.out.println(memberOrGuest(item));
             return memberOrGuest(item);
         } else {
             return false;
