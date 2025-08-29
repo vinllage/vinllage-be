@@ -121,17 +121,21 @@ public class BoardDataController_seul {
         try {
             BoardData_seul boardData = infoService.get(seq);
             if (boardData == null) {
+                System.out.println("실패");
                 return null;
             }
 
             if (!permissionService.canView(boardData)) {
                 return null;
             }
-            BoardData_seul data = new BoardData_seul();
-            data.setCanDelete(permissionService.canEdit(boardData));
-            data.setGuest(permissionService.memberOrGuest(boardData));
 
-            return data;
+
+            System.out.println("=== 디버깅 시작 ===");
+            boardData.setCanDelete(permissionService.canDelete(boardData));
+            boardData.setCanEdit(permissionService.canEdit(boardData));
+            boardData.setGuest(boardData.getMember() == null);
+
+            return boardData;
 
         } catch (Exception e) {
             return null;
@@ -151,15 +155,7 @@ public class BoardDataController_seul {
                 System.out.println(boardData);
                 return null;
             }
-
-            // 비회원 글인 경우 세션 검증
-            if (boardData.getMember() == null) {
-                String sessionKey = "guest_verified_" + seq + "_update";
-                Long expireTime = (Long) session.getAttribute(sessionKey);
-                if (expireTime == null || System.currentTimeMillis() > expireTime) {
-                    return null;
-                }
-            }
+            boardData.setNeedAuth(permissionService.needAuth(boardData));
 
             return boardData;
         } catch (Exception e) {
@@ -169,18 +165,15 @@ public class BoardDataController_seul {
 
     // 게시글 삭제
     @DeleteMapping("/delete/{seq}")
-    public ResponseEntity<?> delete(@PathVariable("seq") Long seq, HttpSession session) {
+    public String delete(@PathVariable("seq") Long seq, HttpSession session) {
         try {
             BoardData_seul boardData = infoService.get(seq);
             if (boardData == null) {
-                return ResponseEntity.notFound().build();
+                return null;
             }
 
             if (!permissionService.canEdit(boardData)) {
-                return ResponseEntity.status(403).body(Map.of(
-                        "success", false,
-                        "message", "삭제 권한이 없습니다."
-                ));
+                return null;
             }
 
             // 비회원 글이고 관리자가 아닌 경우 세션 검증
@@ -188,11 +181,7 @@ public class BoardDataController_seul {
                 String sessionKey = "guest_verified_" + seq + "_delete";
                 Long expireTime = (Long) session.getAttribute(sessionKey);
                 if (expireTime == null || System.currentTimeMillis() > expireTime) {
-                    return ResponseEntity.status(401).body(Map.of(
-                            "success", false,
-                            "message", "비밀번호 확인이 필요합니다.",
-                            "needPassword", true
-                    ));
+                    return null;
                 }
 
                 // 사용 후 세션 제거
@@ -201,41 +190,9 @@ public class BoardDataController_seul {
 
             deleteService.delete(boardData.getSeq());
 
-            return ResponseEntity.ok(Map.of(
-                    "success", true,
-                    "message", "글이 삭제되었습니다.",
-                    "redirectTo", "/board/list/" + boardData.getBoard().getBid()
-            ));
+            return "삭제 완료";
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "message", "글 삭제에 실패했습니다."
-            ));
+            return null;
         }
     }
-
-    // 비회원 비밀번호 확인
-    @PostMapping("/check-guest-password")
-    public ResponseEntity<?> checkGuestPassword(
-            @RequestBody Map<String, Object> request,
-            HttpSession session) {
-        try {
-            Long seq = Long.valueOf(request.get("seq").toString());
-            String password = request.get("password").toString();
-            String action = request.get("action").toString();
-
-            BoardData_seul boardData = infoService.get(seq);
-            if (boardData == null) {
-                return ResponseEntity.notFound().build();
-            }
-
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "message", "오류가 발생했습니다."
-            ));
-        }
-        return null;
-    }
-
 }

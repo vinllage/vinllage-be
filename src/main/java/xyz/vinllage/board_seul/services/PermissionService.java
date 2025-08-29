@@ -30,15 +30,12 @@ public abstract class PermissionService<T extends BoardEntity_seul> {
         };
     }
 
-    // 회원 or 비회원
+    // 회원일때 본인 확인
+    // 비회원
     public boolean memberOrGuest(T item) {
         System.out.println("관리자"+memberUtil.isAdmin());
         System.out.println("회원"+item.getMember());
         System.out.println("회원"+memberUtil.getMember());
-        // 관리자는 모든 글 조회/수정/삭제 가능
-        if (memberUtil.isAdmin()) {
-            return true;
-        }
 
         // 회원인 경우 본인 확인
         if (item.getMember() != null) {
@@ -60,17 +57,20 @@ public abstract class PermissionService<T extends BoardEntity_seul> {
     // 상속시켜서 처리
     protected abstract boolean canAccess(T item);
 
-    // 수정*삭제 권한 확인
+    // 수정 권한 확인: 작성자
     public boolean canEdit(T item) {
-        boolean auth= canAccess(item);
-        System.out.println(auth);
+        System.out.println("canEdit"+ memberOrGuest(item));
+      return memberOrGuest(item);
+    }
 
-        if (auth) {
-            System.out.println(memberOrGuest(item));
-            return memberOrGuest(item);
-        } else {
-            return false;
+    // 삭제 권한 확인: 관리자와 작성자
+    public boolean canDelete(T item) {
+        System.out.println("canEdit"+ memberOrGuest(item));
+        // 관리자는 모든 글 삭제 가능
+        if (memberUtil.isAdmin()) {
+            return true;
         }
+        return memberOrGuest(item);
     }
 
     // 비회원 게시글/댓글인 경우 비회원 비밀번호 확인
