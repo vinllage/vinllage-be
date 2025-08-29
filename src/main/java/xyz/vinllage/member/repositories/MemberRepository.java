@@ -19,6 +19,7 @@ import java.util.Optional;
  */
  public interface MemberRepository extends JpaRepository<Member, Long>, QuerydslPredicateExecutor<Member> {
     Optional<Member> findByEmail(String email);
+    Optional<Member> findBySocialToken(String socialToken);
     boolean existsByEmail(String email);
 
     Optional<Member> findBySocialChannelAndSocialToken(SocialChannel socialChannel, String socialToken);
