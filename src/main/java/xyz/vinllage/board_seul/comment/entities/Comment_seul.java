@@ -18,7 +18,7 @@ public class Comment_seul extends BoardEntity_seul {
     private Long boardDataSeq; // Comment만의 고유 필드
 
     @Transient
-    private boolean needAuth; // Comment만의 고유 필드
+    private boolean needAuth;
 
     // 편의 메서드
     public String getCommenter() {

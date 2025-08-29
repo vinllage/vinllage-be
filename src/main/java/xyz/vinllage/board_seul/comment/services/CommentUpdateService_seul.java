@@ -2,6 +2,7 @@ package xyz.vinllage.board_seul.comment.services;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import xyz.vinllage.board.controllers.RequestComment;
 import xyz.vinllage.board_seul.comment.controllers.RequestComment_seul;
@@ -19,11 +20,13 @@ public class CommentUpdateService_seul extends UpdateService<Comment_seul, Long,
     private final CommentRepository_seul repository;
     private final HttpServletRequest request;
     private final MemberUtil memberUtil;
+    private final PasswordEncoder encoder;
 
-    public CommentUpdateService_seul(CommentRepository_seul repository, HttpServletRequest request, MemberUtil memberUtil) {
+    public CommentUpdateService_seul(CommentRepository_seul repository, HttpServletRequest request, MemberUtil memberUtil, PasswordEncoder encoder) {
         this.repository = repository;
         this.request = request;
         this.memberUtil = memberUtil;
+        this.encoder = encoder;
     }
 
     @Override
@@ -46,7 +49,7 @@ public class CommentUpdateService_seul extends UpdateService<Comment_seul, Long,
             commentSeul.setMember(memberUtil.getMember());
             commentSeul.setPoster(memberUtil.getMember().getName());
         } else {
-            commentSeul.setGuestPw(item.getGuestPw());
+            commentSeul.setGuestPw(encoder.encode(item.getGuestPw()));
             commentSeul.setPoster(item.getCommenter());
         }
 

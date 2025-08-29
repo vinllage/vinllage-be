@@ -34,6 +34,9 @@ public class BoardEntity_seul extends BaseEntity {
     protected boolean canDelete;
 
     @Transient
+    protected boolean canEdit;
+
+    @Transient
     protected boolean guest;
 
     @Transient

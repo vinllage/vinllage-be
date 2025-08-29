@@ -103,8 +103,9 @@ public class BoardDataInfoService_seul extends InfoService<BoardData_seul, Long>
 
             StringExpression subject = boardData.subject;
             StringExpression content = boardData.content;
-            StringExpression name = boardData.poster.concat(boardData.member.name)
-                    .concat(boardData.member.email);
+
+            // member가 null일 경우를 고려한 name 필드
+            StringExpression name = boardData.poster;
 
             StringExpression fields = null;
             if (sopt.equals("SUBJECT")) {

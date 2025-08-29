@@ -9,14 +9,13 @@ import xyz.vinllage.board_seul.controllers.BaseRequest_seul;
 @Data
 public class RequestComment_seul extends BaseRequest_seul {
     private String mode;
+    private String guestPw;
     @NotNull
     private Long boardDataSeq; // 게시글 번호
     private Long seq; // 댓글 seq
 
     @NotBlank
     private String commenter; // 댓글 작성자
-
-    private String guestPw; // 비회원 글수정, 글삭제 비밀번호
 
     @NotBlank
     private String content; // 댓글 내용
