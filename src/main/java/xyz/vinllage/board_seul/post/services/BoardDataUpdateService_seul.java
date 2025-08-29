@@ -83,7 +83,7 @@ public class BoardDataUpdateService_seul extends UpdateService<BoardData_seul, L
         item.setContent(form.getContent());
         item.setSecret(form.isSecret());
 
-        if (form.isGuest()) {
+        if (!memberUtil.isLogin()) {
             item.setGuestPw(encoder.encode(form.getGuestPw()));
         }
 

@@ -50,6 +50,9 @@ public class BoardData_seul extends BoardEntity_seul implements Serializable {
     @Transient
     private boolean editable;
 
+    @Transient
+    private boolean needAuth;
+
     public Authority getCommentAuthority() {
         return this.board.getCommentAuthority();
     }

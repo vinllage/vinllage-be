@@ -10,6 +10,7 @@ import java.util.List;
 @Data
 public class RequestBoardData_seul extends BaseRequest_seul {
     private String mode;
+    private String guestPw;
     private Long seq;
 
     @NotBlank
@@ -22,7 +23,6 @@ public class RequestBoardData_seul extends BaseRequest_seul {
 
     @NotBlank
     private String poster;
-    private String guestPw;
 
     @NotBlank
     private String subject;

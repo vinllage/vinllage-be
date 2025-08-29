@@ -8,6 +8,7 @@ import xyz.vinllage.member.constants.Authority;
 @Data
 public class RequestBoard_seul extends BaseRequest_seul {
     private String mode;
+    private String guestPw;
 
     @NotBlank
     private String bid; // 게시판 아이디
