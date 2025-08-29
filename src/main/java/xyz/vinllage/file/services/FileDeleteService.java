@@ -81,10 +81,16 @@ public class FileDeleteService {
     /**
      * 매일 자정마다 하루전 미완료된 파일 일괄 삭제
      */
-    @Scheduled(cron="0 0 0 * * *")
+    @Scheduled(cron="5 * * * * *")
     public void clearUnDone() {
         // 미완료된 파일 목록 조회(하루전)
-        List<FileInfo> items = infoService.getList(null, null, FileStatus.CLEAR);
+        List<FileInfo> clearItems = infoService.getList(null, null, FileStatus.CLEAR);
+        List<FileInfo> undoneItems = infoService.getList(null, null, FileStatus.UNDONE);
+
+        List<FileInfo> items = new ArrayList<>();
+        items.addAll(clearItems);
+        items.addAll(undoneItems);
+
         items.forEach(item -> {
             // 실 파일 삭제
             String path = item.getFilePath();
