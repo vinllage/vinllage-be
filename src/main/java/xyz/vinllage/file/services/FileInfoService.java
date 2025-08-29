@@ -68,8 +68,8 @@ public class FileInfoService {
         }
 
         if (status != FileStatus.ALL) {
-            if (status == FileStatus.CLEAR) {
-                andBuilder.and(fileInfo.status.eq(FileStatus.CLEAR));
+            if (status == FileStatus.CLEAR || status == FileStatus.UNDONE) {
+                andBuilder.and(fileInfo.status.in(FileStatus.CLEAR, FileStatus.UNDONE));
                 andBuilder.and(fileInfo.createdAt.before(LocalDateTime.now().minusDays(1L)));
             } else {
                 andBuilder.and(fileInfo.status.eq(FileStatus.DONE));
