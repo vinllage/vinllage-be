@@ -5,6 +5,7 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import xyz.vinllage.member.constants.SocialChannel;
 import xyz.vinllage.member.entities.Member;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 /**
@@ -21,5 +22,5 @@ import java.util.Optional;
     boolean existsByEmail(String email);
 
     Optional<Member> findBySocialChannelAndSocialToken(SocialChannel socialChannel, String socialToken);
-
+    void deleteAllByDeletedAtBefore(LocalDateTime threshold);
 }
