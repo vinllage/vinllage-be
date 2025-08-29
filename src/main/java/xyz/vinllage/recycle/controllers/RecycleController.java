@@ -99,4 +99,14 @@ public class RecycleController {
 
         return new ListData<>(items, pagination);
     }
+
+    @Operation(summary = "전체 분리수거 누적 횟수 조회", method = "GET")
+    @ApiResponse(responseCode = "200")
+    @GetMapping("/total-count")
+    public long getTotalRecycleCount() {
+        QDetectedRecycle recycleData = QDetectedRecycle.detectedRecycle;
+
+        // 조건 없이 전체 데이터 카운트
+        return queryFactory.selectFrom(recycleData).fetchCount();
+    }
 }
