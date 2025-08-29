@@ -12,7 +12,6 @@ import xyz.vinllage.member.libs.MemberUtil;
 import xyz.vinllage.member.repositories.MemberRepository;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Lazy
 @Service
@@ -35,9 +34,8 @@ public class ProfileUpdateService {
             member.setCredentialChangedAt(LocalDateTime.now());
         }
 
-        String gid = member.getGid();
+        String gid = form.getGid();
         if (StringUtils.hasText(gid)) {
-            gid = UUID.randomUUID().toString();
             member.setGid(gid);
         }
 

@@ -13,4 +13,6 @@ public class RequestProfile {
 
     @NotBlank
     private String mobile;
+
+    private String gid; // 프로필 사진 gid
 }
