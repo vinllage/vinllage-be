@@ -51,6 +51,9 @@ public class BoardData_seul extends BoardEntity_seul implements Serializable {
     private boolean editable;
 
     @Transient
+    private boolean commentable;
+
+    @Transient
     private boolean needAuth;
 
     public Authority getCommentAuthority() {
