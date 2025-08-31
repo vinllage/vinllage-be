@@ -23,6 +23,6 @@ ENV REDIS_PORT=**
 ENV JWT_SECRET=**
 ENV JWT_VALIDTIME=**
 
-ENTRYPOINT [  "java",  "-Ddb.password=${DB_PASSWORD}", "-Ddb.url=${DB_URL}",  "-Ddb.username=${DB_USERNAME}",  "-Dspring.jpa.hibernate.ddl-auto=${DDL_AUTO}",  "-Dfile.path=${FILE_PATH}",  "-Dfile.url=${FILE_URL}", "-Dredis.host=${REDIS_HOST}",  "-Dredis.port=${REDIS_PORT}",  "-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}", "-Djwt.secret=${JWT_SECRET}", "-Djwt.validTime=${JWT_VALIDTIME}", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Ddb.url=${DB_URL}", "-Ddb.username=${DB_USERNAME}", "-Ddb.password=${DB_PASSWORD}", "-Dspring.jpa.hibernate.ddl-auto=${DDL_AUTO}", "-Dfile.path=${FILE_PATH}", "-Dfile.url=${FILE_URL}", "-Dmail.username=${MAIL_USERNAME}", "-Dmail.password=${MAIL_PASSWORD}", "-Dredis.host=${REDIS_HOST}", "-Dredis.port=${REDIS_PORT}", "-Djwt.secret=${JWT_SECRET}", "-Djwt.validTime=${JWT_VALIDTIME}", "-Dapi.url=${API_URL}", "-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}", "-jar", "app.jar"]
 
 EXPOSE ${PORT}
