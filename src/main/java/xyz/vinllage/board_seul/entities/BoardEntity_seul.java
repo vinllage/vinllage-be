@@ -37,6 +37,9 @@ public class BoardEntity_seul extends BaseEntity {
     protected boolean canEdit;
 
     @Transient
+    protected boolean canView;
+
+    @Transient
     protected boolean guest;
 
     @Transient

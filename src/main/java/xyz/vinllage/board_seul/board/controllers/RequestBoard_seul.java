@@ -5,6 +5,8 @@ import lombok.Data;
 import xyz.vinllage.board_seul.controllers.BaseRequest_seul;
 import xyz.vinllage.member.constants.Authority;
 
+import java.util.List;
+
 @Data
 public class RequestBoard_seul extends BaseRequest_seul {
     private String mode;
@@ -23,6 +25,7 @@ public class RequestBoard_seul extends BaseRequest_seul {
     private String skin; // 게시판 스킨
 
     private String category; // 게시판 분류
+    private List<String> categories;
 
     private boolean active; // 게시판 사용 여부, true - 사용, false : 미사용
     private boolean editor;  // 에디터 사용 여부

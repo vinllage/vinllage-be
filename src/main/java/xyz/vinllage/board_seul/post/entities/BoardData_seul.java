@@ -35,10 +35,6 @@ public class BoardData_seul extends BoardEntity_seul implements Serializable {
     @Column(nullable = false)
     private String subject;
 
-    private boolean notice;
-    private boolean secret;
-    private int viewCount;
-    private int commentCount;
     private boolean plainText;
 
     @Transient
@@ -49,6 +45,9 @@ public class BoardData_seul extends BoardEntity_seul implements Serializable {
 
     @Transient
     private boolean editable;
+
+    @Transient
+    private boolean commentable;
 
     @Transient
     private boolean needAuth;

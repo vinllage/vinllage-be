@@ -28,8 +28,6 @@ public class QBoardData_seul extends EntityPathBase<BoardData_seul> {
 
     public final StringPath category = createString("category");
 
-    public final NumberPath<Integer> commentCount = createNumber("commentCount", Integer.class);
-
     //inherited
     public final StringPath content;
 
@@ -53,14 +51,10 @@ public class QBoardData_seul extends EntityPathBase<BoardData_seul> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedAt;
 
-    public final BooleanPath notice = createBoolean("notice");
-
     public final BooleanPath plainText = createBoolean("plainText");
 
     //inherited
     public final StringPath poster;
-
-    public final BooleanPath secret = createBoolean("secret");
 
     public final NumberPath<Long> seq = createNumber("seq", Long.class);
 
@@ -68,8 +62,6 @@ public class QBoardData_seul extends EntityPathBase<BoardData_seul> {
 
     //inherited
     public final StringPath ua;
-
-    public final NumberPath<Integer> viewCount = createNumber("viewCount", Integer.class);
 
     public QBoardData_seul(String variable) {
         this(BoardData_seul.class, forVariable(variable), INITS);
