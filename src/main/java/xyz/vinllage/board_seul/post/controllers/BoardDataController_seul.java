@@ -37,31 +37,35 @@ public class BoardDataController_seul {
     @GetMapping("/list/{bid}")
     public ListData<BoardData_seul> getList(@PathVariable("bid") String bid, @ModelAttribute BoardSearch_seul search) {
         try {
+            System.out.println("list!!!");
             search.setBid(bid);
             Board_seul board = configInfoService.get(bid);
             if (board == null) {
-                return null;
+                return new ListData<>();
             }
 
             ListData<BoardData_seul> data = infoService.getList(search);
 
             return data;
         } catch (Exception e) {
-            return null;
+            e.printStackTrace();
         }
+
+        return new ListData<>();
     }
 
     // 게시글 작성 폼 데이터 조회
     @GetMapping("/write/{bid}")
     public RequestBoardData_seul getWriteForm(@PathVariable("bid") String bid) {
         try {
+            System.out.println("write!!!");
             Board_seul board = configInfoService.get(bid);
             if (board == null) {
-                return null;
+                return new RequestBoardData_seul();
             }
 
             if (!permissionService.canAccess(board)) {
-                return null;
+                return new RequestBoardData_seul();
             }
 
             RequestBoardData_seul form = new RequestBoardData_seul();
@@ -75,8 +79,10 @@ public class BoardDataController_seul {
             }
             return form;
         } catch (Exception e) {
-            return null;
+            e.printStackTrace();
         }
+
+        return new RequestBoardData_seul();
     }
 
     // 게시글 저장
@@ -119,14 +125,15 @@ public class BoardDataController_seul {
     @GetMapping("/view/{seq}")
     public BoardData_seul view(@PathVariable("seq") Long seq) {
         try {
+            System.out.println("view!!!");
             BoardData_seul boardData = infoService.get(seq);
             if (boardData == null) {
                 System.out.println("실패");
-                return null;
+                return new BoardData_seul();
             }
 
             if (!permissionService.canView(boardData)) {
-                return null;
+                return new BoardData_seul();
             }
 
 
@@ -138,35 +145,41 @@ public class BoardDataController_seul {
             return boardData;
 
         } catch (Exception e) {
-            return null;
+            e.printStackTrace();
         }
+
+        return new BoardData_seul();
     }
 
     // 게시글 수정 폼 데이터 조회
     @GetMapping("/update/{seq}")
     public BoardData_seul getUpdateForm(@PathVariable("seq") Long seq, HttpSession session) {
         try {
+            System.out.println("update!!!");
             BoardData_seul boardData = infoService.get(seq);
             if (boardData == null) {
-                return null;
+                return new BoardData_seul();
             }
 
             if (!permissionService.canEdit(boardData)) {
                 System.out.println(boardData);
-                return null;
+                return new BoardData_seul();
             }
             boardData.setNeedAuth(permissionService.needAuth(boardData));
 
             return boardData;
         } catch (Exception e) {
-            return null;
+            e.printStackTrace();
         }
+
+        return new BoardData_seul();
     }
 
     // 게시글 삭제
     @DeleteMapping("/delete/{seq}")
     public String delete(@PathVariable("seq") Long seq, HttpSession session) {
         try {
+            System.out.println("delete!!!");
             BoardData_seul boardData = infoService.get(seq);
             if (boardData == null) {
                 return null;
