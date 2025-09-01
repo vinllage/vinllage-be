@@ -5,8 +5,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import xyz.vinllage.board.controllers.RequestBoard;
-import xyz.vinllage.board.repositories.BoardRepository;
 import xyz.vinllage.board_seul.board.controllers.RequestBoard_seul;
 import xyz.vinllage.board_seul.board.repositories.BoardRepository_seul;
 

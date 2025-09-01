@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import xyz.vinllage.board.controllers.RequestPassword;
 import xyz.vinllage.board_seul.comment.entities.Comment_seul;
 import xyz.vinllage.board_seul.comment.services.CommentInfoService_seul;
 import xyz.vinllage.board_seul.post.entities.BoardData_seul;
@@ -20,7 +19,6 @@ import xyz.vinllage.board_seul.post.services.BoardDataInfoService_seul;
 import xyz.vinllage.global.exceptions.BadRequestException;
 import xyz.vinllage.global.libs.Utils;
 import xyz.vinllage.member.libs.MemberUtil;
-import xyz.vinllage.member.services.MemberSessionService;
 
 
 @RestController

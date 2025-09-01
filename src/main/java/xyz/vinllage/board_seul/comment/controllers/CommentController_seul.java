@@ -6,12 +6,9 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import xyz.vinllage.board.entities.Comment;
-import xyz.vinllage.board_seul.board.entities.Board_seul;
 import xyz.vinllage.board_seul.board.services.BoardInfoService_seul;
 import xyz.vinllage.board_seul.comment.entities.Comment_seul;
 import xyz.vinllage.board_seul.comment.services.CommentDeleteService_seul;
@@ -19,14 +16,11 @@ import xyz.vinllage.board_seul.comment.services.CommentInfoService_seul;
 import xyz.vinllage.board_seul.comment.services.CommentPermissionService_seul;
 import xyz.vinllage.board_seul.comment.services.CommentUpdateService_seul;
 import xyz.vinllage.board_seul.controllers.BoardSearch_seul;
-import xyz.vinllage.board_seul.post.controllers.RequestBoardData_seul;
 import xyz.vinllage.board_seul.post.entities.BoardData_seul;
 import xyz.vinllage.board_seul.post.services.BoardDataInfoService_seul;
 import xyz.vinllage.global.exceptions.BadRequestException;
 import xyz.vinllage.global.search.ListData;
 import xyz.vinllage.member.constants.Authority;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/comment")

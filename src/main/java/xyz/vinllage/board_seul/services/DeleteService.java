@@ -3,8 +3,6 @@ package xyz.vinllage.board_seul.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import xyz.vinllage.board.entities.Board;
-import xyz.vinllage.board_seul.controllers.BoardSearch_seul;
 import xyz.vinllage.board_seul.repositories.BaseRepository_seul;
 import xyz.vinllage.global.entities.BaseEntity;
 import xyz.vinllage.global.exceptions.NotFoundException;

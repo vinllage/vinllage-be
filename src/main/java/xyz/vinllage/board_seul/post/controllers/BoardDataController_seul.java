@@ -26,7 +26,6 @@ import java.util.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/board")
-@CrossOrigin(origins = "http://localhost:3000")
 public class BoardDataController_seul {
 
     private final MemberUtil memberUtil;
@@ -48,7 +47,6 @@ public class BoardDataController_seul {
             }
 
             ListData<BoardData_seul> data = infoService.getList(search);
-            permissionService.canView(data);
 
             return data;
         } catch (Exception e) {
@@ -131,10 +129,6 @@ public class BoardDataController_seul {
             }
             setPermissions(boardData);
 
-            if (!permissionService.canView(boardData)) {
-                return null;
-            }
-
             return boardData;
 
         } catch (Exception e) {
@@ -174,26 +168,27 @@ public class BoardDataController_seul {
             setPermissions(boardData);
 
             if (!boardData.isCanDelete()) {
+                System.out.println("지울 수 없음!");
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
 
-            // 비회원 글이고 관리자가 아닐 경우
-            if (boardData.getMember() == null && !memberUtil.isAdmin()) {
-                // HttpSession 사용으로 변경
-                HttpSession httpSession = request.getSession();
-                String sessionKey = "board_seq_" + seq;
-                Boolean verified = (Boolean) httpSession.getAttribute(sessionKey);
-
-                System.out.println("HttpSession 조회 - 키: " + sessionKey);
-                System.out.println("HttpSession 조회 - 값: " + verified);
-
-                if (verified == null || !verified) {
-                    System.out.println("삭제 실패 - 세션 검증 실패");
-                    return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-                }
-
-                httpSession.removeAttribute(sessionKey);
-            }
+//            // 비회원 글이고 관리자가 아닐 경우
+//            if (boardData.getMember() == null && !memberUtil.isAdmin()) {
+//                // HttpSession 사용으로 변경
+//                HttpSession httpSession = request.getSession();
+//                String sessionKey = "board_seq_" + seq;
+//                Boolean verified = (Boolean) httpSession.getAttribute(sessionKey);
+//
+//                System.out.println("HttpSession 조회 - 키: " + sessionKey);
+//                System.out.println("HttpSession 조회 - 값: " + verified);
+//
+//                if (verified == null || !verified) {
+//                    System.out.println("삭제 실패 - 세션 검증 실패");
+//                    return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+//                }
+//
+//                httpSession.removeAttribute(sessionKey);
+//            }
 
             String bid = boardData.getBoard().getBid();
             deleteService.delete(seq);
