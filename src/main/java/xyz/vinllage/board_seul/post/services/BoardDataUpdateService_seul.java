@@ -81,18 +81,10 @@ public class BoardDataUpdateService_seul extends UpdateService<BoardData_seul, L
         item.setPoster(form.getPoster());
         item.setSubject(form.getSubject());
         item.setContent(form.getContent());
-        item.setSecret(form.isSecret());
 
         if (!memberUtil.isLogin()) {
             item.setGuestPw(encoder.encode(form.getGuestPw()));
         }
-
-        if (memberUtil.isAdmin()) {
-            item.setNotice(form.isNotice());
-        } else {
-            item.setNotice(false); // 공지글은 관리자만 설정 가능
-        }
-
         item.setPlainText(!boardSeul.isEditor());
 
         return item;

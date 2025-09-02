@@ -4,13 +4,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import xyz.vinllage.board.controllers.RequestPassword;
 import xyz.vinllage.board_seul.comment.entities.Comment_seul;
 import xyz.vinllage.board_seul.comment.services.CommentInfoService_seul;
 import xyz.vinllage.board_seul.post.entities.BoardData_seul;
@@ -18,7 +19,6 @@ import xyz.vinllage.board_seul.post.services.BoardDataInfoService_seul;
 import xyz.vinllage.global.exceptions.BadRequestException;
 import xyz.vinllage.global.libs.Utils;
 import xyz.vinllage.member.libs.MemberUtil;
-import xyz.vinllage.member.services.MemberSessionService;
 
 
 @RestController
@@ -28,7 +28,6 @@ import xyz.vinllage.member.services.MemberSessionService;
 public class PasswordController_seul {
     private final BoardDataInfoService_seul infoService;
     private final PasswordEncoder encoder;
-    private final MemberSessionService session;
     private final CommentInfoService_seul commentInfoService;
     private final MemberUtil memberUtil;
     private final Utils utils;
@@ -39,7 +38,7 @@ public class PasswordController_seul {
     @Parameter(name="password", required = true, in = ParameterIn.QUERY, description = "비회원 비밀번호")
     @PostMapping({"/password/{seq}", "/password/comment/{commentSeq}"})
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void guestPasswordCheckProcess(@PathVariable(required = false, name="seq")Long seq, @PathVariable(required = false, name="commentSeq") Long commentSeq, @Valid @RequestBody RequestPassword form, Errors errors) {
+    public void guestPasswordCheckProcess(@PathVariable(required = false, name="seq")Long seq, @PathVariable(required = false, name="commentSeq") Long commentSeq, @Valid @RequestBody RequestPassword form, Errors errors, HttpServletRequest request) {
         if (errors.hasErrors()) {
             throw new BadRequestException(utils.getErrorMessages(errors));
         }
@@ -59,6 +58,7 @@ public class PasswordController_seul {
             throw new BadRequestException(utils.getMessage("비밀번호가_일치하지_않습니다."));
         }
 
-        session.set(confirmKey, true); // 비회원 비밀번호 확인 완료
+        HttpSession httpSession = request.getSession();
+        httpSession.setAttribute(confirmKey, true);
     }
 }

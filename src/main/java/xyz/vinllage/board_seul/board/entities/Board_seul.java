@@ -2,9 +2,12 @@ package xyz.vinllage.board_seul.board.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.util.StringUtils;
 import xyz.vinllage.board_seul.entities.AuthorityEntity_seul;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 @Data
 @Entity
@@ -32,4 +35,13 @@ public class Board_seul extends AuthorityEntity_seul implements Serializable {
     private boolean attachFile; // 파일 첨부 기능 사용 여부
     private boolean comment; // 댓글 사용 여부
 
+    public List<String> getCategories() {
+        if (!StringUtils.hasText(category)) {
+            return List.of();
+        }
+
+        String[] categories = category.replaceAll("\r", "").split("\n");
+
+        return Arrays.stream(categories).filter(StringUtils::hasText).toList();
+    }
 }

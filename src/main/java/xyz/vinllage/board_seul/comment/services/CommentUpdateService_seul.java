@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import xyz.vinllage.board.controllers.RequestComment;
 import xyz.vinllage.board_seul.comment.controllers.RequestComment_seul;
 import xyz.vinllage.board_seul.comment.entities.Comment_seul;
 import xyz.vinllage.board_seul.comment.repositories.CommentRepository_seul;

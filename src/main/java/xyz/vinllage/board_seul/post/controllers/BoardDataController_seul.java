@@ -1,8 +1,10 @@
 package xyz.vinllage.board_seul.post.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
@@ -17,13 +19,13 @@ import xyz.vinllage.board_seul.post.services.BoardDataUpdateService_seul;
 import xyz.vinllage.board_seul.post.services.BoardPermissionService_seul;
 import xyz.vinllage.global.search.ListData;
 import xyz.vinllage.member.libs.MemberUtil;
+import xyz.vinllage.member.services.MemberSessionService;
 
 import java.util.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/board")
-@CrossOrigin(origins = "http://localhost:3000")
 public class BoardDataController_seul {
 
     private final MemberUtil memberUtil;
@@ -32,40 +34,37 @@ public class BoardDataController_seul {
     private final BoardInfoService_seul configInfoService;
     private final BoardDataUpdateService_seul updateService;
     private final BoardDataDeleteService_seul deleteService;
+    private final MemberSessionService session;
 
     // 게시글 목록 조회
     @GetMapping("/list/{bid}")
     public ListData<BoardData_seul> getList(@PathVariable("bid") String bid, @ModelAttribute BoardSearch_seul search) {
         try {
-            System.out.println("list!!!");
             search.setBid(bid);
             Board_seul board = configInfoService.get(bid);
             if (board == null) {
-                return new ListData<>();
+                return null;
             }
 
             ListData<BoardData_seul> data = infoService.getList(search);
 
             return data;
         } catch (Exception e) {
-            e.printStackTrace();
+            return null;
         }
-
-        return new ListData<>();
     }
 
     // 게시글 작성 폼 데이터 조회
     @GetMapping("/write/{bid}")
     public RequestBoardData_seul getWriteForm(@PathVariable("bid") String bid) {
         try {
-            System.out.println("write!!!");
             Board_seul board = configInfoService.get(bid);
             if (board == null) {
-                return new RequestBoardData_seul();
+                return null;
             }
 
             if (!permissionService.canAccess(board)) {
-                return new RequestBoardData_seul();
+                return null;
             }
 
             RequestBoardData_seul form = new RequestBoardData_seul();
@@ -79,10 +78,8 @@ public class BoardDataController_seul {
             }
             return form;
         } catch (Exception e) {
-            e.printStackTrace();
+            return null;
         }
-
-        return new RequestBoardData_seul();
     }
 
     // 게시글 저장
@@ -125,87 +122,75 @@ public class BoardDataController_seul {
     @GetMapping("/view/{seq}")
     public BoardData_seul view(@PathVariable("seq") Long seq) {
         try {
-            System.out.println("view!!!");
             BoardData_seul boardData = infoService.get(seq);
             if (boardData == null) {
                 System.out.println("실패");
-                return new BoardData_seul();
+                return null;
             }
-
-            if (!permissionService.canView(boardData)) {
-                return new BoardData_seul();
-            }
-
-
-            System.out.println("=== 디버깅 시작 ===");
-            boardData.setCanDelete(permissionService.canDelete(boardData));
-            boardData.setCanEdit(permissionService.canEdit(boardData));
-            boardData.setGuest(boardData.getMember() == null);
+            setPermissions(boardData);
 
             return boardData;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            return null;
         }
-
-        return new BoardData_seul();
     }
 
     // 게시글 수정 폼 데이터 조회
     @GetMapping("/update/{seq}")
     public BoardData_seul getUpdateForm(@PathVariable("seq") Long seq, HttpSession session) {
         try {
-            System.out.println("update!!!");
             BoardData_seul boardData = infoService.get(seq);
             if (boardData == null) {
-                return new BoardData_seul();
+                return null;
             }
+            setPermissions(boardData);
 
             if (!permissionService.canEdit(boardData)) {
                 System.out.println(boardData);
-                return new BoardData_seul();
+                return null;
             }
-            boardData.setNeedAuth(permissionService.needAuth(boardData));
 
             return boardData;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return new BoardData_seul();
-    }
-
-    // 게시글 삭제
-    @DeleteMapping("/delete/{seq}")
-    public String delete(@PathVariable("seq") Long seq, HttpSession session) {
-        try {
-            System.out.println("delete!!!");
-            BoardData_seul boardData = infoService.get(seq);
-            if (boardData == null) {
-                return null;
-            }
-
-            if (!permissionService.canEdit(boardData)) {
-                return null;
-            }
-
-            // 비회원 글이고 관리자가 아닌 경우 세션 검증
-            if (boardData.getMember() == null && !memberUtil.isAdmin()) {
-                String sessionKey = "guest_verified_" + seq + "_delete";
-                Long expireTime = (Long) session.getAttribute(sessionKey);
-                if (expireTime == null || System.currentTimeMillis() > expireTime) {
-                    return null;
-                }
-
-                // 사용 후 세션 제거
-                session.removeAttribute(sessionKey);
-            }
-
-            deleteService.delete(boardData.getSeq());
-
-            return "삭제 완료";
         } catch (Exception e) {
             return null;
         }
     }
+
+    @DeleteMapping("/delete/{seq}")
+    public ResponseEntity<Map<String, String>> delete(@PathVariable("seq") Long seq, HttpServletRequest request) {
+        try {
+            BoardData_seul boardData = infoService.get(seq);
+            if (boardData == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            setPermissions(boardData);
+
+            if (!boardData.isCanDelete()) {
+                System.out.println("지울 수 없음!");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+
+            String bid = boardData.getBoard().getBid();
+            deleteService.delete(seq);
+
+            return ResponseEntity.ok(Map.of(
+                    "message", "삭제 완료",
+                    "bid", bid
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    private void setPermissions(BoardData_seul boardData) {
+        boardData.setCanEdit(permissionService.canEdit(boardData));
+        boardData.setCanDelete(permissionService.canDelete(boardData));
+        boardData.setGuest(boardData.getMember() == null);
+        boardData.setMine(permissionService.memberOrGuest(boardData));
+        boardData.setNeedAuth(permissionService.needAuth(boardData));
+        boardData.setCommentable(permissionService.commentCheck((boardData.getBoard())));
+    }
+
 }

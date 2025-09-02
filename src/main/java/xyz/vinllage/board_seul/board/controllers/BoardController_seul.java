@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/admin/board")
-@CrossOrigin(origins = "http://localhost:3000") // React 개발 서버
 @Tag(name="관리자 게시판 API", description = "게시판 설정 관리 API")
 public class BoardController_seul {
 
