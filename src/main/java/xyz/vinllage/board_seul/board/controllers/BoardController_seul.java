@@ -15,6 +15,7 @@ import xyz.vinllage.board_seul.board.services.BoardUpdateService_seul;
 import xyz.vinllage.board_seul.board.validator.BoardValidator_seul;
 import xyz.vinllage.board_seul.controllers.BoardSearch_seul;
 import xyz.vinllage.board_seul.post.services.BoardDataInfoService_seul;
+import xyz.vinllage.board_seul.post.services.BoardPermissionService_seul;
 import xyz.vinllage.global.search.ListData;
 import xyz.vinllage.member.constants.Authority;
 
@@ -31,6 +32,7 @@ public class BoardController_seul {
     private final BoardInfoService_seul configInfoService;
     private final BoardUpdateService_seul configUpdateService;
     private final BoardDataInfoService_seul dataInfoService;
+    private final BoardPermissionService_seul permissionService;
     private final BoardValidator_seul validate;
     private final HttpServletRequest request;
 
@@ -92,6 +94,7 @@ public class BoardController_seul {
     public ResponseEntity<RequestBoard_seul> getUpdateForm(@PathVariable("bid") String bid) {
         RequestBoard_seul form = configInfoService.getForm(bid);
         form.setMode("update");
+        form.setWritable(permissionService.authCheck(form.getWriteAuthority()));
         return ResponseEntity.ok(form);
     }
 
