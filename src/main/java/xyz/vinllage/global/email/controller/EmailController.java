@@ -49,6 +49,12 @@ public class EmailController {
                 subject = "탈퇴 인증 메일";
                 title = "Vinllage 탈퇴 인증 코드";
             }
+            // 계정 복구 메일
+            case ACCOUNT_RECOVERY -> {
+                code = verifyService.generateCode(request.getEmail());
+                subject = "계정 복구 메일";
+                title = "Vinllage 계정 복구 인증 코드";
+            }
         }
 
         sendService.sendEmail(request.getEmail(), subject, title, code);
