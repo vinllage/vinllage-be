@@ -140,7 +140,7 @@ public class MemberController {
         Member member = repository.findByEmail(email).orElse(null);
 
         // 멤버가 존재하지 않으면 프론트엔드에 검증 메시지 전달
-        if (member != null) {
+        if (member == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("member","등록되지 않은 이메일입니다."));
         }
 
