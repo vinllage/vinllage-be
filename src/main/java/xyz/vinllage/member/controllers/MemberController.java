@@ -21,13 +21,13 @@ import xyz.vinllage.member.jwt.TokenService;
 import xyz.vinllage.member.libs.MemberUtil;
 import xyz.vinllage.member.repositories.MemberRepository;
 import xyz.vinllage.member.services.JoinService;
+import xyz.vinllage.member.services.MemberDeleteService;
 import xyz.vinllage.member.services.PasswordService;
 import xyz.vinllage.member.services.ProfileUpdateService;
 import xyz.vinllage.member.validators.JoinValidator;
 import xyz.vinllage.member.validators.ProfileValidator;
 import xyz.vinllage.member.validators.TokenValidator;
 
-import java.time.LocalDateTime;
 import java.util.Map;
 
 @RestController
@@ -46,6 +46,7 @@ public class MemberController {
     private final Utils utils;
     private final MemberRepository repository;
     private final PasswordService passwordService;
+    private final MemberDeleteService deleteService;
 
     @Operation(summary = "회원가입처리", method = "POST")
     @ApiResponse(responseCode = "201", description = "회원가입 성공시 201로 응답, 검증 실패시 400")
@@ -140,7 +141,7 @@ public class MemberController {
         Member member = repository.findByEmail(email).orElse(null);
 
         // 멤버가 존재하지 않으면 프론트엔드에 검증 메시지 전달
-        if (member != null) {
+        if (member == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("member","등록되지 않은 이메일입니다."));
         }
 
@@ -157,10 +158,34 @@ public class MemberController {
     public ResponseEntity<?> withdraw(){
         Member member = memberUtil.getMember();
 
-        // 탈퇴 시각 기록
-        member.setDeletedAt(LocalDateTime.now());
-        repository.saveAndFlush(member);
+        // 계정 탈퇴 처리(탈퇴 시각 기록)
+        deleteService.withdrawProcess(member);
 
         return ResponseEntity.ok(Map.of("message", "탈퇴 처리가 완료되었습니다."));
+    }
+
+    @Operation(summary = "계정 복구", method = "POST")
+    @ApiResponse(responseCode = "200")
+    @PostMapping("/recover-acc")
+    public ResponseEntity<?> recoverAcc(@RequestBody RequestEmail form){
+        String email  = form.getEmail();
+
+        // 멤버 조회
+        Member member = repository.findByEmail(email).orElse(null);
+
+        // 멤버가 존재하지 않으면 프론트엔드에 검증 메시지 전달
+        if (member == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message","등록되지 않은 이메일입니다."));
+        }
+
+        // 계정 복구 처리
+        boolean isRecovered = deleteService.recoverProcess(member);
+        if (!isRecovered) {
+            // 탈퇴 처리 되지 않은 계정인 경우
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message","탈퇴되지 않은 계정입니다."));
+        }
+
+        // 프론트엔드에 메일 발송 성공 메시지 전달
+        return ResponseEntity.ok(Map.of("message", "계정이 복구되었습니다."));
     }
 }
