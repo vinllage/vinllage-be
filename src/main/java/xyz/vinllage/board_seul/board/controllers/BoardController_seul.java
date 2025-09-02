@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import xyz.vinllage.board_seul.board.entities.Board_seul;
+import xyz.vinllage.board_seul.board.services.BoardDeleteService_seul;
 import xyz.vinllage.board_seul.board.services.BoardInfoService_seul;
 import xyz.vinllage.board_seul.board.services.BoardUpdateService_seul;
 import xyz.vinllage.board_seul.board.validator.BoardValidator_seul;
@@ -33,6 +34,7 @@ public class BoardController_seul {
     private final BoardUpdateService_seul configUpdateService;
     private final BoardDataInfoService_seul dataInfoService;
     private final BoardValidator_seul validate;
+    private final BoardDeleteService_seul deleteService;
     private final HttpServletRequest request;
 
     /**
@@ -126,6 +128,9 @@ public class BoardController_seul {
     public ResponseEntity<?> delete(
             @Valid @RequestBody RequestBoard_seul form,
             Errors errors) {
+
+        deleteService.delete(form.getBid());
+
         return ResponseEntity.ok(Map.of(
                 "success", true,
                 "message", "게시판이 삭제되었습니다."
