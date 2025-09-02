@@ -43,7 +43,7 @@ public class JoinValidator implements Validator, PasswordValidator, MobileValida
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotBlank");
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "confirmPassword", "NotBlank");
 
-            if (StringUtils.hasText(password) && password.length() < 16) {
+            if (StringUtils.hasText(password) && password.length() < 8) {
                 errors.rejectValue("password", "Size");
             }
         }
