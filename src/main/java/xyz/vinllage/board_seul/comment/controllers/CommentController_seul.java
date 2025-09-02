@@ -94,4 +94,12 @@ public class CommentController_seul {
     public void commentDelete(@PathVariable("seq") Long seq, Model model) {
         deleteService.delete(seq);
     }
+
+    @Operation(summary = "댓글 한개 가져오기", method = "DELETE", description = "댓글 등록번호(seq)로 댓글 정보 조회")
+    @Parameter(name="seq", required = true, in = ParameterIn.PATH, description = "댓글 등록 번호")
+    @ApiResponse(responseCode = "200")
+    @GetMapping("/comment/{seq}")
+    public Comment_seul comment(@PathVariable("seq") Long seq, Model model) {
+        return infoService.get(seq);
+    }
 }
