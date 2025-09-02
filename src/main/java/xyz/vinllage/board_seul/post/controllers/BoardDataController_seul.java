@@ -17,6 +17,7 @@ import xyz.vinllage.board_seul.post.services.BoardDataDeleteService_seul;
 import xyz.vinllage.board_seul.post.services.BoardDataInfoService_seul;
 import xyz.vinllage.board_seul.post.services.BoardDataUpdateService_seul;
 import xyz.vinllage.board_seul.post.services.BoardPermissionService_seul;
+import xyz.vinllage.global.exceptions.BadRequestException;
 import xyz.vinllage.global.search.ListData;
 import xyz.vinllage.member.libs.MemberUtil;
 import xyz.vinllage.member.services.MemberSessionService;
@@ -56,15 +57,15 @@ public class BoardDataController_seul {
 
     // 게시글 작성 폼 데이터 조회
     @GetMapping("/write/{bid}")
-    public RequestBoardData_seul getWriteForm(@PathVariable("bid") String bid) {
+    public ResponseEntity<RequestBoardData_seul> getWriteForm(@PathVariable("bid") String bid) {
         try {
             Board_seul board = configInfoService.get(bid);
             if (board == null) {
-                return null;
+                return ResponseEntity.notFound().build();
             }
 
             if (!permissionService.canAccess(board)) {
-                return null;
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
 
             RequestBoardData_seul form = new RequestBoardData_seul();
@@ -76,9 +77,10 @@ public class BoardDataController_seul {
             } else {
                 form.setGuest(true);
             }
-            return form;
+
+            return ResponseEntity.ok(form);
         } catch (Exception e) {
-            return null;
+            return ResponseEntity.internalServerError().build();
         }
     }
 
