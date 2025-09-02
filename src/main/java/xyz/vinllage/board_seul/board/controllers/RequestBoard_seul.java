@@ -42,4 +42,6 @@ public class RequestBoard_seul extends BaseRequest_seul {
     private Authority writeAuthority; // 글작성 권한
 
     private Authority commentAuthority; // 댓글 작성 권한
+
+    private boolean writable;
 }

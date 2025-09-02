@@ -89,6 +89,11 @@ public class BoardDataInfoService_seul extends InfoService<BoardData_seul, Long>
             andBuilder.and(boardData.createdAt.loe(eDate.atTime(23, 59, 59)));
         }
 
+        List<String> categories = search.getCategory();
+        if (categories != null && !categories.isEmpty()) { // 게시판 분류 조회
+            andBuilder.and(boardData.category.in(categories));
+        }
+
         /**
          * 키워드 검색
          * sopt - ALL : 통합검색 (SUBJECT + CONTENT + NAME)
