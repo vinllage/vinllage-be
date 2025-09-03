@@ -1,5 +1,6 @@
 package xyz.vinllage.board_seul.post.controllers;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import xyz.vinllage.board_seul.controllers.BaseRequest_seul;
@@ -8,6 +9,7 @@ import xyz.vinllage.file.entities.FileInfo;
 import java.util.List;
 
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class RequestBoardData_seul extends BaseRequest_seul {
     private String mode;
     private String guestPw;
@@ -29,8 +31,6 @@ public class RequestBoardData_seul extends BaseRequest_seul {
 
     @NotBlank
     private String content;
-    private boolean notice; // 공지글 여부
-    private boolean secret; // 비밀글 여부
 
     private boolean guest; // 비회원 게시글 작성, 수정 여부
 
