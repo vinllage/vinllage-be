@@ -10,8 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import xyz.vinllage.board_seul.controllers.BoardSearch_seul;
-import xyz.vinllage.global.exceptions.NotFoundException;
 import xyz.vinllage.board_seul.repositories.BaseRepository_seul;
+import xyz.vinllage.global.exceptions.NotFoundException;
 import xyz.vinllage.global.search.ListData;
 import xyz.vinllage.global.search.Pagination;
 
