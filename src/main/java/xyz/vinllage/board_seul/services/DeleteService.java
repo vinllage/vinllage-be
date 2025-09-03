@@ -23,7 +23,7 @@ public abstract class DeleteService<T extends BaseEntity,ID> {
         try {
             T entity = getInfoService().get(id);
             entity.setDeletedAt(LocalDateTime.now());
-            getRepository().save(entity);
+            getRepository().saveAndFlush(entity);
         } catch(NotFoundException e) {
             throw new RuntimeException(getNotFoundErrorMessage());
         }
