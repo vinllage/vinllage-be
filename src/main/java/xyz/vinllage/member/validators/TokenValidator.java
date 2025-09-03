@@ -39,6 +39,7 @@ public class TokenValidator implements Validator {
         // 탈퇴한 회원일 경우
         if ((member != null && member.getDeletedAt() != null) || (socialMember != null && socialMember.getDeletedAt() != null)) {
             errors.reject("Invalid.member");
+
             return;
         }
 
@@ -69,6 +70,10 @@ public class TokenValidator implements Validator {
                     // 기간이 만료된 경우
                     if (LocalDateTime.now().isAfter(member.getTempPasswordExpiresAt())) {
                         errors.reject("Invalid.tempPassword");
+
+                        // 만료된 경우 만료된 임시비밀번호 삭제
+                        socialMember.setTempPassword(null);
+                        repository.saveAndFlush(socialMember);
                     }
                     // 비밀번호와 임시 비밀번호가 모두 일치하지 않은 경우
                     else if (!encoder.matches(form.getPassword(), member.getTempPassword())
