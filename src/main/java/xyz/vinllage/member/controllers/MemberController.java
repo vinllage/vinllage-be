@@ -83,6 +83,8 @@ public class MemberController {
         tokenValidator.validate(form, errors);
 
         if (errors.hasErrors()) {
+            System.out.println("----- 검증 에러 ------");
+            errors.getAllErrors().forEach(System.out::println);
             throw new BadRequestException(utils.getErrorMessages(errors));
         }
 
